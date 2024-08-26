@@ -66,4 +66,23 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-foreground/20
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground/30 rounded-lg transition-colors duration-200
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-foreground/40;
+  }
 }
