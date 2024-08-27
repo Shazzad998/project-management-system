@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { NavLink as NavLinkType, User } from "@/types";
-import {  Home } from "lucide-react";
+import {  FolderOpen, Home, ListTodo, Users2 } from "lucide-react";
 import { Navbar } from "./partials/Navbar";
 import Sidebar from "./partials/Sidebar";
 
@@ -11,9 +11,28 @@ const navigations: NavLinkType[] = [
         route: "dashboard",
         icon: <Home className="h-5 w-5" />,
     },
+    {
+        id: 2,
+        label: "Users",
+        route: "users.index",
+        icon: <Users2 className="h-5 w-5" />,
+    },
+    {
+        id: 3,
+        label: "Projects",
+        route: "projects.index",
+        icon: <FolderOpen className="h-5 w-5" />,
+    },
+    {
+        id: 4,
+        label: "Tasks",
+        route: "tasks.index",
+        icon: <ListTodo className="h-5 w-5" />,
+    },
+
 ];
 
-export default function Authenticated({
+export default function AuthenticatedLayout({
     user,
     header,
     children,
