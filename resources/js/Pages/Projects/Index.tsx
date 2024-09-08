@@ -1,7 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Project, ProjectResource, User } from "@/types";
-import { Badge } from "@/Components/ui/badge";
+import {  ProjectResource, User } from "@/types";
 import {
     Card,
     CardContent,
@@ -25,7 +24,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import {  MoreHorizontal } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { useState } from "react";
 import {
@@ -37,15 +36,21 @@ import {
     DialogTitle,
 } from "@/Components/ui/dialog";
 import Pagination from "@/Components/Pagination";
+import ProjectStatusBadge from "@/Components/Projects/ProjectStatusBadge";
+import Filters from "@/Components/Projects/Filters";
+
 
 type Props = {
     auth: {
         user: User;
     };
     projects: ProjectResource;
+    queryParams : {
+        status?:string[]
+    }
 };
 
-const Index = ({ auth, projects }: Props) => {
+const Index = ({ auth, projects, queryParams }: Props) => {
     const [selectedId, setSelectedId] = useState<number>(0);
 
     const confirmDelete = (id: number) => {
@@ -56,7 +61,7 @@ const Index = ({ auth, projects }: Props) => {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Projects" />
-            {/* Logout Dialog */}
+            {/* Delete Dialog */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -87,10 +92,11 @@ const Index = ({ auth, projects }: Props) => {
                     <CardDescription>List of all the projects.</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <Filters queryParam={queryParams}/>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead> &nbsp;</TableHead>
+                                {/* <TableHead> &nbsp;</TableHead> */}
                                 <TableHead>Name</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead>Created At</TableHead>
@@ -100,24 +106,22 @@ const Index = ({ auth, projects }: Props) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                     
                             {projects.data.map((project) => (
-                                <TableRow>
-                                    <TableCell>
+                                <TableRow key={project.id}>
+                                    {/* <TableCell>
                                         <img
                                             src={project.image_path}
                                             alt={project.name}
                                             className=" w-16 h-16 object-cover rounded"
                                         />
-                                    </TableCell>
+                                    </TableCell> */}
                                     <TableCell>{project.name}</TableCell>
                                     <TableCell>
-                                        <Badge
-                                            className="text-xs"
-                                            variant="default"
-                                        >
-                                            {project.status}
-                                        </Badge>
+                                        {project.status && (
+                                            <ProjectStatusBadge
+                                                status={project.status}
+                                            />
+                                        )}
                                     </TableCell>
                                     <TableCell>{project.created_at}</TableCell>
                                     <TableCell>{project.due_date}</TableCell>
@@ -170,7 +174,12 @@ const Index = ({ auth, projects }: Props) => {
                     </Table>
                 </CardContent>
                 <CardFooter>
-                    <Pagination links={projects.meta.links} from={projects.meta.from} to={projects.meta.to} total={projects.meta.total}/>
+                    <Pagination
+                        links={projects.meta.links}
+                        from={projects.meta.from}
+                        to={projects.meta.to}
+                        total={projects.meta.total}
+                    />
                 </CardFooter>
             </Card>
         </AuthenticatedLayout>
