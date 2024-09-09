@@ -19,7 +19,7 @@ class ProjectController extends Controller
         if(request('status')){
             $query->whereIn('status',request('status') );
         }
-        $projects = $query->paginate(10);
+        $projects = $query->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
             'queryParams' => request()->query()
