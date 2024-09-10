@@ -38,11 +38,11 @@ export default function AuthenticatedLayout({
     children,
 }: PropsWithChildren<{ user: User; header?: ReactNode }>) {
     return (
-        <div className="grid min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr]">
+        <div className="grid h-full min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] ">
             <Sidebar navigations={navigations} />
-            <div className="flex flex-col">
+            <div className="flex flex-col bg-muted/20 max-h-screen overflow-auto">
                 <Navbar navigations={navigations} user={user} />
-                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 max-h-[calc(100vh-3.5rem)] overflow-auto">
+                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
                     {children}
                 </main>
             </div>
