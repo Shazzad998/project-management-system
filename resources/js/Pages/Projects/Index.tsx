@@ -5,7 +5,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
@@ -28,17 +27,15 @@ type Props = {
         user: User;
     };
     projects: ProjectResource;
-    queryParams: {
-        status?: string[];
-    };
 };
 
-const Index = ({ auth, projects, queryParams }: Props) => {
-    const [selectedId, setSelectedId] = useState<number>(0);
+const Index = ({ auth, projects }: Props) => {
+    let deleteId = 0;
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [selectedIds, setSelectedIds] = useState([]) 
 
     const confirmDelete = (id: number) => {
-        setSelectedId(id);
+        deleteId=id;
         setDeleteDialogOpen(true);
     };
 
@@ -57,7 +54,7 @@ const Index = ({ auth, projects, queryParams }: Props) => {
                     <div className="flex justify-end gap-x-2">
                         <Button variant={"destructive"} asChild>
                             <Link
-                                href={route("projects.destroy", selectedId)}
+                                href={route("projects.destroy", deleteId)}
                                 method="delete"
                                 as="button"
                             >
@@ -86,7 +83,7 @@ const Index = ({ auth, projects, queryParams }: Props) => {
                                 options:projectStatus
                             }
                         ]}
-                        searchColumn="name"
+                        search={{column:'name', placeholder:'Filter projects'}}
                     />
                 </CardContent>
             </Card>

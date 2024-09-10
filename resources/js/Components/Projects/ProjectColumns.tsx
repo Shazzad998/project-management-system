@@ -59,7 +59,9 @@ export const ProjectColumns = (
         },
         {
             accessorKey: "status",
-            header: () => <div className="text-center">Status</div>,
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Status" className=" justify-center" />
+              ),
             cell: ({ row }) => {
                 return (
                     <div className="text-center">
@@ -68,6 +70,7 @@ export const ProjectColumns = (
                 );
             },
             filterFn: (row, id, value) => {
+                console.log(row, id, value)
                 return value.includes(row.getValue(id));
             },
         },

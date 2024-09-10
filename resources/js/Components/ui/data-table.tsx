@@ -3,6 +3,7 @@ import {
   ColumnDef,
   SortingState,
   ColumnFiltersState,
+  VisibilityState,
   getFilteredRowModel,
   flexRender,
   getCoreRowModel,
@@ -19,12 +20,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
-import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import React from "react";
-import { CheckCircledIcon, CircleIcon, CrossCircledIcon, QuestionMarkCircledIcon, StopwatchIcon } from "@radix-ui/react-icons";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,20 +38,26 @@ interface DataTableProps<TData, TValue> {
       icon?: React.ComponentType<{ className?: string }>
     }[]
   }[],
-  searchColumn:string
+  search:{
+    column:string,
+    placeholder?:string
+  }
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filters,
-  searchColumn
+  search,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({});
+  console.log(rowSelection)
   const table = useReactTable({
     data,
     columns,
@@ -62,35 +68,19 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
       rowSelection,
+      columnVisibility
     },
   });
 
   return (
-    <div>
-      <div className="flex items-center py-4 gap-3">
-        <Input
-          placeholder="Filter projects..."
-          value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(searchColumn)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm h-8"
-        />
-        {filters.map((filter) => {
-          if(table.getColumn(filter.value)){
-            return <DataTableFacetedFilter
-            column={table.getColumn(filter.value)}
-            title={filter.title}
-            options={filter.options}
-          />
-          }
-        })}
-      </div>
-      <div className="rounded-md border mb-3">
+    <div className=" space-y-4">
+      <DataTableToolbar table={table} filters={filters} search={search}/>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
