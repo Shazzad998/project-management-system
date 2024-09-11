@@ -11,11 +11,10 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { Project } from "@/types";
+import { Project, User } from "@/types";
 import ProjectStatusBadge from "./ProjectStatusBadge";
 import { DataTableColumnHeader } from "../ui/data-table-column-header";
 
-// Pass confirmDelete and other required props
 export const ProjectColumns = (
     confirmDelete: (id: number) => void
 ): ColumnDef<Project>[] => {
@@ -45,10 +44,23 @@ export const ProjectColumns = (
             enableHiding: false,
         },
         {
+            accessorKey: "image_path",
+            header: "Image",
+            cell: ({ row }) => {
+                return (
+                    <img
+                        className=" w-12 h-12 rounded-lg object-cover"
+                        src={row.getValue("image_path")}
+                        alt={row.getValue("name")}
+                    />
+                );
+            },
+        },
+        {
             accessorKey: "name",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
-              ),
+            ),
             cell: ({ row }) => {
                 return (
                     <div className="text-left font-semibold">
@@ -60,8 +72,12 @@ export const ProjectColumns = (
         {
             accessorKey: "status",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Status" className=" justify-center" />
-              ),
+                <DataTableColumnHeader
+                    column={column}
+                    title="Status"
+                    className=" justify-center"
+                />
+            ),
             cell: ({ row }) => {
                 return (
                     <div className="text-center">
@@ -70,13 +86,44 @@ export const ProjectColumns = (
                 );
             },
             filterFn: (row, id, value) => {
-                console.log(row, id, value)
+                console.log(row, id, value);
                 return value.includes(row.getValue(id));
             },
         },
         {
             accessorKey: "created_at",
-            header: "Created at",
+            header: ({ column }) => (
+                <DataTableColumnHeader
+                    column={column}
+                    title="Created at"
+                />
+            ),
+        },
+        {
+            accessorKey: "due_date",
+            header: ({ column }) => (
+                <DataTableColumnHeader
+                    column={column}
+                    title="Due Date"
+                />
+            ),
+        },
+        {
+            accessorKey: "created_by",
+            header: ({ column }) => (
+                <DataTableColumnHeader
+                    column={column}
+                    title="Created by"
+                />
+            ),
+            cell: ({ row }) => {
+                const created_by = row.getValue("created_by") as User
+                return (
+                    <div className="text-start font-bold">
+                        {created_by.name}
+                    </div>
+                );
+            },
         },
         {
             id: "actions",
@@ -93,7 +140,12 @@ export const ProjectColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem><span className=" flex items-center gap-1"> <Edit className="w-4 h-4"/> Edit</span></DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <span className=" flex items-center gap-1">
+                                    {" "}
+                                    <Edit className="w-4 h-4" /> Edit
+                                </span>
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => confirmDelete(project.id)}
                             >
