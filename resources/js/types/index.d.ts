@@ -34,28 +34,30 @@ export type Project = {
     updated_by: User;
 };
 
-export type metaLinks = {
-    url: string;
-    label: string;
-    active: boolean;
+export type Task = {
+    id: number;
+    name: string;
+    description: string | null;
+    due_date: string | null;
+    status: string;
+    priority: string;
+    image_path: string | undefined;
+    created_at: string;
+    updated_at: string;
+    created_by: User;
+    updated_by: User;
+    assigned_user: User|null;
+    project:Project
 };
+
 
 export type ProjectResource = {
     data: Project[];
-    links: {
-        first: string | null;
-        last: string | null;
-        prev: string | null;
-        next: string | null;
-    };
-    meta: {
-        current_page: number;
-        from: number;
-        last_page: number;
-        links: metaLinks[];
-        path: string;
-        per_page: number;
-        to: number;
-        total: number;
-    };
 };
+
+export type TaskResource ={
+    data:Task[]
+}
+export type UserResource ={
+    data:User[]
+}

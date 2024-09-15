@@ -16,4 +16,24 @@ class Task extends Model
     const PRIORITY_LOW = 'low';
     const PRIORITY_MEDIUM = 'medium';
     const PRIORITY_HIGH = 'high';
+
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function assigned_user(){
+        return $this->belongsTo(User::class, 'assigned_user_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

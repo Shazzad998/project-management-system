@@ -1,4 +1,4 @@
-// src/Components/Projects/ProjectColumns.tsx
+
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
@@ -12,47 +12,64 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Project, User } from "@/types";
-import ProjectStatusBadge from "./ProjectStatusBadge";
-import { DataTableColumnHeader } from "../ui/data-table-column-header";
+import { DataTableColumnHeader } from "../../Components/ui/data-table-column-header";
+import StatusBadge from "../../Components/StatusBadge";
+import { Link } from "@inertiajs/react";
 
 export const ProjectColumns = (
     confirmDelete: (id: number) => void
 ): ColumnDef<Project>[] => {
     return [
+        // {
+        //     id: "select",
+        //     header: ({ table }) => (
+        //         <Checkbox
+        //             checked={
+        //                 table.getIsAllPageRowsSelected() ||
+        //                 (table.getIsSomePageRowsSelected() && "indeterminate")
+        //             }
+        //             onCheckedChange={(value) =>
+        //                 table.toggleAllPageRowsSelected(!!value)
+        //             }
+        //             aria-label="Select all"
+        //         />
+        //     ),
+        //     cell: ({ row }) => (
+        //         <Checkbox
+        //             checked={row.getIsSelected()}
+        //             onCheckedChange={(value) => row.toggleSelected(!!value)}
+        //             aria-label="Select row"
+        //         />
+        //     ),
+        //     enableSorting: false,
+        //     enableHiding: false,
+        // },
+        // {
+        //     accessorKey: "image_path",
+        //     header: "Image",
+        //     cell: ({ row }) => {
+        //         return (
+        //             <img
+        //                 className=" w-12 h-12 rounded-lg object-cover"
+        //                 src={row.getValue("image_path")}
+        //                 alt={row.getValue("name")}
+        //             />
+        //         );
+        //     },
+        // },
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) =>
-                        table.toggleAllPageRowsSelected(!!value)
-                    }
-                    aria-label="Select all"
-                />
+            accessorKey: "id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Id" className="pl-2" />
             ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            accessorKey: "image_path",
-            header: "Image",
             cell: ({ row }) => {
+                const project = row.original
                 return (
-                    <img
-                        className=" w-12 h-12 rounded-lg object-cover"
-                        src={row.getValue("image_path")}
-                        alt={row.getValue("name")}
-                    />
+                    <div className="text-left font-semibold px-3">
+                        <Link href={route('projects.show', project.id)}>
+                        {project.id}
+                        </Link>
+                    </div>
                 );
             },
         },
@@ -62,9 +79,12 @@ export const ProjectColumns = (
                 <DataTableColumnHeader column={column} title="Name" />
             ),
             cell: ({ row }) => {
+                const project = row.original
                 return (
                     <div className="text-left font-semibold">
-                        {row.getValue("name")}
+                        <Link href={route('projects.show', project.id)}>
+                        {project.name}
+                        </Link>
                     </div>
                 );
             },
@@ -81,12 +101,11 @@ export const ProjectColumns = (
             cell: ({ row }) => {
                 return (
                     <div className="text-center">
-                        <ProjectStatusBadge status={row.getValue("status")} />
+                        <StatusBadge status={row.getValue("status")} />
                     </div>
                 );
             },
             filterFn: (row, id, value) => {
-                console.log(row, id, value);
                 return value.includes(row.getValue(id));
             },
         },

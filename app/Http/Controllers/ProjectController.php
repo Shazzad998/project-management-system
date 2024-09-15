@@ -6,6 +6,10 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\TaskResource;
+use App\Http\Resources\UserResource;
+use App\Models\Task;
+use App\Models\User;
 
 class ProjectController extends Controller
 {
@@ -47,7 +51,14 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        $query = Task::query()->where('project_id', $project->id);
+        $relatedTasks = $query->get();
+        $projectMembers = User::whereIn('id', $query->pluck('assigned_user_id'))->get();
+        return inertia('Projects/Show', [
+            'project' => new ProjectResource($project),
+            'tasks' => TaskResource::collection($relatedTasks),
+            'members' => UserResource::collection($projectMembers)
+        ]);
     }
 
     /**

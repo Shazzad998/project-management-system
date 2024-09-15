@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { ProjectResource, User } from "@/types";
+import { ProjectResource, TaskResource, User } from "@/types";
 import {
     Card,
     CardContent,
@@ -19,17 +19,17 @@ import {
     DialogTitle,
 } from "@/Components/ui/dialog";
 import { DataTable } from "@/Components/ui/data-table";
-import { ProjectColumns } from "@/Pages/Projects/ProjectColumns";
-import { projectStatus } from "@/data";
+import { taskPriorities, taskStatuses } from "@/data";
+import { TaskColumns } from "./TaskColumns";
 
 type Props = {
     auth: {
         user: User;
     };
-    projects: ProjectResource;
+    tasks: TaskResource;
 };
 
-const Index = ({ auth, projects }: Props) => {
+const Index = ({ auth, tasks }: Props) => {
     let deleteId = 0;
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]) 
@@ -41,7 +41,7 @@ const Index = ({ auth, projects }: Props) => {
 
     return (
         <AuthenticatedLayout user={auth.user}>
-            <Head title="Projects" />
+            <Head title="Tasks" />
             {/* Delete Dialog */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <DialogContent>
@@ -69,21 +69,26 @@ const Index = ({ auth, projects }: Props) => {
             </Dialog>
             <Card>
                 <CardHeader className="px-7">
-                    <CardTitle>Projects</CardTitle>
-                    <CardDescription>List of all the projects.</CardDescription>
+                    <CardTitle>Tasks</CardTitle>
+                    <CardDescription>List of all the tasks.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <DataTable
-                        data={projects.data}
-                        columns={ProjectColumns(confirmDelete)}
+                        data={tasks.data}
+                        columns={TaskColumns(confirmDelete)}
                         filters={[
                             {
                                 title:"Status",
                                 value:"status",
-                                options:projectStatus
+                                options:taskStatuses
+                            },
+                            {
+                                title:"Priority",
+                                value:"priority",
+                                options:taskPriorities
                             }
                         ]}
-                        search={{column:'name', placeholder:'Filter projects'}}
+                        search={{column:'name', placeholder:'Filter tasks..'}}
                     />
                 </CardContent>
             </Card>

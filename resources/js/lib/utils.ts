@@ -11,3 +11,10 @@ export function formatString(str: string) {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
 }
+
+export function getInitials(str: string) {
+    return str
+        .split(" ")
+        .map((word) => word[0].toUpperCase())
+        .join("");
+}

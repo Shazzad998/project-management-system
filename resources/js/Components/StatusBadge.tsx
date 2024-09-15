@@ -5,7 +5,7 @@ type Props = {
     status: string;
 };
 
-function ProjectStatusBadge({ status }: Props) {
+function StatusBadge({ status }: Props) {
     const color =
         status == "in_progress"
             ? "bg-primary text-primary-foreground"
@@ -26,4 +26,4 @@ function ProjectStatusBadge({ status }: Props) {
     );
 }
 
-export default ProjectStatusBadge;
+export default StatusBadge;
