@@ -3,24 +3,19 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ProjectResource, User } from "@/types";
 import {
     Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+    CardContent
 } from "@/Components/ui/card";
-import { Button } from "@/Components/ui/button";
-import { useState } from "react";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/Components/ui/dialog";
-import { DataTable } from "@/Components/ui/data-table";
-import { ProjectColumns } from "@/Pages/Projects/ProjectColumns";
-import { projectStatus } from "@/data";
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/Components/ui/breadcrumb";
+import ProjectsTable from "./ProjectsTable";
+import { Button } from "@/Components/ui/button";
+import { PlusIcon } from "lucide-react";
 
 type Props = {
     auth: {
@@ -30,61 +25,30 @@ type Props = {
 };
 
 const Index = ({ auth, projects }: Props) => {
-    let deleteId = 0;
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [selectedIds, setSelectedIds] = useState([]) 
-
-    const confirmDelete = (id: number) => {
-        deleteId=id;
-        setDeleteDialogOpen(true);
-    };
-
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Projects" />
-            {/* Delete Dialog */}
-            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                        <DialogDescription>
-                            This action can not be undone after completed.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex justify-end gap-x-2">
-                        <Button variant={"destructive"} asChild>
-                            <Link
-                                href={route("projects.destroy", deleteId)}
-                                method="delete"
-                                as="button"
-                            >
-                                Delete
-                            </Link>
-                        </Button>
-                        <DialogClose asChild>
-                            <Button variant={"secondary"}>Cancel</Button>
-                        </DialogClose>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            <div className="flex items-center justify-between gap-2 mb-3">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink asChild>
+                                <Link href="/">Home</Link>
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>Projects</BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+                <Button>
+                    <Link className=" flex items-center gap-1 " href={route('projects.create')}> <PlusIcon className="w-4 h-4"/> Create Project</Link>
+                </Button>
+            </div>
             <Card>
-                <CardHeader className="px-7">
-                    <CardTitle>Projects</CardTitle>
-                    <CardDescription>List of all the projects.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <DataTable
-                        data={projects.data}
-                        columns={ProjectColumns(confirmDelete)}
-                        filters={[
-                            {
-                                title:"Status",
-                                value:"status",
-                                options:projectStatus
-                            }
-                        ]}
-                        search={{column:'name', placeholder:'Filter projects'}}
-                    />
+                <CardContent className="pt-6">
+                    <ProjectsTable projects={projects.data} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>
