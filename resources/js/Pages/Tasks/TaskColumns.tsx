@@ -17,9 +17,10 @@ import StatusBadge from "../../Components/StatusBadge";
 import PriorityBadge from "@/Components/PriorityBadge";
 
 export const TaskColumns = (
-    confirmDelete: (id: number) => void
+    confirmDelete: (id: number) => void,
+    hideProjectColumn = false
 ): ColumnDef<Task>[] => {
-    return [
+    const columns: ColumnDef<Task>[] = [
         // {
         //     id: "select",
         //     header: ({ table }) => (
@@ -210,4 +211,23 @@ export const TaskColumns = (
             },
         },
     ];
+    if (!hideProjectColumn) {
+        columns.splice(2, 0, {
+            accessorKey: "project",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Project" />
+            ),
+            cell: ({ row }) => {
+                const project = row.original;
+                return (
+                    <div className="text-left font-semibold">
+                        {project.name}
+                    </div>
+                );
+            },
+        });
+    }
+
+    return columns
+
 };

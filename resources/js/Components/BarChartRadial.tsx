@@ -47,7 +47,7 @@ const BarChartRadial = ({ cardTitle, data, className }: Props) => {
             <CardContent className="flex gap-4 justify-between">
                 <div className="grid items-center gap-2">
                     {data.map((item) => (
-                        <div className="grid flex-1 auto-rows-min gap-0.5">
+                        <div key={item.type} className="grid flex-1 auto-rows-min gap-0.5">
                             <div className="text-sm text-muted-foreground">
                                 {item.label}{" "}
                                 <span

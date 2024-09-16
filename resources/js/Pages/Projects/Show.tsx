@@ -1,33 +1,26 @@
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/Components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Project, TaskResource, User, UserResource } from "@/types";
 import { Head, Link } from "@inertiajs/react";
-import ChartShow from "./Chart";
-import { PolarAngleAxis, RadialBar, RadialBarChart } from "recharts";
-import { ChartContainer } from "@/Components/ui/chart";
 import BarChartRadial from "@/Components/BarChartRadial";
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
-import { getInitials } from "@/lib/utils";
-import { taskPriorities, taskStatuses } from "@/data";
-import { DataTable } from "@/Components/ui/data-table";
-import { TaskColumns } from "../Tasks/TaskColumns";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/Components/ui/dialog";
-import { Button } from "@/Components/ui/button";
 import { useState } from "react";
+import { Label } from "@/Components/ui/label";
+import StatusBadge from "@/Components/StatusBadge";
+import TasksTable from "../Tasks/TasksTable";
 
 type Props = {
     auth: {
@@ -39,12 +32,6 @@ type Props = {
 };
 
 const Show = ({ auth, project, tasks, members }: Props) => {
-    let deleteId = 0;
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const confirmDelete = (id: number) => {
-        deleteId = id;
-        setDeleteDialogOpen(true);
-    };
     const totalTasks = tasks.data.length;
     const totalColpleted = tasks.data.filter(
         (item) => item.status == "completed"
@@ -105,9 +92,29 @@ const Show = ({ auth, project, tasks, members }: Props) => {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title={project.name} />
-            <h2 className="text-3xl font-bold tracking-tight">
-                Project "{project.name}"
-            </h2>
+            <div className="grid ">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink asChild>
+                                <Link href="/">Home</Link>
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbLink asChild>
+                                <Link href={route("projects.index")}>
+                                    Projects
+                                </Link>
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>{project.name}</BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+            </div>
             <div className="flex flex-col ">
                 <div className="flex-1 space-y-4 ">
                     <Tabs defaultValue="overview" className="space-y-4">
@@ -246,7 +253,59 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                                     </CardContent>
                                 </Card>
                             </div>
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7">
+                                <Card className="col-span-2 lg:col-span-4 2xl:col-span-3">
+                                    <CardHeader>
+                                        <CardTitle>Project Details</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="">
+                                        <div className="flex flex-wrap md:flex-nowrap gap-3 mb-3">
+                                            <div className="grid gap-2">
+                                                <img
+                                                    src={project.image_path}
+                                                    alt=""
+                                                    className=" aspect-square rounded-lg max-w-32"
+                                                />
+                                            </div>
+                                            <div className=" grid gap-2">
+                                                <p className="text-xl font-medium text-foreground/80">
+                                                   {"["+project.id+"]"} {project.name}
+                                                </p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {project.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className=" flex flex-wrap gap-6 justify-between items-center">
+                                            <div>
+                                                <Label>Created at</Label>
+                                                <div className=" text-sm text-muted-foreground">
+                                                    {project.created_at}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Label>Due date</Label>
+                                                <div className=" text-sm text-muted-foreground">
+                                                    {project.due_date}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Label>Status</Label>
+                                                <div className=" text-sm text-muted-foreground">
+                                                    <StatusBadge
+                                                        status={project.status}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Label>Created by</Label>
+                                                <div className=" text-sm text-muted-foreground">
+                                                    {project.created_by.name}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                                 <BarChartRadial
                                     className=" col-span-2"
                                     cardTitle="Priority Based Tast Overview"
@@ -257,106 +316,12 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                                     cardTitle="Status Based Task Overview"
                                     data={statusTastData}
                                 />
-                                <Card className="col-span-3">
-                                    <CardHeader>
-                                        <CardTitle>Project Members</CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="grid gap-8">
-                                        {members.data.map((member) => (
-                                            <div className="flex items-center gap-4">
-                                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                                    <AvatarImage
-                                                        src="/avatars/01.png"
-                                                        alt="Avatar"
-                                                    />
-                                                    <AvatarFallback>
-                                                        {getInitials(
-                                                            member.name
-                                                        )}
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                <div className="grid gap-1">
-                                                    <p className="text-sm font-medium leading-none">
-                                                        {member.name}
-                                                    </p>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {member.email}
-                                                    </p>
-                                                </div>
-                                                <div className="ml-auto font-medium">
-                                                    <span className="px-3 text-sm py-1 bg-accent text-accent-foreground rounded-md">
-                                                        Project Manager
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </CardContent>
-                                </Card>
                             </div>
                         </TabsContent>
                         <TabsContent value="tasks">
                             <Card>
                                 <CardContent className=" pt-4">
-                                    <Dialog
-                                        open={deleteDialogOpen}
-                                        onOpenChange={setDeleteDialogOpen}
-                                    >
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>
-                                                    Are you absolutely sure?
-                                                </DialogTitle>
-                                                <DialogDescription>
-                                                    This action can not be
-                                                    undone after completed.
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <div className="flex justify-end gap-x-2">
-                                                <Button
-                                                    variant={"destructive"}
-                                                    asChild
-                                                >
-                                                    <Link
-                                                        href={route(
-                                                            "projects.destroy",
-                                                            deleteId
-                                                        )}
-                                                        method="delete"
-                                                        as="button"
-                                                    >
-                                                        Delete
-                                                    </Link>
-                                                </Button>
-                                                <DialogClose asChild>
-                                                    <Button
-                                                        variant={"secondary"}
-                                                    >
-                                                        Cancel
-                                                    </Button>
-                                                </DialogClose>
-                                            </div>
-                                        </DialogContent>
-                                    </Dialog>
-                                    <DataTable
-                                        data={tasks.data}
-                                        columns={TaskColumns(confirmDelete)}
-                                        filters={[
-                                            {
-                                                title: "Status",
-                                                value: "status",
-                                                options: taskStatuses,
-                                            },
-                                            {
-                                                title: "Priority",
-                                                value: "priority",
-                                                options: taskPriorities,
-                                            },
-                                        ]}
-                                        search={{
-                                            column: "name",
-                                            placeholder: "Filter tasks..",
-                                        }}
-                                    />
+                                    <TasksTable hideProjectColumn={true} tasks={tasks.data}/>
                                 </CardContent>
                             </Card>
                         </TabsContent>
