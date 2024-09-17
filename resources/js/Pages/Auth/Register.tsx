@@ -4,7 +4,6 @@ import InputError from "@/Components/InputError";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import {
-    Card,
     CardContent,
     CardDescription,
     CardHeader,

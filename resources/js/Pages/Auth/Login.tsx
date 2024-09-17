@@ -1,5 +1,4 @@
 import { FormEventHandler } from "react";
-import Checkbox from "@/Components/Checkbox";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import { Head, Link, useForm } from "@inertiajs/react";
@@ -12,6 +11,7 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
+import { Checkbox } from "@/Components/ui/checkbox";
 
 export default function Login({
     status,
@@ -93,8 +93,8 @@ export default function Login({
                             id="remember"
                             name="remember"
                             checked={data.remember}
-                            onChange={(e) =>
-                                setData("remember", e.target.checked)
+                            onCheckedChange={(e) =>
+                                setData("remember", e as boolean)
                             }
                         />
                         <Label htmlFor="remember">Remember me</Label>
