@@ -61,3 +61,8 @@ export type TaskResource ={
 export type UserResource ={
     data:User[]
 }
+
+export type SelectOption = {
+    label:string
+    value:string
+}

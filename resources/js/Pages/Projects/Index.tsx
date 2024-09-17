@@ -1,10 +1,7 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ProjectResource, User } from "@/types";
-import {
-    Card,
-    CardContent
-} from "@/Components/ui/card";
+import { Card, CardContent } from "@/Components/ui/card";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -28,22 +25,31 @@ const Index = ({ auth, projects }: Props) => {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Projects" />
-            <div className="flex items-center justify-between gap-2 mb-3">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink asChild>
-                                <Link href="/">Home</Link>
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Projects</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
+            <div className="flex items-end justify-between gap-2">
+                <div>
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/">Home</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Projects</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <h2 className="mt-2 font-bold text-xl">Project List</h2>
+                </div>
                 <Button>
-                    <Link className=" flex items-center gap-1 " href={route('projects.create')}> <PlusIcon className="w-4 h-4"/> Create Project</Link>
+                    <Link
+                        className=" flex items-center gap-1 "
+                        href={route("projects.create")}
+                    >
+                        {" "}
+                        <PlusIcon className="w-4 h-4" /> Create Project
+                    </Link>
                 </Button>
             </div>
             <Card>

@@ -21,8 +21,6 @@ type ProjectsTableProps = {
 const ProjectsTable = ({ projects }: ProjectsTableProps) => {
     let deleteId = 0;
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [selectedIds, setSelectedIds] = useState([]);
-
     const confirmDelete = (id: number) => {
         deleteId = id;
         setDeleteDialogOpen(true);

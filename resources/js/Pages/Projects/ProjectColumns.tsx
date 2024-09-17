@@ -81,11 +81,9 @@ export const ProjectColumns = (
             cell: ({ row }) => {
                 const project = row.original
                 return (
-                    <div className="text-left font-semibold">
-                        <Link href={route('projects.show', project.id)}>
+                        <Link href={route('projects.show', project.id)} className="text-left font-semibold ease-in-out duration-200 hover:underline" >
                         {project.name}
                         </Link>
-                    </div>
                 );
             },
         },
