@@ -13,6 +13,17 @@ class Project extends Model
     const IN_PROGRESS = 'in_progress';
     const COMPLETED = 'completed';
 
+
+    protected $fillable = [
+        'name',
+        'description',
+        'image_path',
+        'due_date',
+        'status',
+        'created_by',
+        'updated_by',
+    ];
+
     public function tasks()
     {
         return $this->hasMany(Task::class);

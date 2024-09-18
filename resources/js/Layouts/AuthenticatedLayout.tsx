@@ -3,6 +3,7 @@ import { NavLink as NavLinkType, User } from "@/types";
 import {  FolderOpen, Home, ListTodo, Users2 } from "lucide-react";
 import { Navbar } from "./partials/Navbar";
 import Sidebar from "./partials/Sidebar";
+import { Toaster } from "@/Components/ui/toaster";
 
 const navigations: NavLinkType[] = [
     {
@@ -46,6 +47,7 @@ export default function AuthenticatedLayout({
                     {children}
                 </main>
             </div>
+            <Toaster/>
         </div>
     );
 }

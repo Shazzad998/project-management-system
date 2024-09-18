@@ -40,7 +40,7 @@ export function SelectInput({
                     {selectedValue ? (
                         <>{selectedValue.label}</>
                     ) : (
-                        <>{placeholder}</>
+                        <span className="text-muted-foreground">{placeholder}</span>
                     )}
                 </Button>
             </PopoverTrigger>

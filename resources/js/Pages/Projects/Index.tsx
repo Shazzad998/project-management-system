@@ -13,15 +13,29 @@ import {
 import ProjectsTable from "./ProjectsTable";
 import { Button } from "@/Components/ui/button";
 import { PlusIcon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 type Props = {
     auth: {
         user: User;
     };
     projects: ProjectResource;
+    success: string;
 };
 
-const Index = ({ auth, projects }: Props) => {
+const Index = ({ auth, projects, success }: Props) => {
+    const { toast } = useToast();
+
+    useEffect(() => {
+        if (success) {
+            toast({
+                title: success,
+                variant:'success',
+            });
+        }
+    }, [success]);
+
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Projects" />
@@ -42,7 +56,7 @@ const Index = ({ auth, projects }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Project List</h2>
                 </div>
-                <Button>
+                <Button asChild>
                     <Link
                         className=" flex items-center gap-1 "
                         href={route("projects.create")}

@@ -10,6 +10,7 @@ use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -19,14 +20,10 @@ class ProjectController extends Controller
     public function index()
     {
         $query = Project::query();
-        // dd(request()->query());
-        if(request('status')){
-            $query->whereIn('status',request('status') );
-        }
-        $projects = $query->get();
+        $projects = $query->orderBy('id', 'desc')->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
-            'queryParams' => request()->query()
+            'success' => session('success')
         ]);
     }
 
@@ -43,7 +40,12 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $validatedPayload = $request->validated();
+        dd($validatedPayload);
+        $validatedPayload['created_by'] = Auth::id();
+        $validatedPayload['updated_by'] = Auth::id();
+        Project::create($validatedPayload);
+        return to_route('projects.index')->with('success', 'Project Created Successfully');
     }
 
     /**
