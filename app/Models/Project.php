@@ -17,7 +17,6 @@ class Project extends Model
     protected $fillable = [
         'name',
         'description',
-        'image_path',
         'due_date',
         'status',
         'created_by',

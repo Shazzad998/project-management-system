@@ -1,9 +1,4 @@
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -258,23 +253,15 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                                     <CardHeader>
                                         <CardTitle>Project Details</CardTitle>
                                     </CardHeader>
-                                    <CardContent className="">
-                                        <div className="flex flex-wrap md:flex-nowrap gap-3 mb-3">
-                                            <div className="grid gap-2">
-                                                <img
-                                                    src={project.image_path}
-                                                    alt=""
-                                                    className=" aspect-square rounded-lg max-w-32"
-                                                />
-                                            </div>
-                                            <div className=" grid gap-2">
-                                                <p className="text-xl font-medium text-foreground/80">
-                                                   {"["+project.id+"]"} {project.name}
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {project.description}
-                                                </p>
-                                            </div>
+                                    <CardContent>
+                                        <div className=" grid gap-2 mb-3">
+                                            <p className="text-xl font-medium text-foreground/80">
+                                                {"[" + project.id + "]"}{" "}
+                                                {project.name}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {project.description}
+                                            </p>
                                         </div>
                                         <div className=" flex flex-wrap gap-6 justify-between items-center">
                                             <div>
@@ -321,7 +308,10 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                         <TabsContent value="tasks">
                             <Card>
                                 <CardContent className=" pt-4">
-                                    <TasksTable hideProjectColumn={true} tasks={tasks.data}/>
+                                    <TasksTable
+                                        hideProjectColumn={true}
+                                        tasks={tasks.data}
+                                    />
                                 </CardContent>
                             </Card>
                         </TabsContent>

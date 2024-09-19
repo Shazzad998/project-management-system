@@ -41,7 +41,7 @@ export default function AuthenticatedLayout({
     return (
         <div className="grid h-full min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] ">
             <Sidebar navigations={navigations} />
-            <div className="flex flex-col bg-muted/10 max-h-screen overflow-auto">
+            <div className="flex flex-col bg-muted/10 min-h-screen max-h-screen overflow-auto">
                 <Navbar navigations={navigations} user={user} />
                 <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
                     {children}

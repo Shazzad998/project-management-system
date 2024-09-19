@@ -44,19 +44,6 @@ export const ProjectColumns = (
         //     enableSorting: false,
         //     enableHiding: false,
         // },
-        // {
-        //     accessorKey: "image_path",
-        //     header: "Image",
-        //     cell: ({ row }) => {
-        //         return (
-        //             <img
-        //                 className=" w-12 h-12 rounded-lg object-cover"
-        //                 src={row.getValue("image_path")}
-        //                 alt={row.getValue("name")}
-        //             />
-        //         );
-        //     },
-        // },
         {
             accessorKey: "id",
             header: ({ column }) => (

@@ -33,7 +33,6 @@ const Create = ({ auth }: PageProps) => {
     const [date, setDate] = useState<Date>();
 
     const { data, setData, post, errors, reset } = useForm({
-        image_path: null as File | null,
         name: "",
         status: status?.value,
         description: "",
@@ -45,12 +44,6 @@ const Create = ({ auth }: PageProps) => {
         post(route("projects.store"));
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]; 
-        if (file) {
-            setData("image_path", file);
-        }
-    };
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Projects" />
@@ -110,18 +103,6 @@ const Create = ({ auth }: PageProps) => {
                                     }
                                 />
                                 <InputError message={errors.name} />
-                            </div>
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="image_path">Project Image</Label>
-                            <div>
-                                <Input
-                                    className=" file:text-muted-foreground"
-                                    id="image_path"
-                                    type="file"
-                                    onChange={handleFileChange}
-                                />
-                                <InputError message={errors.image_path} />
                             </div>
                         </div>
                         <div className="grid gap-2">
