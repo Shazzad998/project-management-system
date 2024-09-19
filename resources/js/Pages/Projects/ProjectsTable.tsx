@@ -16,9 +16,10 @@ import { projectStatus } from "@/data";
 
 type ProjectsTableProps = {
     projects: Project[];
+    setProject?:(item:Project) => void
 };
 
-const ProjectsTable = ({ projects }: ProjectsTableProps) => {
+const ProjectsTable = ({ projects, setProject }: ProjectsTableProps) => {
     let deleteId = 0;
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const confirmDelete = (id: number) => {

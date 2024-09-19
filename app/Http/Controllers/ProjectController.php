@@ -41,11 +41,10 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $validatedPayload = $request->validated();
-        dd($validatedPayload);
         $validatedPayload['created_by'] = Auth::id();
         $validatedPayload['updated_by'] = Auth::id();
         Project::create($validatedPayload);
-        return to_route('projects.index')->with('success', 'Project Created Successfully');
+        return back()->with('success', 'Project Created Successfully');
     }
 
     /**

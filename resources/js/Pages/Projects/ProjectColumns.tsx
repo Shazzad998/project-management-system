@@ -17,7 +17,8 @@ import StatusBadge from "../../Components/StatusBadge";
 import { Link } from "@inertiajs/react";
 
 export const ProjectColumns = (
-    confirmDelete: (id: number) => void
+    confirmDelete: (id: number) => void,
+    setProject?:(item:Project) => void
 ): ColumnDef<Project>[] => {
     return [
         // {

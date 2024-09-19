@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { ProjectResource, User } from "@/types";
+import { Project, ProjectResource, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import {
     Breadcrumb,
@@ -14,7 +14,8 @@ import ProjectsTable from "./ProjectsTable";
 import { Button } from "@/Components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ProjectForm from "@/Components/projects/ProjectForm";
 
 type Props = {
     auth: {
@@ -26,7 +27,13 @@ type Props = {
 
 const Index = ({ auth, projects, success }: Props) => {
     const { toast } = useToast();
+    const [formOpen, setFormOpen] = useState<boolean>(false)
+    const [project, setProject] = useState<Project|null>(null)
 
+    const closeForm =() => {
+        setFormOpen(false)
+        setProject(null)
+    }
     useEffect(() => {
         if (success) {
             toast({
@@ -56,7 +63,7 @@ const Index = ({ auth, projects, success }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Project List</h2>
                 </div>
-                <Button asChild>
+                {/* <Button asChild>
                     <Link
                         className=" flex items-center gap-1 "
                         href={route("projects.create")}
@@ -64,7 +71,13 @@ const Index = ({ auth, projects, success }: Props) => {
                         {" "}
                         <PlusIcon className="w-4 h-4" /> Create Project
                     </Link>
+                </Button> */}
+                <Button onClick={()=> setFormOpen(true)}>
+                    
+                        <PlusIcon className="w-4 h-4" /> Create Project
+                    
                 </Button>
+                <ProjectForm open={formOpen} onOpenChange={closeForm} project={project}/>
             </div>
             <Card>
                 <CardContent className="pt-6">

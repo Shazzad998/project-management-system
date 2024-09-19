@@ -18,7 +18,7 @@ import { useState } from "react";
 
 type SelectInputProps = {
     options: SelectOption[];
-    selectedValue: SelectOption | null;
+    selectedValue: SelectOption | null | undefined;
     setSelectedValue: (value: SelectOption | null) => void;
     placeholder?: string;
     className?:string
