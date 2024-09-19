@@ -15,7 +15,7 @@ import { Button } from "@/Components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import ProjectForm from "@/Components/projects/ProjectForm";
+import ProjectForm from "./Modals/ProjectForm";
 
 type Props = {
     auth: {
@@ -27,21 +27,27 @@ type Props = {
 
 const Index = ({ auth, projects, success }: Props) => {
     const { toast } = useToast();
-    const [formOpen, setFormOpen] = useState<boolean>(false)
-    const [project, setProject] = useState<Project|null>(null)
+    const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [project, setProject] = useState<Project | null>(null);
 
-    const closeForm =() => {
-        setFormOpen(false)
-        setProject(null)
-    }
+    const closeForm = () => {
+        setFormOpen(false);
+        setProject(null);
+    };
     useEffect(() => {
         if (success) {
             toast({
-                title: success,
-                variant:'success',
+                title: "Success!",
+                description: success,
+                variant: "success",
             });
         }
     }, [success]);
+
+    const openEdit = (project: Project | null) => {
+        setProject(project);
+        setFormOpen(true);
+    };
 
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -63,25 +69,21 @@ const Index = ({ auth, projects, success }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Project List</h2>
                 </div>
-                {/* <Button asChild>
-                    <Link
-                        className=" flex items-center gap-1 "
-                        href={route("projects.create")}
-                    >
-                        {" "}
-                        <PlusIcon className="w-4 h-4" /> Create Project
-                    </Link>
-                </Button> */}
-                <Button onClick={()=> setFormOpen(true)}>
-                    
-                        <PlusIcon className="w-4 h-4" /> Create Project
-                    
+                <Button onClick={() => setFormOpen(true)}>
+                    <PlusIcon className="w-4 h-4" /> Create Project
                 </Button>
-                <ProjectForm open={formOpen} onOpenChange={closeForm} project={project}/>
+                <ProjectForm
+                    open={formOpen}
+                    onOpenChange={closeForm}
+                    project={project}
+                />
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <ProjectsTable projects={projects.data} />
+                    <ProjectsTable
+                        projects={projects.data}
+                        setProject={openEdit}
+                    />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

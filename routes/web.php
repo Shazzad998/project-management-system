@@ -22,8 +22,7 @@ Route::redirect('/', '/dashboard');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
     Route::resource('users', UserController::class);
-    Route::resource('projects', ProjectController::class)->except('store');
-    Route::post('/projectStore', [ProjectController::class, 'store']);
+    Route::resource('projects', ProjectController::class);
     Route::resource('tasks', TaskController::class);
 });
 

@@ -27,13 +27,6 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return inertia('Projects/Create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,20 +55,16 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Project $project)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $validatedPayload = $request->validated();
+        $validatedPayload['updated_by'] = Auth::id();
+        $project->update($validatedPayload);
+        return back()->with('success', 'Project Updated Successfully');
     }
 
     /**
@@ -83,6 +72,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return back()->with('success', 'Project Deleted Successfully');
     }
 }

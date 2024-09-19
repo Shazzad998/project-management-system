@@ -46,23 +46,29 @@ export type Task = {
     updated_at: string;
     created_by: User;
     updated_by: User;
-    assigned_user: User|null;
-    project:Project
+    assigned_user: User | null;
+    project: Project;
 };
-
 
 export type ProjectResource = {
     data: Project[];
 };
 
-export type TaskResource ={
-    data:Task[]
-}
-export type UserResource ={
-    data:User[]
-}
+export type TaskResource = {
+    data: Task[];
+};
+export type UserResource = {
+    data: User[];
+};
 
 export type SelectOption = {
-    label:string
-    value:string
-}
+    label: string;
+    value: string;
+};
+
+export type Errors = {
+    name?: string;
+    description?: string;
+    due_date?: string;
+    status?: string;
+};

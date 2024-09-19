@@ -1,5 +1,5 @@
 import { Button } from "@/Components/ui/button";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { useState } from "react";
 import { Project } from "@/types";
 import {
@@ -13,49 +13,41 @@ import {
 import { DataTable } from "@/Components/ui/data-table";
 import { ProjectColumns } from "@/Pages/Projects/ProjectColumns";
 import { projectStatus } from "@/data";
+import DeleteConfirm from "@/Components/DeleteConfirm";
 
 type ProjectsTableProps = {
     projects: Project[];
-    setProject?:(item:Project) => void
+    setProject: (item: Project) => void;
 };
 
 const ProjectsTable = ({ projects, setProject }: ProjectsTableProps) => {
-    let deleteId = 0;
+    const [deleteId, setDeleteId] = useState<number | null>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const confirmDelete = (id: number) => {
-        deleteId = id;
+        setDeleteId(id);
         setDeleteDialogOpen(true);
+    };
+
+    const deleteItem = () => {
+        if (deleteId) {
+            router.delete(route("projects.destroy", deleteId), {
+                onSuccess: () => {
+                    setDeleteDialogOpen(false);
+                    setDeleteId(null);
+                },
+            });
+        }
     };
     return (
         <>
-            {/* Delete Dialog */}
-            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                        <DialogDescription>
-                            This action can not be undone after completed.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex justify-end gap-x-2">
-                        <Button variant={"destructive"} asChild>
-                            <Link
-                                href={route("projects.destroy", deleteId)}
-                                method="delete"
-                                as="button"
-                            >
-                                Delete
-                            </Link>
-                        </Button>
-                        <DialogClose asChild>
-                            <Button variant={"secondary"}>Cancel</Button>
-                        </DialogClose>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            <DeleteConfirm
+                open={deleteDialogOpen}
+                opOpenChange={setDeleteDialogOpen}
+                onConfirm={deleteItem}
+            />
             <DataTable
                 data={projects}
-                columns={ProjectColumns(confirmDelete)}
+                columns={ProjectColumns(confirmDelete, setProject)}
                 filters={[
                     {
                         title: "Status",

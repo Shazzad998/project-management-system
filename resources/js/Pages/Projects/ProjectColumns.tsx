@@ -1,4 +1,3 @@
-
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
@@ -18,7 +17,7 @@ import { Link } from "@inertiajs/react";
 
 export const ProjectColumns = (
     confirmDelete: (id: number) => void,
-    setProject?:(item:Project) => void
+    setProject: (item: Project) => void
 ): ColumnDef<Project>[] => {
     return [
         // {
@@ -48,14 +47,18 @@ export const ProjectColumns = (
         {
             accessorKey: "id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Id" className="pl-2" />
+                <DataTableColumnHeader
+                    column={column}
+                    title="Id"
+                    className="pl-2"
+                />
             ),
             cell: ({ row }) => {
-                const project = row.original
+                const project = row.original;
                 return (
                     <div className="text-left font-semibold px-3">
-                        <Link href={route('projects.show', project.id)}>
-                        {project.id}
+                        <Link href={route("projects.show", project.id)}>
+                            {project.id}
                         </Link>
                     </div>
                 );
@@ -67,11 +70,14 @@ export const ProjectColumns = (
                 <DataTableColumnHeader column={column} title="Name" />
             ),
             cell: ({ row }) => {
-                const project = row.original
+                const project = row.original;
                 return (
-                        <Link href={route('projects.show', project.id)} className="text-left font-semibold ease-in-out duration-200 hover:underline" >
+                    <Link
+                        href={route("projects.show", project.id)}
+                        className="text-left font-semibold ease-in-out duration-200 hover:underline"
+                    >
                         {project.name}
-                        </Link>
+                    </Link>
                 );
             },
         },
@@ -98,31 +104,22 @@ export const ProjectColumns = (
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Created at"
-                />
+                <DataTableColumnHeader column={column} title="Created at" />
             ),
         },
         {
             accessorKey: "due_date",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Due Date"
-                />
+                <DataTableColumnHeader column={column} title="Due Date" />
             ),
         },
         {
             accessorKey: "created_by",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Created by"
-                />
+                <DataTableColumnHeader column={column} title="Created by" />
             ),
             cell: ({ row }) => {
-                const created_by = row.getValue("created_by") as User
+                const created_by = row.getValue("created_by") as User;
                 return (
                     <div className="text-start font-bold">
                         {created_by.name}
@@ -145,7 +142,9 @@ export const ProjectColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => setProject(project ?? null)}
+                            >
                                 <span className=" flex items-center gap-1">
                                     {" "}
                                     <Edit className="w-4 h-4" /> Edit

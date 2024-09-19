@@ -2,23 +2,21 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
 } from "@/Components/ui/sheet";
-import { Button } from "../ui/button";
-import { Project, SelectOption } from "@/types";
-import { FormEvent, useState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import InputError from "../InputError";
-import { DatePicker } from "../DatePicker";
+import { Button } from "../../../Components/ui/button";
+import { Errors, Project, SelectOption } from "@/types";
+import { FormEvent, useEffect, useState } from "react";
+import { Label } from "../../../Components/ui/label";
+import { Input } from "../../../Components/ui/input";
+import InputError from "../../../Components/InputError";
+import { DatePicker } from "../../../Components/DatePicker";
 import { formatDate } from "@/lib/utils";
-import { SelectInput } from "../SelectInput";
+import { SelectInput } from "../../../Components/SelectInput";
 import { projectStatus } from "@/data";
-import { Textarea } from "../ui/textarea";
-import { router, useForm } from "@inertiajs/react";
+import { Textarea } from "../../../Components/ui/textarea";
+import { router } from "@inertiajs/react";
 
 type Props = {
     open: boolean;
@@ -27,34 +25,75 @@ type Props = {
 };
 
 const ProjectForm = ({ open, onOpenChange, project }: Props) => {
-    const [status, setStatus] = useState<SelectOption | null | undefined>(
-        project
-            ? projectStatus.find((item) => item.value == project.status)
-            : null
-    );
-    const [date, setDate] = useState<Date | undefined>(
-        project && project.due_date ? new Date(project.due_date) : undefined
-      );
+    const [status, setStatus] = useState<SelectOption | null | undefined>();
+    const [date, setDate] = useState<Date | undefined>();
+    const [errors, setErrors] = useState<Errors>({});
 
-    const { data, setData, post, errors, reset } = useForm({
-        name: project?.name ?? "",
-        status: status?.value ?? "",
-        description: project?.description ?? "",
-        due_date: project?.due_date ?? "",
+    const [data, _setData] = useState({
+        name: "",
+        description: "",
+        status: "",
+        due_date: "",
     });
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault(); // This stops the page from refreshing
-        console.log(data);
-        router.post("/projectStore", data, {
-            onSuccess: () => {
-                closeSheet();
-                reset(); // Reset the form on success
-            },
-            onError: () => {
-                console.log(errors); // Handle errors
-            },
+    const setData = (key: string, value: string) => {
+        _setData((values) => ({
+            ...values,
+            [key]: value,
+        }));
+    };
+
+    useEffect(() => {
+        setData("name", project?.name ?? "");
+        setData("status", project?.status ?? "");
+        setStatus(
+            project
+                ? projectStatus.find((item) => item.value == project.status)
+                : null
+        );
+        setData("description", project?.description ?? "");
+        setData("due_date", project?.due_date ?? "");
+        setDate(
+            project && project.due_date ? new Date(project.due_date) : undefined
+        );
+    }, [project]);
+
+    const reset = () => {
+        _setData({
+            name: "",
+            description: "",
+            status: "",
+            due_date: "",
         });
+        setStatus(null);
+        setDate(undefined);
+        setErrors({});
+    };
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        setErrors({});
+        if (project) {
+            router.patch(route("projects.update", project.id), data, {
+                onSuccess: () => {
+                    closeSheet();
+                    reset();
+                },
+                onError: (errors) => {
+                    setErrors(errors as Errors);
+                },
+            });
+        } else {
+            router.post(route("projects.store"), data, {
+                onSuccess: () => {
+                    closeSheet();
+                    reset();
+                },
+                onError: (errors) => {
+                    setErrors(errors as Errors);
+                },
+            });
+        }
     };
     const closeSheet = () => {
         onOpenChange(false);
