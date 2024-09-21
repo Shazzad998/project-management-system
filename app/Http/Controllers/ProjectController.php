@@ -23,7 +23,10 @@ class ProjectController extends Controller
         $projects = $query->orderBy('id', 'desc')->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
-            'success' => session('success')
+            'session' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
         ]);
     }
 
@@ -72,6 +75,9 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if($project->tasks()->count()){
+            return back()->with('error', 'This project has tasks associated with it.');
+        }
         $project->delete();
         return back()->with('success', 'Project Deleted Successfully');
     }

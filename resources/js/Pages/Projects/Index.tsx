@@ -22,10 +22,13 @@ type Props = {
         user: User;
     };
     projects: ProjectResource;
-    success: string;
+    session: {
+        success?:string
+        error?:string
+    };
 };
 
-const Index = ({ auth, projects, success }: Props) => {
+const Index = ({ auth, projects, session }: Props) => {
     const { toast } = useToast();
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [project, setProject] = useState<Project | null>(null);
@@ -35,14 +38,21 @@ const Index = ({ auth, projects, success }: Props) => {
         setProject(null);
     };
     useEffect(() => {
-        if (success) {
+        if (session.success) {
             toast({
                 title: "Success!",
-                description: success,
+                description: session.success,
                 variant: "success",
             });
         }
-    }, [success]);
+        if (session.error) {
+            toast({
+                title: "Error!",
+                description: session.error,
+                variant: "destructive",
+            });
+        }
+    }, [session]);
 
     const openEdit = (project: Project | null) => {
         setProject(project);
