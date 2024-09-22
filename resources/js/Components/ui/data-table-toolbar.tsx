@@ -9,7 +9,7 @@ import { DataTableViewOptions } from "./data-table-view-options"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>,
-  filters : {
+  filters ?: {
     title:string,
     value:string,
     options:{
@@ -42,7 +42,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {filters.map((filter) => {
+        {filters?.map((filter) => {
           if(table.getColumn(filter.value)){
             return <DataTableFacetedFilter key={filter.value}
             column={table.getColumn(filter.value)}

@@ -29,7 +29,7 @@ import { DataTableToolbar } from "./data-table-toolbar";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  filters : {
+  filters ?: {
     title:string,
     value:string,
     options:{

@@ -1,18 +1,17 @@
 
 import { router } from "@inertiajs/react";
 import { useState } from "react";
-import { Project } from "@/types";
+import { User } from "@/types";
 import { DataTable } from "@/Components/ui/data-table";
-import { ProjectColumns } from "@/Pages/Projects/ProjectColumns";
-import { projectStatus } from "@/data";
 import DeleteConfirm from "@/Components/DeleteConfirm";
+import { UserColumns } from "./UserColumns";
 
-type ProjectsTableProps = {
-    projects: Project[];
-    setProject: (item: Project) => void;
+type UsersTableProps = {
+    users: User[];
+    setUser: (item: User) => void;
 };
 
-const ProjectsTable = ({ projects, setProject }: ProjectsTableProps) => {
+const UsersTable = ({ users, setUser }: UsersTableProps) => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const confirmDelete = (id: number) => {
@@ -22,7 +21,7 @@ const ProjectsTable = ({ projects, setProject }: ProjectsTableProps) => {
 
     const deleteItem = () => {
         if (deleteId) {
-            router.delete(route("projects.destroy", deleteId), {
+            router.delete(route("users.destroy", deleteId), {
                 onSuccess: () => {
                     setDeleteDialogOpen(false);
                     setDeleteId(null);
@@ -38,19 +37,17 @@ const ProjectsTable = ({ projects, setProject }: ProjectsTableProps) => {
                 onConfirm={deleteItem}
             />
             <DataTable
-                data={projects}
-                columns={ProjectColumns(confirmDelete, setProject)}
-                filters={[
-                    {
-                        title: "Status",
-                        value: "status",
-                        options: projectStatus,
-                    },
-                ]}
-                search={{ column: "name", placeholder: "Filter projects" }}
+                data={users}
+                columns={UserColumns(confirmDelete, setUser)}
+                filters={[{
+                    title: "Verified",
+                    value: "email_verified_at",
+                    options: [{label:"Yes", value:"Yes"}, {label:"No", value:"No"}],
+                },]}
+                search={{ column: "name", placeholder: "Filter users" }}
             />
         </>
     );
 };
 
-export default ProjectsTable;
+export default UsersTable;

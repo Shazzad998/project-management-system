@@ -1,271 +1,97 @@
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { User } from "@/types";
-import { Badge } from "@/Components/ui/badge";
+import { Project, ProjectResource, User, UserResource } from "@/types";
+import { Card, CardContent } from "@/Components/ui/card";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table";
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/Components/ui/breadcrumb";
+import { Button } from "@/Components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import ProjectForm from "../Projects/Modals/ProjectForm";
+import UsersTable from "./UsersTable";
+import UserForm from "./Modals/UserForm";
 
 type Props = {
     auth: {
         user: User;
     };
+    users: UserResource;
+    session: {
+        success?:string
+        error?:string
+    };
 };
 
-const Index = ({ auth }: Props) => {
+const Index = ({ auth, users, session }: Props) => {
+    const { toast } = useToast();
+    const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [user, setUser] = useState<User | null>(null);
+
+    const closeForm = () => {
+        setFormOpen(false);
+        setUser(null);
+    };
+    useEffect(() => {
+        if (session.success) {
+            toast({
+                title: "Success!",
+                description: session.success,
+                variant: "success",
+            });
+        }
+        if (session.error) {
+            toast({
+                title: "Error!",
+                description: session.error,
+                variant: "destructive",
+            });
+        }
+    }, [session]);
+
+    const openEdit = (user: User | null) => {
+        setUser(user);
+        setFormOpen(true);
+    };
+
     return (
         <AuthenticatedLayout user={auth.user}>
-            <Head title="Dashboard" />
+            <Head title="Users" />
+            <div className="flex items-end justify-between gap-2">
+                <div>
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/">Home</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Users</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <h2 className="mt-2 font-bold text-xl">User List</h2>
+                </div>
+                <Button onClick={() => setFormOpen(true)}>
+                    <PlusIcon className="w-4 h-4 mr-2" /> Create User
+                </Button>
+                <UserForm open={formOpen}
+                    onOpenChange={closeForm} user={user}/>
+            </div>
             <Card>
-                <CardHeader className="px-7">
-                    <CardTitle>Orders</CardTitle>
-                    <CardDescription>
-                        Recent orders from your store.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Customer</TableHead>
-                                <TableHead className="hidden sm:table-cell">
-                                    Type
-                                </TableHead>
-                                <TableHead className="hidden sm:table-cell">
-                                    Status
-                                </TableHead>
-                                <TableHead className="hidden md:table-cell">
-                                    Date
-                                </TableHead>
-                                <TableHead className="text-right">
-                                    Amount
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow className="bg-accent">
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Liam Johnson
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        liam@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="secondary"
-                                    >
-                                        Fulfilled
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-23
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $250.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Olivia Smith
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        olivia@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Refund
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="outline"
-                                    >
-                                        Declined
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-24
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $150.00
-                                </TableCell>
-                            </TableRow>
-                            {/* <TableRow>
-                          <TableCell>
-                            <div className="font-medium">Liam Johnson</div>
-                            <div className="hidden text-sm text-muted-foreground md:inline">
-                              liam@example.com
-                            </div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            Sale
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            2023-06-23
-                          </TableCell>
-                          <TableCell className="text-right">$250.00</TableCell>
-                        </TableRow> */}
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Noah Williams
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        noah@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Subscription
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="secondary"
-                                    >
-                                        Fulfilled
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-25
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $350.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Emma Brown
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        emma@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="secondary"
-                                    >
-                                        Fulfilled
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-26
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $450.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Liam Johnson
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        liam@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="secondary"
-                                    >
-                                        Fulfilled
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-23
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $250.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Olivia Smith
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        olivia@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Refund
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="outline"
-                                    >
-                                        Declined
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-24
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $150.00
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <div className="font-medium">
-                                        Emma Brown
-                                    </div>
-                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                        emma@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    Sale
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                    <Badge
-                                        className="text-xs"
-                                        variant="secondary"
-                                    >
-                                        Fulfilled
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    2023-06-26
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    $450.00
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                <CardContent className="pt-6">
+                    <UsersTable
+                        users={users.data}
+                        setUser={openEdit}
+                    />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

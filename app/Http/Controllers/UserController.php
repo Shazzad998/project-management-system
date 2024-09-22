@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -13,23 +16,32 @@ class UserController extends Controller
      */
     public function index()
     {
-        return inertia("Users/Index");
+        $query = User::query();
+        $users = $query->orderBy('id', 'desc')->get();
+        return inertia('Users/Index', [
+            'users' => UserResource::collection($users),
+            'session' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreUserRequest $request)
     {
-        //
+
+        $validatedPayload = $request->validated();
+        try {
+            User::create($validatedPayload);
+            return back()->with('success', 'User Created Successfully');
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Something went wrong. Please try again later.');
+        }
     }
 
     /**
@@ -41,19 +53,22 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $validatedPayload = $request->validated();
+        try {
+            if (!$validatedPayload['password']) {
+                unset($validatedPayload['password']);
+            }
+            $user->update($validatedPayload);
+            return back()->with('success', 'User Updated Successfully');
+            
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Something went wrong. Please try again later.');
+        }
     }
 
     /**
@@ -61,6 +76,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+            return back()->with('success', 'User Deleted Successfully');
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Something went wrong. Please try again later.');
+        }
     }
 }
