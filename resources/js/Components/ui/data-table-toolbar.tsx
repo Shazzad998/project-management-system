@@ -18,28 +18,25 @@ interface DataTableToolbarProps<TData> {
       icon?: React.ComponentType<{ className?: string }>
     }[]
   }[],
-  search:{
-    column:string,
-    placeholder?:string
-  }
+  globalFilter:string
+  setGlobalFilter:(value:string)=>void
 }
 
 export function DataTableToolbar<TData>({
   table,
   filters,
-  search
+  globalFilter,
+  setGlobalFilter
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <Input
-          placeholder={search.placeholder?? 'Search...'}
-          value={(table.getColumn(search.column)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(search.column)?.setFilterValue(event.target.value)
-          }
+      <Input
+          placeholder='Search...'
+          value={globalFilter ?? ""} 
+          onChange={(event) => setGlobalFilter(event.target.value)}  
           className="h-8 w-[150px] lg:w-[250px]"
         />
         {filters?.map((filter) => {

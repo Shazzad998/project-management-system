@@ -44,7 +44,7 @@ const UsersTable = ({ users, setUser }: UsersTableProps) => {
                     value: "email_verified_at",
                     options: [{label:"Yes", value:"Yes"}, {label:"No", value:"No"}],
                 },]}
-                search={{ column: "name", placeholder: "Filter users" }}
+                searchableColumns={['name', 'email']}
             />
         </>
     );

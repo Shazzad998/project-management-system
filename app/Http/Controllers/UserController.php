@@ -36,6 +36,10 @@ class UserController extends Controller
 
         $validatedPayload = $request->validated();
         try {
+            $image = $validatedPayload['image_path'] ?? null;
+            if ($image) {
+                $validatedPayload['image_path'] = $image->store('users/' . str_replace(" ", "_", $validatedPayload['name']), 'public');
+            }
             User::create($validatedPayload);
             return back()->with('success', 'User Created Successfully');
         } catch (Exception $e) {
@@ -62,9 +66,13 @@ class UserController extends Controller
             if (!$validatedPayload['password']) {
                 unset($validatedPayload['password']);
             }
+            $image = $validatedPayload['image_path'] ?? null;
+            if ($image) {
+                $validatedPayload['image_path'] = $image->store('users/' . str_replace(" ", "_", $validatedPayload['name']), 'public');
+                
+            }
             $user->update($validatedPayload);
             return back()->with('success', 'User Updated Successfully');
-            
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'Something went wrong. Please try again later.');

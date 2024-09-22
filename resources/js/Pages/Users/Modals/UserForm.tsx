@@ -7,7 +7,7 @@ import {
 } from "@/Components/ui/sheet";
 import { Button } from "../../../Components/ui/button";
 import { Errors, User } from "@/types";
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Label } from "../../../Components/ui/label";
 import { Input } from "../../../Components/ui/input";
 import InputError from "../../../Components/InputError";
@@ -22,13 +22,19 @@ type Props = {
 const UserForm = ({ open, onOpenChange, user }: Props) => {
     const [errors, setErrors] = useState<Errors>({});
 
-    const [data, _setData] = useState({
+    const [data, _setData] = useState<{
+        name: string;
+        email: string;
+        password: string;
+        image_path: File | null;
+    }>({
         name: "",
         email: "",
-        password:""
+        password: "",
+        image_path: null,
     });
 
-    const setData = (key: string, value: string) => {
+    const setData = (key: string, value: string | File | null) => {
         _setData((values) => ({
             ...values,
             [key]: value,
@@ -40,11 +46,19 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
         setData("email", user?.email ?? "");
     }, [user]);
 
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setData("image_path", file);
+        }
+    };
+
     const reset = () => {
         _setData({
             name: "",
             email: "",
-            password:""
+            password: "",
+            image_path: null,
         });
         setErrors({});
     };
@@ -89,6 +103,29 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
                     onSubmit={handleSubmit}
                     className=" grid grid-cols-1 md:grid-cols-2 gap-4 mt-6"
                 >
+                    <div className=" flex gap-4 items-stretch">
+                        {user && user.image_path && (
+                            <img
+                                src={user.image_path}
+                                alt=""
+                                className=" aspect-square w-16 rounded-xl object-cover"
+                            />
+                        )}
+                        <div className="grid gap-2">
+                            <Label htmlFor="image">Image</Label>
+
+                            <div>
+                                <Input
+                                    id="image"
+                                    className=" file:text-muted-foreground"
+                                    type="file"
+                                    onChange={handleFileChange}
+                                />
+                                <InputError message={errors.name} />
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
 
@@ -106,7 +143,7 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
                         </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Email</Label>
+                        <Label htmlFor="email">Email</Label>
 
                         <div>
                             <Input
@@ -137,7 +174,6 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
                             <InputError message={errors.password} />
                         </div>
                     </div>
-
 
                     <div className=" flex items-center justify-end gap-2 md:col-span-2">
                         <SheetClose asChild>

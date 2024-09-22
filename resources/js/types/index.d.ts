@@ -5,6 +5,7 @@ export interface User {
     name: string;
     email: string;
     email_verified_at: string | null;
+    image_path: string | null;
 }
 
 export type PageProps<
@@ -71,6 +72,6 @@ export type Errors = {
     description?: string;
     due_date?: string;
     status?: string;
-    email?:string;
-    password?:string
+    email?: string;
+    password?: string;
 };

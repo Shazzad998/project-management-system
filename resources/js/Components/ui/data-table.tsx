@@ -38,22 +38,20 @@ interface DataTableProps<TData, TValue> {
       icon?: React.ComponentType<{ className?: string }>
     }[]
   }[],
-  search:{
-    column:string,
-    placeholder?:string
-  }
+  searchableColumns:string[]
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filters,
-  search,
+  searchableColumns,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [globalFilter, setGlobalFilter] = React.useState('');
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({});
@@ -68,8 +66,15 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
+    globalFilterFn: (row, id, filterValue) => {
+      return searchableColumns.some((column) => {
+        const cellValue = row.getValue(column)?.toString().toLowerCase() || '';
+        return cellValue.includes(filterValue.toLowerCase());
+      });
+    },
     state: {
       sorting,
+      globalFilter,
       columnFilters,
       rowSelection,
       columnVisibility
@@ -78,7 +83,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className=" space-y-4">
-      <DataTableToolbar table={table} filters={filters} search={search}/>
+      <DataTableToolbar table={table} filters={filters} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

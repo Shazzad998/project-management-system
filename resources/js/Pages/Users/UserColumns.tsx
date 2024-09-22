@@ -65,6 +65,25 @@ export const UserColumns = (
             },
         },
         {
+            accessorKey: "image_path",
+            header: "Image",
+            cell: ({ row }) => {
+                const user = row.original;
+                return (
+                    <div>
+                        {user.image_path ? (
+                            <img
+                                className=" w-10 h-10 rounded-xl object-cover"
+                                src={user.image_path}
+                            />
+                        ) : (
+                            <></>
+                        )}
+                    </div>
+                );
+            },
+        },
+        {
             accessorKey: "name",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
@@ -93,7 +112,9 @@ export const UserColumns = (
             cell: ({ row }) => {
                 return (
                     <div className="text-center text-nowrap">
-                        <a href={`mailto:${row.getValue('email')}`}>{row.getValue('email')}</a>
+                        <a href={`mailto:${row.getValue("email")}`}>
+                            {row.getValue("email")}
+                        </a>
                     </div>
                 );
             },
@@ -110,12 +131,18 @@ export const UserColumns = (
             cell: ({ row }) => {
                 return (
                     <div className="text-center">
-                        {row.getValue('email_verified_at')? <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Yes</Badge> : <Badge variant={'destructive'}>No</Badge>}
+                        {row.getValue("email_verified_at") ? (
+                            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                Yes
+                            </Badge>
+                        ) : (
+                            <Badge variant={"destructive"}>No</Badge>
+                        )}
                     </div>
                 );
             },
             filterFn: (row, id, value) => {
-                return value.includes(row.getValue(id)? "Yes" : "No");
+                return value.includes(row.getValue(id) ? "Yes" : "No");
             },
         },
         {
@@ -124,7 +151,7 @@ export const UserColumns = (
                 <DataTableColumnHeader column={column} title="Created at" />
             ),
         },
-  
+
         {
             id: "actions",
             cell: ({ row }) => {
