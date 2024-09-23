@@ -27,6 +27,7 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
         email: string;
         password: string;
         image_path: File | null;
+        _method?:string
     }>({
         name: "",
         email: "",
@@ -44,6 +45,9 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
     useEffect(() => {
         setData("name", user?.name ?? "");
         setData("email", user?.email ?? "");
+        if(user){
+            setData('_method', 'PUT')
+        }
     }, [user]);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,8 +70,9 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         setErrors({});
+        console.log(data)
         if (user) {
-            router.patch(route("users.update", user.id), data, {
+            router.post(route("users.update", user.id), data, {
                 onSuccess: () => {
                     closeSheet();
                     reset();

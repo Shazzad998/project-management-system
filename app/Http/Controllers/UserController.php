@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -68,8 +69,10 @@ class UserController extends Controller
             }
             $image = $validatedPayload['image_path'] ?? null;
             if ($image) {
-                $validatedPayload['image_path'] = $image->store('users/' . str_replace(" ", "_", $validatedPayload['name']), 'public');
-                
+                if ($user->image_path) {
+                    Storage::disk('public')->deleteDirectory(dirname($user->image_path));
+                }
+                $validatedPayload['image_path'] = $image->store('users/' . strtolower(str_replace(['-', ' '], "_", $validatedPayload['name'])) , 'public');
             }
             $user->update($validatedPayload);
             return back()->with('success', 'User Updated Successfully');
@@ -85,6 +88,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         try {
+            if ($user->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($user->image_path));
+            }
             $user->delete();
             return back()->with('success', 'User Deleted Successfully');
         } catch (Exception $e) {
