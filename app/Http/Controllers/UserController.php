@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -19,8 +20,10 @@ class UserController extends Controller
     {
         $query = User::query();
         $users = $query->orderBy('id', 'desc')->get();
+        $roles = Role::all()->pluck('name');
         return inertia('Users/Index', [
             'users' => UserResource::collection($users),
+            'roles' => $roles,
             'session' => [
                 'success' => session('success'),
                 'error' => session('error'),

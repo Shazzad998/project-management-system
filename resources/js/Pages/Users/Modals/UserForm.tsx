@@ -6,32 +6,41 @@ import {
     SheetTitle,
 } from "@/Components/ui/sheet";
 import { Button } from "../../../Components/ui/button";
-import { Errors, User } from "@/types";
+import { Errors, SelectOption, User } from "@/types";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Label } from "../../../Components/ui/label";
 import { Input } from "../../../Components/ui/input";
 import InputError from "../../../Components/InputError";
 import { router } from "@inertiajs/react";
+import { SelectInput } from "@/Components/SelectInput";
 
 type Props = {
     open: boolean;
     onOpenChange: (value: boolean) => void;
     user: User | null;
+    roles: string[];
 };
 
-const UserForm = ({ open, onOpenChange, user }: Props) => {
+const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
+    const roleOptions = roles.map((role) => ({
+        label: role,
+        value: role,
+    }));
     const [errors, setErrors] = useState<Errors>({});
+    const [role, setRole] = useState<SelectOption | null | undefined>();
 
     const [data, _setData] = useState<{
         name: string;
         email: string;
         password: string;
         image_path: File | null;
-        _method?:string
+        role: string;
+        _method?: string;
     }>({
         name: "",
         email: "",
         password: "",
+        role: "",
         image_path: null,
     });
 
@@ -45,8 +54,8 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
     useEffect(() => {
         setData("name", user?.name ?? "");
         setData("email", user?.email ?? "");
-        if(user){
-            setData('_method', 'PUT')
+        if (user) {
+            setData("_method", "PUT");
         }
     }, [user]);
 
@@ -62,6 +71,7 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
             name: "",
             email: "",
             password: "",
+            role: "",
             image_path: null,
         });
         setErrors({});
@@ -70,7 +80,7 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         setErrors({});
-        console.log(data)
+        console.log(data);
         if (user) {
             router.post(route("users.update", user.id), data, {
                 onSuccess: () => {
@@ -116,7 +126,7 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
                                 className=" aspect-square w-16 rounded-xl object-cover"
                             />
                         )}
-                        <div className="grid gap-2">
+                        <div className="grid gap-2 w-full">
                             <Label htmlFor="image">Image</Label>
 
                             <div>
@@ -177,6 +187,22 @@ const UserForm = ({ open, onOpenChange, user }: Props) => {
                                 }
                             />
                             <InputError message={errors.password} />
+                        </div>
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Role</Label>
+                        <div>
+                            <SelectInput
+                                className="w-full"
+                                options={roleOptions}
+                                selectedValue={role}
+                                setSelectedValue={(value) => {
+                                    setRole(value);
+                                    setData("status", value?.value ?? "");
+                                }}
+                                placeholder="Select Role"
+                            />
+                            <InputError message={errors.status} />
                         </div>
                     </div>
 

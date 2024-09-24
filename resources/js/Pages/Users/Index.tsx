@@ -23,13 +23,14 @@ type Props = {
         user: User;
     };
     users: UserResource;
+    roles: string[];
     session: {
         success?:string
         error?:string
     };
 };
 
-const Index = ({ auth, users, session }: Props) => {
+const Index = ({ auth, users, roles, session }: Props) => {
     const { toast } = useToast();
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
@@ -83,7 +84,7 @@ const Index = ({ auth, users, session }: Props) => {
                 <Button onClick={() => setFormOpen(true)}>
                     <PlusIcon className="w-4 h-4 mr-2" /> Create User
                 </Button>
-                <UserForm open={formOpen}
+                <UserForm open={formOpen} roles={roles}
                     onOpenChange={closeForm} user={user}/>
             </div>
             <Card>

@@ -14,6 +14,7 @@ import {
 } from "@/Components/ui/popover";
 import { cn } from "@/lib/utils";
 import { SelectOption } from "@/types";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
 type SelectInputProps = {
@@ -36,12 +37,13 @@ export function SelectInput({
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("justify-start", className)}>
+                <Button variant="outline" className={cn("justify-between", className)}>
                     {selectedValue ? (
                         <>{selectedValue.label}</>
                     ) : (
                         <span className="text-muted-foreground">{placeholder}</span>
                     )}
+                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="start">
