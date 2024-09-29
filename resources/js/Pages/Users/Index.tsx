@@ -1,6 +1,12 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Project, ProjectResource, User, UserResource } from "@/types";
+import {
+    Project,
+    ProjectResource,
+    User,
+    UserResource,
+    UserSingleResource,
+} from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import {
     Breadcrumb,
@@ -20,13 +26,13 @@ import UserForm from "./Modals/UserForm";
 
 type Props = {
     auth: {
-        user: User;
+        user: UserSingleResource;
     };
     users: UserResource;
     roles: string[];
     session: {
-        success?:string
-        error?:string
+        success?: string;
+        error?: string;
     };
 };
 
@@ -62,7 +68,7 @@ const Index = ({ auth, users, roles, session }: Props) => {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.data}>
             <Head title="Users" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -84,15 +90,16 @@ const Index = ({ auth, users, roles, session }: Props) => {
                 <Button onClick={() => setFormOpen(true)}>
                     <PlusIcon className="w-4 h-4 mr-2" /> Create User
                 </Button>
-                <UserForm open={formOpen} roles={roles}
-                    onOpenChange={closeForm} user={user}/>
+                <UserForm
+                    open={formOpen}
+                    roles={roles}
+                    onOpenChange={closeForm}
+                    user={user}
+                />
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <UsersTable
-                        users={users.data}
-                        setUser={openEdit}
-                    />
+                    <UsersTable users={users.data} setUser={openEdit} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

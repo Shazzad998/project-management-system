@@ -9,7 +9,13 @@ import {
 } from "@/Components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Project, TaskResource, User, UserResource } from "@/types";
+import {
+    Project,
+    TaskResource,
+    User,
+    UserResource,
+    UserSingleResource,
+} from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import BarChartRadial from "@/Components/BarChartRadial";
 import { Label } from "@/Components/ui/label";
@@ -18,7 +24,7 @@ import TasksTable from "../Tasks/TasksTable";
 
 type Props = {
     auth: {
-        user: User;
+        user: UserSingleResource;
     };
     project: Project;
     tasks: TaskResource;
@@ -84,7 +90,7 @@ const Show = ({ auth, project, tasks, members }: Props) => {
         },
     ];
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.data}>
             <Head title={project.name} />
             <div className="grid ">
                 <Breadcrumb>

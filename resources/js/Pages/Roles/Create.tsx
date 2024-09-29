@@ -1,6 +1,6 @@
 import { Head, Link, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Errors, User } from "@/types";
+import { Errors, User, UserSingleResource } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { List } from "lucide-react";
@@ -20,7 +20,7 @@ import CheckBoxGroup from "./Partials/CheckBoxGroup";
 
 type Props = {
     auth: {
-        user: User;
+        user: UserSingleResource;
     };
     permissions: {
         [key: string]: string[];
@@ -59,7 +59,7 @@ const Create = ({ auth, permissions }: Props) => {
     }
 
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.data}>
             <Head title="Create Role" />
             <div className="flex items-end justify-between gap-2">
                 <div>

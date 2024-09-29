@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { NavLink as NavLinkType, User } from "@/types";
-import {  FolderOpen, Home, ListTodo, UserRoundCog, Users2 } from "lucide-react";
+import { FolderOpen, Home, ListTodo, UserRoundCog, Users2 } from "lucide-react";
 import { Navbar } from "./partials/Navbar";
 import Sidebar from "./partials/Sidebar";
 import { Toaster } from "@/Components/ui/toaster";
@@ -36,7 +36,6 @@ const navigations: NavLinkType[] = [
         route: "tasks.index",
         icon: <ListTodo className="h-5 w-5" />,
     },
-
 ];
 
 export default function AuthenticatedLayout({
@@ -53,7 +52,7 @@ export default function AuthenticatedLayout({
                     {children}
                 </main>
             </div>
-            <Toaster/>
+            <Toaster />
         </div>
     );
 }

@@ -1,26 +1,29 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {RoleResource, User } from "@/types";
-import {
-    Card,
-    CardContent
-} from "@/Components/ui/card";
+import { RoleResource, User, UserSingleResource } from "@/types";
+import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/Components/ui/breadcrumb";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/Components/ui/breadcrumb";
 import { useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import RolesTable from "./RolesTable";
 
-
 type Props = {
     auth: {
-        user: User;
+        user: UserSingleResource;
     };
     roles: RoleResource;
     session: {
-        success?:string
-        error?:string
+        success?: string;
+        error?: string;
     };
 };
 
@@ -42,7 +45,7 @@ const Index = ({ auth, roles, session }: Props) => {
         }
     }, [session]);
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.data}>
             <Head title="Roles" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -73,7 +76,7 @@ const Index = ({ auth, roles, session }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <RolesTable roles={roles.data}/>
+                    <RolesTable roles={roles.data} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

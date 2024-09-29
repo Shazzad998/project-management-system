@@ -1,26 +1,29 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {TaskResource, User } from "@/types";
-import {
-    Card,
-    CardContent
-} from "@/Components/ui/card";
+import { TaskResource, User, UserSingleResource } from "@/types";
+import { Card, CardContent } from "@/Components/ui/card";
 import TasksTable from "./TasksTable";
 import { Button } from "@/Components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/Components/ui/breadcrumb";
-
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/Components/ui/breadcrumb";
 
 type Props = {
     auth: {
-        user: User;
+        user: UserSingleResource;
     };
     tasks: TaskResource;
 };
 
 const Index = ({ auth, tasks }: Props) => {
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.data}>
             <Head title="Tasks" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -51,7 +54,7 @@ const Index = ({ auth, tasks }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <TasksTable tasks={tasks.data}/>
+                    <TasksTable tasks={tasks.data} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>
