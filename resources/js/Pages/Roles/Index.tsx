@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {RoleResource, TaskResource, User } from "@/types";
+import {RoleResource, User } from "@/types";
 import {
     Card,
     CardContent

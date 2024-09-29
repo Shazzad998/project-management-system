@@ -1,4 +1,3 @@
-
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { Project } from "@/types";
@@ -47,7 +46,7 @@ const ProjectsTable = ({ projects, setProject }: ProjectsTableProps) => {
                         options: projectStatus,
                     },
                 ]}
-                search={{ column: "name", placeholder: "Filter projects" }}
+                searchableColumns={["name"]}
             />
         </>
     );

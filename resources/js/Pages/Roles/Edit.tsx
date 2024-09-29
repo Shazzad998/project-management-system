@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Errors, Permission, Role, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { List, PlusIcon } from "lucide-react";
+import { List } from "lucide-react";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -16,8 +16,6 @@ import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { FormEvent, useEffect, useState } from "react";
 import InputError from "@/Components/InputError";
-import { Checkbox } from "@/Components/ui/checkbox";
-import { formatString } from "@/lib/utils";
 import CheckBoxGroup from "./Partials/CheckBoxGroup";
 
 type EditProps = {

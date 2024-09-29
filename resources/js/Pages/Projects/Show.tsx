@@ -12,7 +12,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Project, TaskResource, User, UserResource } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import BarChartRadial from "@/Components/BarChartRadial";
-import { useState } from "react";
 import { Label } from "@/Components/ui/label";
 import StatusBadge from "@/Components/StatusBadge";
 import TasksTable from "../Tasks/TasksTable";

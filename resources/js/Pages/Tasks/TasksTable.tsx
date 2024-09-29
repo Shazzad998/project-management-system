@@ -16,7 +16,7 @@ import { Task } from "@/types";
 
 type TasksTableProps = {
     tasks: Task[];
-    hideProjectColumn?:boolean
+    hideProjectColumn?: boolean;
 };
 
 const TasksTable = ({ tasks, hideProjectColumn = false }: TasksTableProps) => {
@@ -70,7 +70,7 @@ const TasksTable = ({ tasks, hideProjectColumn = false }: TasksTableProps) => {
                         options: taskPriorities,
                     },
                 ]}
-                search={{ column: "name", placeholder: "Filter tasks.." }}
+                searchableColumns={["name"]}
             />
         </>
     );
