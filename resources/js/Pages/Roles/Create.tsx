@@ -36,27 +36,29 @@ const Create = ({ auth, permissions }: Props) => {
     );
 
     const [data, _setData] = useState({
-        name: ""
+        name: "",
     });
 
     const setData = (key: string, value: string) => {
         _setData((values) => ({
             ...values,
-            [key]:value,
+            [key]: value,
         }));
     };
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        router.post(route('roles.store'), {...data, permissions:selectedPermissions}, {
-            onSuccess: () => {
-            },
-            onError: (errors) => {
-                setErrors(errors as Errors);
-            },
-        });
+        router.post(
+            route("roles.store"),
+            { ...data, permissions: selectedPermissions },
+            {
+                onSuccess: () => {},
+                onError: (errors) => {
+                    setErrors(errors as Errors);
+                },
+            }
+        );
     }
-
 
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -89,7 +91,7 @@ const Create = ({ auth, permissions }: Props) => {
                 <Button>
                     <Link
                         className=" flex items-center gap-1 "
-                        href={route("roles.create")}
+                        href={route("roles.index")}
                     >
                         {" "}
                         <List className="w-4 h-4" /> Role List
@@ -117,14 +119,13 @@ const Create = ({ auth, permissions }: Props) => {
                                 <InputError message={errors.name} />
                             </div>
                         </div>
-                        <hr className=" col-span-2" />
 
-                        <div className="grid col-span-2 gap-6">
+                        <div className="grid col-span-2 gap-4">
                             <div>
-                            <Label htmlFor="name">Permissions</Label>
-                            <InputError message={errors.permissions} />
+                                <Label htmlFor="name">Permissions</Label>
+                                <InputError message={errors.permissions} />
                             </div>
-                            
+
                             <CheckBoxGroup
                                 permissions={permissions}
                                 selectedPermissions={selectedPermissions}

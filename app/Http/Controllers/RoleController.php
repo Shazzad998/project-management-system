@@ -59,7 +59,11 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        $permissions = config('roles_permissions.permissions');
+        return inertia('Roles/Edit', [
+            'permissions' => $permissions,
+            'role' => new RoleResource($role)
+        ]);
     }
 
     /**
@@ -67,7 +71,10 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+        $validatedPayload = $request->validated();
+        $role->update($validatedPayload);
+        $role->syncPermissions($validatedPayload['permissions']);
+        return to_route('roles.index')->with('success', 'Role Updated Successfully');
     }
 
     /**

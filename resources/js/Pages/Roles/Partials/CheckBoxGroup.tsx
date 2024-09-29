@@ -64,7 +64,7 @@ const CheckBoxGroup = ({
         addToIsAllChecked(group, add as boolean);
     };
     return (
-        <div className=" grid gap-10">
+        <div className=" grid gap-8">
             {Object.entries(permissions).map(([group, permissions]) => (
                 <div className=" grid gap-4" key={group}>
                     <div className="flex items-center space-x-2">

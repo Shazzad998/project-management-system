@@ -13,6 +13,7 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Permission, Role } from "@/types";
 import { DataTableColumnHeader } from "../../Components/ui/data-table-column-header";
 import { Badge } from "@/Components/ui/badge";
+import { Link } from "@inertiajs/react";
 
 export const RoleColumns = (
     confirmDelete: (id: number) => void
@@ -94,7 +95,9 @@ export const RoleColumns = (
                 return (
                     <div className="flex flex-wrap gap-2">
                         {permissions.map((permission) => (
-                            <Badge variant={'secondary'} key={permission.id}>{permission.name}</Badge>
+                            <Badge variant={"secondary"} key={permission.id}>
+                                {permission.name}
+                            </Badge>
                         ))}
                     </div>
                 );
@@ -117,10 +120,13 @@ export const RoleColumns = (
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                                <span className=" flex items-center gap-1">
+                                <Link
+                                    href={route("roles.edit", role.id)}
+                                    className=" flex items-center gap-1"
+                                >
                                     {" "}
                                     <Edit className="w-4 h-4" /> Edit
-                                </span>
+                                </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => confirmDelete(role.id)}
