@@ -146,6 +146,26 @@ export const UserColumns = (
             },
         },
         {
+            accessorKey: "roles",
+            header: ({ column }) => (
+                <DataTableColumnHeader
+                    column={column}
+                    title="Role"
+                    className=" justify-center"
+                />
+            ),
+            cell: ({ row }) => {
+                let roles = row.original.roles;
+                return (
+                    <div className=" text-center">
+                        {roles?.map((role: string) => (
+                            <Badge>{role}</Badge>
+                        ))}
+                    </div>
+                );
+            },
+        },
+        {
             accessorKey: "created_at",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Created at" />

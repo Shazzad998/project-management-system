@@ -6,6 +6,7 @@ export interface User {
     email: string;
     email_verified_at: string | null;
     image_path: string | null;
+    roles?:string[]
 }
 
 export type PageProps<
@@ -51,12 +52,27 @@ export type Task = {
     project: Project;
 };
 
+export type Role = {
+    id:number;
+    name: string;
+    permissions:Permission[]
+};
+
+export type Permission = {
+    id:number;
+    name:string
+}
+
+
 export type ProjectResource = {
     data: Project[];
 };
 
 export type TaskResource = {
     data: Task[];
+};
+export type RoleResource = {
+    data: Role[];
 };
 export type UserResource = {
     data: User[];
@@ -74,4 +90,6 @@ export type Errors = {
     status?: string;
     email?: string;
     password?: string;
+    role?: string;
+    permissions?:string
 };

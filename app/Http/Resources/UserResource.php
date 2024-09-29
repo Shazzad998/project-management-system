@@ -22,7 +22,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
             'image_path' => $this->image_path ? Storage::url($this->image_path) : '',
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d')
+            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'roles' => $this->getRoleNames()
         ];
     }
 }

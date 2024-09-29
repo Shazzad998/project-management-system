@@ -74,6 +74,7 @@ const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
             role: "",
             image_path: null,
         });
+        setRole(null);
         setErrors({});
     };
 
@@ -198,11 +199,11 @@ const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
                                 selectedValue={role}
                                 setSelectedValue={(value) => {
                                     setRole(value);
-                                    setData("status", value?.value ?? "");
+                                    setData("role", value?.value ?? "");
                                 }}
                                 placeholder="Select Role"
                             />
-                            <InputError message={errors.status} />
+                            <InputError message={errors.role} />
                         </div>
                     </div>
 

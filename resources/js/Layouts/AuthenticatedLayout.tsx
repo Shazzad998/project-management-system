@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { NavLink as NavLinkType, User } from "@/types";
-import {  FolderOpen, Home, ListTodo, Users2 } from "lucide-react";
+import {  FolderOpen, Home, ListTodo, UserRoundCog, Users2 } from "lucide-react";
 import { Navbar } from "./partials/Navbar";
 import Sidebar from "./partials/Sidebar";
 import { Toaster } from "@/Components/ui/toaster";
@@ -20,12 +20,18 @@ const navigations: NavLinkType[] = [
     },
     {
         id: 3,
+        label: "Roles",
+        route: "roles.index",
+        icon: <UserRoundCog className="h-5 w-5" />,
+    },
+    {
+        id: 4,
         label: "Projects",
         route: "projects.index",
         icon: <FolderOpen className="h-5 w-5" />,
     },
     {
-        id: 4,
+        id: 5,
         label: "Tasks",
         route: "tasks.index",
         icon: <ListTodo className="h-5 w-5" />,

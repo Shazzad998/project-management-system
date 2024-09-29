@@ -19,8 +19,8 @@ class UserController extends Controller
     public function index()
     {
         $query = User::query();
-        $users = $query->orderBy('id', 'desc')->get();
-        $roles = Role::all()->pluck('name');
+        $users = $query->whereNot('id', 1)->orderBy('id', 'desc')->get();
+        $roles = Role::whereNot('id', 1)->get()->pluck('name');
         return inertia('Users/Index', [
             'users' => UserResource::collection($users),
             'roles' => $roles,
@@ -37,14 +37,19 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-
         $validatedPayload = $request->validated();
+
         try {
+            $roles = Role::whereNot('id', 1)->get()->pluck('name')->toArray();
+            if (!in_array($validatedPayload['role'], $roles)) {
+                return back()->with('error', 'Invalid Role Selected.');
+            }
             $image = $validatedPayload['image_path'] ?? null;
             if ($image) {
                 $validatedPayload['image_path'] = $image->store('users/' . str_replace(" ", "_", $validatedPayload['name']), 'public');
             }
-            User::create($validatedPayload);
+            $user = User::create($validatedPayload);
+            $user->assignRole($validatedPayload['role']);
             return back()->with('success', 'User Created Successfully');
         } catch (Exception $e) {
             Log::error($e->getMessage());
@@ -75,7 +80,7 @@ class UserController extends Controller
                 if ($user->image_path) {
                     Storage::disk('public')->deleteDirectory(dirname($user->image_path));
                 }
-                $validatedPayload['image_path'] = $image->store('users/' . strtolower(str_replace(['-', ' '], "_", $validatedPayload['name'])) , 'public');
+                $validatedPayload['image_path'] = $image->store('users/' . strtolower(str_replace(['-', ' '], "_", $validatedPayload['name'])), 'public');
             }
             $user->update($validatedPayload);
             return back()->with('success', 'User Updated Successfully');
