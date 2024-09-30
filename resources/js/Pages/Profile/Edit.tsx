@@ -4,7 +4,6 @@ import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
 import { Head } from "@inertiajs/react";
 import { PageProps } from "@/types";
-import { Card } from "@/Components/ui/card";
 
 export default function Edit({
     auth,

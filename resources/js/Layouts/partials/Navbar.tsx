@@ -166,20 +166,23 @@ export function Navbar({ navigations, user }: NavbarProps) {
                             </span>
                             <span className="sr-only">Acme Inc</span>
                         </Link>
-                        {navigations.map((nav) => (
-                            <Link
-                                key={nav.id}
-                                href={route(nav.route)}
-                                className={cn(
-                                    "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
-                                    route().current(nav.route) &&
-                                        "bg-muted text-foreground"
-                                )}
-                            >
-                                {nav.icon}
-                                {nav.label}
-                            </Link>
-                        ))}
+                        {navigations.map(
+                            (nav) =>
+                                nav.show && (
+                                    <Link
+                                        key={nav.label}
+                                        href={route(nav.route)}
+                                        className={cn(
+                                            "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
+                                            route().current(nav.route) &&
+                                                "bg-muted text-foreground"
+                                        )}
+                                    >
+                                        {nav.icon}
+                                        {nav.label}
+                                    </Link>
+                                )
+                        )}
                     </nav>
                 </SheetContent>
             </Sheet>

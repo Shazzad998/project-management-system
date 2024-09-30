@@ -26,6 +26,7 @@ export function getInitials(str: string) {
         .join("");
 }
 
-export function can( permission: string, user: User) {
+export function can(permission: string, user: User | null) {
+    if (!user) return false;
     return user.permissions.includes(permission);
 }

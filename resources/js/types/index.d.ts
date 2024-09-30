@@ -19,10 +19,10 @@ export type PageProps<
 };
 
 export type NavLink = {
-    id: number;
     label: string;
     route: string;
     icon?: ReactNode;
+    show:boolean
 };
 
 export type Project = {

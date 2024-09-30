@@ -1,8 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {
-    User,
-} from "@/types";
+import { User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import {
     Breadcrumb,
@@ -19,6 +17,7 @@ import { useEffect, useState } from "react";
 import ProjectForm from "../Projects/Modals/ProjectForm";
 import UsersTable from "./UsersTable";
 import UserForm from "./Modals/UserForm";
+import { can } from "@/lib/utils";
 
 type Props = {
     auth: {
@@ -83,9 +82,11 @@ const Index = ({ auth, users, roles, session }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">User List</h2>
                 </div>
-                <Button onClick={() => setFormOpen(true)}>
-                    <PlusIcon className="w-4 h-4 mr-2" /> Create User
-                </Button>
+                {can("user-create", auth.user) && (
+                    <Button onClick={() => setFormOpen(true)}>
+                        <PlusIcon className="w-4 h-4 mr-2" /> Create User
+                    </Button>
+                )}
                 <UserForm
                     open={formOpen}
                     roles={roles}

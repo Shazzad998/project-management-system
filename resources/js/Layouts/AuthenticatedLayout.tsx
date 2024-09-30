@@ -4,45 +4,45 @@ import { FolderOpen, Home, ListTodo, UserRoundCog, Users2 } from "lucide-react";
 import { Navbar } from "./partials/Navbar";
 import Sidebar from "./partials/Sidebar";
 import { Toaster } from "@/Components/ui/toaster";
-
-const navigations: NavLinkType[] = [
-    {
-        id: 1,
-        label: "Dashboard",
-        route: "dashboard",
-        icon: <Home className="h-5 w-5" />,
-    },
-    {
-        id: 2,
-        label: "Users",
-        route: "users.index",
-        icon: <Users2 className="h-5 w-5" />,
-    },
-    {
-        id: 3,
-        label: "Roles",
-        route: "roles.index",
-        icon: <UserRoundCog className="h-5 w-5" />,
-    },
-    {
-        id: 4,
-        label: "Projects",
-        route: "projects.index",
-        icon: <FolderOpen className="h-5 w-5" />,
-    },
-    {
-        id: 5,
-        label: "Tasks",
-        route: "tasks.index",
-        icon: <ListTodo className="h-5 w-5" />,
-    },
-];
+import { can } from "@/lib/utils";
 
 export default function AuthenticatedLayout({
     user,
-    header,
     children,
 }: PropsWithChildren<{ user: User; header?: ReactNode }>) {
+    const navigations: NavLinkType[] = [
+        {
+            label: "Dashboard",
+            route: "dashboard",
+            icon: <Home className="h-5 w-5" />,
+            show: true,
+        },
+        {
+            label: "Users",
+            route: "users.index",
+            icon: <Users2 className="h-5 w-5" />,
+            show: can("user-list", user),
+        },
+        {
+            label: "Roles",
+            route: "roles.index",
+            icon: <UserRoundCog className="h-5 w-5" />,
+            show: can("role-list", user),
+        },
+        {
+            label: "Projects",
+            route: "projects.index",
+            icon: <FolderOpen className="h-5 w-5" />,
+            show: can("project-list", user),
+        },
+        {
+            label: "Tasks",
+            route: "tasks.index",
+            icon: <ListTodo className="h-5 w-5" />,
+            show: can("task-list", user),
+        },
+    ];
+
     return (
         <div className="grid h-full min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] ">
             <Sidebar navigations={navigations} />
