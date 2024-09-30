@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $query = User::query();
+        $query = User::query()->with(['roles', 'permissions']);
         $users = $query->whereNot('id', 1)->orderBy('id', 'desc')->get();
         $roles = Role::whereNot('id', 1)->get()->pluck('name');
         return inertia('Users/Index', [

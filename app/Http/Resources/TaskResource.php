@@ -25,9 +25,21 @@ class TaskResource extends JsonResource
             'due_date' => (new Carbon($this->due_date))->format('Y-m-d'),
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
             'updated_at' => (new Carbon($this->created_at))->format('Y-m-d'),
-            'created_by' => new UserResource($this->creator),
-            'updated_by' => new UserResource($this->updater),
-            'assigned_user' => $this->assigned_user? new UserResource($this->assigned_user) : null,
+            'created_by' => [
+              'id' => $this->creator->id,  
+              'name' => $this->creator->name,  
+              'email' => $this->creator->email,  
+            ],
+            'updated_by' => [
+                'id' => $this->updater->id,  
+                'name' => $this->updater->name,  
+                'email' => $this->updater->email,  
+              ],
+            'assigned_user' => $this->assigned_user? [
+                'id' => $this->assigned_user->id,  
+                'name' => $this->assigned_user->name,  
+                'email' => $this->assigned_user->email,  
+              ] : null,
             'project' => new ProjectResource($this->project)
         ];
     }

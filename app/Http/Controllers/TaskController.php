@@ -14,7 +14,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $query = Task::query();
+        $query = Task::query()->with(['project', 'creator', 'updater','assigned_user']);
         $projects = $query->get();
         return inertia('Tasks/Index', [
             'tasks' => TaskResource::collection($projects)

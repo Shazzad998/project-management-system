@@ -14,7 +14,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $query = Role::query();
+        $query = Role::query()->with('permissions');
         $roles = $query->whereNot('name', 'Super Admin')->get();
         return inertia('Roles/Index', [
             'roles' => RoleResource::collection($roles),

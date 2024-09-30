@@ -19,7 +19,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $query = Project::query();
+        $query = Project::query()->with('tasks');
         $projects = $query->orderBy('id', 'desc')->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),

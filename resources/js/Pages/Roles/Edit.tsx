@@ -25,9 +25,7 @@ type EditProps = {
     permissions: {
         [key: string]: string[];
     };
-    role: {
-        data: Role;
-    };
+    role: Role
 };
 
 const Edit = ({ auth, permissions, role }: EditProps) => {
@@ -37,7 +35,7 @@ const Edit = ({ auth, permissions, role }: EditProps) => {
         return permissions.map((permission) => permission.name);
     };
     const [selectedPermissions, setSelectedPermissions] = useState<string[]>(
-        initializePermissions(role.data.permissions)
+        initializePermissions(role.permissions)
     );
 
     const [data, _setData] = useState({
@@ -45,7 +43,7 @@ const Edit = ({ auth, permissions, role }: EditProps) => {
     });
 
     useEffect(() => {
-        setData("name", role.data.name);
+        setData("name", role.name);
     }, [role]);
 
     const setData = (key: string, value: string) => {
@@ -58,7 +56,7 @@ const Edit = ({ auth, permissions, role }: EditProps) => {
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
         router.put(
-            route("roles.update", role.data),
+            route("roles.update", role),
             { ...data, permissions: selectedPermissions },
             {
                 onSuccess: () => {},

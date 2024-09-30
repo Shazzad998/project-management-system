@@ -81,7 +81,6 @@ const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         setErrors({});
-        console.log(data);
         if (user) {
             router.post(route("users.update", user.id), data, {
                 onSuccess: () => {

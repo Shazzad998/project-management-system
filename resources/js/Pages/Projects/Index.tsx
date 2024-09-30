@@ -29,7 +29,6 @@ type Props = {
 };
 
 const Index = ({ auth, projects, session }: Props) => {
-    console.log(projects)
     const { toast } = useToast();
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [project, setProject] = useState<Project | null>(null);

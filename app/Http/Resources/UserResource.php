@@ -17,6 +17,14 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $roles = $this->roles->pluck('name'); 
+        $isSuperAdmin = $roles->contains('Super Admin');
+        $allpermissions = array_merge(...array_values(config('roles_permissions.permissions')));
+ 
+        $permissions = $isSuperAdmin 
+        ? $allpermissions
+        : $this->getAllPermissions()->pluck('name');
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -24,8 +32,8 @@ class UserResource extends JsonResource
             'email_verified_at' => $this->email_verified_at,
             'image_path' => $this->image_path ? Storage::url($this->image_path) : '',
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
-            'roles' => $this->getRoleNames(),
-            'permissions' => in_array('Super Admin', $this->getRoleNames()->toArray()) ? Permission::get()->pluck('name') :  $this->getAllPermissions()->pluck('name'),
+            'roles' => $roles, 
+            'permissions' => $permissions,
         ];
     }
 }

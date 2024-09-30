@@ -101,7 +101,6 @@ export const TaskColumns = (
                 );
             },
             filterFn: (row, id, value) => {
-                console.log(row, id, value);
                 return value.includes(row.getValue(id));
             },
         },
