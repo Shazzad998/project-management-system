@@ -9,13 +9,7 @@ import {
 } from "@/Components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {
-    Project,
-    TaskResource,
-    User,
-    UserResource,
-    UserSingleResource,
-} from "@/types";
+import { Project, Task, User } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import BarChartRadial from "@/Components/BarChartRadial";
 import { Label } from "@/Components/ui/label";
@@ -24,21 +18,21 @@ import TasksTable from "../Tasks/TasksTable";
 
 type Props = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
     project: Project;
-    tasks: TaskResource;
-    members: UserResource;
+    tasks: Task[];
+    members: User[];
 };
 
 const Show = ({ auth, project, tasks, members }: Props) => {
-    const totalTasks = tasks.data.length;
-    const totalColpleted = tasks.data.filter(
-        (item) => item.status == "completed"
+    const totalTasks = tasks.length;
+    const totalColpleted = tasks.filter(
+        (item: Task) => item.status == "completed"
     );
-    const high = tasks.data.filter((item) => item.priority == "high");
-    const medium = tasks.data.filter((item) => item.priority == "medium");
-    const low = tasks.data.filter((item) => item.priority == "low");
+    const high = tasks.filter((item: Task) => item.priority == "high");
+    const medium = tasks.filter((item: Task) => item.priority == "medium");
+    const low = tasks.filter((item: Task) => item.priority == "low");
 
     const priorityTaskData = [
         {
@@ -67,30 +61,28 @@ const Show = ({ auth, project, tasks, members }: Props) => {
     const statusTastData = [
         {
             label: "In Progress",
-            value: tasks.data.filter((item) => item.status == "in_progress")
-                .length,
+            value: tasks.filter((item) => item.status == "in_progress").length,
             total: totalTasks,
             color: "hsl(var(--primary))",
             type: "in_progress",
         },
         {
             label: "Pending",
-            value: tasks.data.filter((item) => item.status == "pending").length,
+            value: tasks.filter((item) => item.status == "pending").length,
             total: totalTasks,
             color: "#d97706",
             type: "pending",
         },
         {
             label: "Completed",
-            value: tasks.data.filter((item) => item.status == "completed")
-                .length,
+            value: tasks.filter((item) => item.status == "completed").length,
             total: totalTasks,
             color: "#065f46",
             type: "completed",
         },
     ];
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title={project.name} />
             <div className="grid ">
                 <Breadcrumb>
@@ -315,7 +307,7 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                                 <CardContent className=" pt-4">
                                     <TasksTable
                                         hideProjectColumn={true}
-                                        tasks={tasks.data}
+                                        tasks={tasks}
                                     />
                                 </CardContent>
                             </Card>

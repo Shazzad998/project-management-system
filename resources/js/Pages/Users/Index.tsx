@@ -1,11 +1,7 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {
-    Project,
-    ProjectResource,
     User,
-    UserResource,
-    UserSingleResource,
 } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import {
@@ -26,9 +22,9 @@ import UserForm from "./Modals/UserForm";
 
 type Props = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
-    users: UserResource;
+    users: User[];
     roles: string[];
     session: {
         success?: string;
@@ -68,7 +64,7 @@ const Index = ({ auth, users, roles, session }: Props) => {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Users" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -99,7 +95,7 @@ const Index = ({ auth, users, roles, session }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <UsersTable users={users.data} setUser={openEdit} />
+                    <UsersTable users={users} setUser={openEdit} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

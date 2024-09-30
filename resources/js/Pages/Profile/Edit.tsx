@@ -12,7 +12,7 @@ export default function Edit({
     status,
 }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Profile" />
 
             <div className="space-y-6">

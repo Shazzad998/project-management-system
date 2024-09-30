@@ -1,3 +1,4 @@
+import { User } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -23,4 +24,8 @@ export function getInitials(str: string) {
         .split(" ")
         .map((word) => word[0].toUpperCase())
         .join("");
+}
+
+export function can( permission: string, user: User) {
+    return user.permissions.includes(permission);
 }

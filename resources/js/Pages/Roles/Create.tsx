@@ -1,6 +1,6 @@
 import { Head, Link, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Errors, User, UserSingleResource } from "@/types";
+import { Errors, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { List } from "lucide-react";
@@ -20,7 +20,7 @@ import CheckBoxGroup from "./Partials/CheckBoxGroup";
 
 type Props = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
     permissions: {
         [key: string]: string[];
@@ -59,7 +59,7 @@ const Create = ({ auth, permissions }: Props) => {
     }
 
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Create Role" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -86,7 +86,7 @@ const Create = ({ auth, permissions }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Create Role</h2>
                 </div>
-                <Button>
+                <Button asChild>
                     <Link
                         className=" flex items-center gap-1 "
                         href={route("roles.index")}

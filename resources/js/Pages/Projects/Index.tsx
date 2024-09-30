@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Project, ProjectResource, User, UserSingleResource } from "@/types";
+import { Project, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import {
     Breadcrumb,
@@ -19,9 +19,9 @@ import ProjectForm from "./Modals/ProjectForm";
 
 type Props = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
-    projects: ProjectResource;
+    projects: Project[];
     session: {
         success?: string;
         error?: string;
@@ -29,6 +29,7 @@ type Props = {
 };
 
 const Index = ({ auth, projects, session }: Props) => {
+    console.log(projects)
     const { toast } = useToast();
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [project, setProject] = useState<Project | null>(null);
@@ -60,7 +61,7 @@ const Index = ({ auth, projects, session }: Props) => {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Projects" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -91,7 +92,7 @@ const Index = ({ auth, projects, session }: Props) => {
             <Card>
                 <CardContent className="pt-6">
                     <ProjectsTable
-                        projects={projects.data}
+                        projects={projects}
                         setProject={openEdit}
                     />
                 </CardContent>

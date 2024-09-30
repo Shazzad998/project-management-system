@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { RoleResource, User, UserSingleResource } from "@/types";
+import { Role, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { PlusIcon } from "lucide-react";
@@ -18,9 +18,9 @@ import RolesTable from "./RolesTable";
 
 type Props = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
-    roles: RoleResource;
+    roles: Role[];
     session: {
         success?: string;
         error?: string;
@@ -45,7 +45,7 @@ const Index = ({ auth, roles, session }: Props) => {
         }
     }, [session]);
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Roles" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -64,7 +64,7 @@ const Index = ({ auth, roles, session }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Role List</h2>
                 </div>
-                <Button>
+                <Button asChild>
                     <Link
                         className=" flex items-center gap-1 "
                         href={route("roles.create")}
@@ -76,7 +76,7 @@ const Index = ({ auth, roles, session }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <RolesTable roles={roles.data} />
+                    <RolesTable roles={roles} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

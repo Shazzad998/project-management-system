@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { TaskResource, User, UserSingleResource } from "@/types";
+import { Task, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import TasksTable from "./TasksTable";
 import { Button } from "@/Components/ui/button";
@@ -16,14 +16,14 @@ import {
 
 type Props = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
-    tasks: TaskResource;
+    tasks: Task[];
 };
 
 const Index = ({ auth, tasks }: Props) => {
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Tasks" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -54,7 +54,7 @@ const Index = ({ auth, tasks }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <TasksTable tasks={tasks.data} />
+                    <TasksTable tasks={tasks} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>

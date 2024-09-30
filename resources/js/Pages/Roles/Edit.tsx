@@ -1,6 +1,6 @@
 import { Head, Link, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Errors, Permission, Role, User, UserSingleResource } from "@/types";
+import { Errors, Permission, Role, User } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { List } from "lucide-react";
@@ -20,7 +20,7 @@ import CheckBoxGroup from "./Partials/CheckBoxGroup";
 
 type EditProps = {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
     permissions: {
         [key: string]: string[];
@@ -70,7 +70,7 @@ const Edit = ({ auth, permissions, role }: EditProps) => {
     }
 
     return (
-        <AuthenticatedLayout user={auth.user.data}>
+        <AuthenticatedLayout user={auth.user}>
             <Head title="Roles" />
             <div className="flex items-end justify-between gap-2">
                 <div>
@@ -97,7 +97,7 @@ const Edit = ({ auth, permissions, role }: EditProps) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Edit Role</h2>
                 </div>
-                <Button>
+                <Button asChild>
                     <Link
                         className=" flex items-center gap-1 "
                         href={route("roles.index")}

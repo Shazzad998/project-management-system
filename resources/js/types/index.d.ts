@@ -6,15 +6,15 @@ export interface User {
     email: string;
     email_verified_at: string | null;
     image_path: string | null;
-    roles?: string[];
-    permissions?: string[];
+    roles: string[];
+    permissions: string[];
 }
 
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>
 > = T & {
     auth: {
-        user: UserSingleResource;
+        user: User;
     };
 };
 
@@ -62,23 +62,6 @@ export type Role = {
 export type Permission = {
     id: number;
     name: string;
-};
-
-export type ProjectResource = {
-    data: Project[];
-};
-
-export type TaskResource = {
-    data: Task[];
-};
-export type RoleResource = {
-    data: Role[];
-};
-export type UserResource = {
-    data: User[];
-};
-export type UserSingleResource = {
-    data: User;
 };
 
 export type SelectOption = {
