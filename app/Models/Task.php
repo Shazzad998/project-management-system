@@ -18,6 +18,20 @@ class Task extends Model
     const PRIORITY_HIGH = 'high';
 
 
+
+    protected $fillable = [
+        'name',
+        'description',
+        'status',
+        'priority',
+        'due_date',
+        'project_id',
+        'assigned_user_id',
+        'created_by',
+        'updated_by',
+    ];
+
+
     public function project()
     {
         return $this->belongsTo(Project::class);

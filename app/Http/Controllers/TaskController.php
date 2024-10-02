@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\ProjectOptionResource;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\UserOptionResource;
+use App\Models\Project;
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -15,9 +19,17 @@ class TaskController extends Controller
     public function index()
     {
         $query = Task::query()->with(['project', 'creator', 'updater','assigned_user']);
-        $projects = $query->get();
+        $tasks = $query->get();
+        $projects = Project::query()->get();
+        $users = User::query()->whereNot('id', 1)->get();
         return inertia('Tasks/Index', [
-            'tasks' => TaskResource::collection($projects)
+            'tasks' => TaskResource::collection($tasks),
+            'projects' => ProjectOptionResource::collection($projects),
+            'users' => UserOptionResource::collection($users),
+            'session' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
         ]);
     }
 

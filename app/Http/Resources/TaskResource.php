@@ -40,7 +40,9 @@ class TaskResource extends JsonResource
                 'name' => $this->assigned_user->name,  
                 'email' => $this->assigned_user->email,  
               ] : null,
-            'project' => new ProjectResource($this->project)
+            'project' => new ProjectResource($this->project),
+            'project_id' => $this->project_id,
+            'assigned_user_id' => $this->assigned_user_id,
         ];
     }
 }

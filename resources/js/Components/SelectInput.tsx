@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { SelectOption } from "@/types";
 import { CaretSortIcon } from "@radix-ui/react-icons";
+import { CheckIcon } from "lucide-react";
 import { useState } from "react";
 
 type SelectInputProps = {
@@ -22,7 +23,7 @@ type SelectInputProps = {
     selectedValue: SelectOption | null | undefined;
     setSelectedValue: (value: SelectOption | null) => void;
     placeholder?: string;
-    className?:string
+    className?: string;
 };
 
 export function SelectInput({
@@ -30,20 +31,25 @@ export function SelectInput({
     selectedValue,
     setSelectedValue,
     placeholder = "",
-    className
+    className,
 }: SelectInputProps) {
     const [open, setOpen] = useState(false);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("justify-between", className)}>
+                <Button
+                    variant="outline"
+                    className={cn("justify-between overflow-hidden", className)}
+                >
                     {selectedValue ? (
-                        <>{selectedValue.label}</>
+                        <span className=" truncate max-w-full">{selectedValue.label}</span>
                     ) : (
-                        <span className="text-muted-foreground">{placeholder}</span>
+                        <span className="text-muted-foreground">
+                            {placeholder}
+                        </span>
                     )}
-                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0" align="start">
@@ -55,17 +61,28 @@ export function SelectInput({
                             {options.map((option) => (
                                 <CommandItem
                                     key={option.value}
-                                    value={option.value}
+                                    value={option.value.toString()}
                                     onSelect={(value) => {
                                         setSelectedValue(
                                             options.find(
-                                                (opt) => opt.value === value
+                                                (opt) => opt.value == value
                                             ) || null
                                         );
+                                        console.log(value)
+                                        console.log(options)
                                         setOpen(false);
                                     }}
                                 >
                                     {option.label}
+                                    <CheckIcon
+                                        className={cn(
+                                            "ml-auto h-4 w-4",
+                                            selectedValue?.value ===
+                                                option.value
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                        )}
+                                    />
                                 </CommandItem>
                             ))}
                         </CommandGroup>

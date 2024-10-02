@@ -50,7 +50,9 @@ export type Task = {
     created_by: User;
     updated_by: User;
     assigned_user: User | null;
+    assigned_user_id: string;
     project: Project;
+    project_id:string;
 };
 
 export type Role = {
@@ -78,4 +80,16 @@ export type Errors = {
     password?: string;
     role?: string;
     permissions?: string;
+    priority?: string;
+    project_id?: string;
+    assigned_user_id?: string;
+};
+
+export type ProjectOption = {
+    id: string;
+    name: string;
+};
+export type UserOption = {
+    id: string;
+    name: string;
 };
