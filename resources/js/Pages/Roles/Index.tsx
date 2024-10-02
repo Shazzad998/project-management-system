@@ -15,6 +15,7 @@ import {
 import { useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import RolesTable from "./RolesTable";
+import { can } from "@/lib/utils";
 
 type Props = {
     auth: {
@@ -64,15 +65,17 @@ const Index = ({ auth, roles, session }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Role List</h2>
                 </div>
-                <Button asChild>
-                    <Link
-                        className=" flex items-center gap-1 "
-                        href={route("roles.create")}
-                    >
-                        {" "}
-                        <PlusIcon className="w-4 h-4" /> Create Role
-                    </Link>
-                </Button>
+                {can("role-create", auth.user) && (
+                    <Button asChild>
+                        <Link
+                            className=" flex items-center gap-1 "
+                            href={route("roles.create")}
+                        >
+                            {" "}
+                            <PlusIcon className="w-4 h-4" /> Create Role
+                        </Link>
+                    </Button>
+                )}
             </div>
             <Card>
                 <CardContent className="pt-6">

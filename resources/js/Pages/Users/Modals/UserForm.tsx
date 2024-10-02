@@ -54,6 +54,12 @@ const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
     useEffect(() => {
         setData("name", user?.name ?? "");
         setData("email", user?.email ?? "");
+        setData("role", user?.roles?.[0] ?? null);
+        setRole(
+            user
+                ? roleOptions.find((item) => item.value == user.roles?.[0])
+                : null
+        );
         if (user) {
             setData("_method", "PUT");
         }
@@ -82,6 +88,7 @@ const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
         e.preventDefault();
         setErrors({});
         if (user) {
+            console.log(data);
             router.post(route("users.update", user.id), data, {
                 onSuccess: () => {
                     closeSheet();

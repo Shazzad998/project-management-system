@@ -7,17 +7,35 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Exception;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:user-list', only: ['index']),
+            new Middleware('permission:user-create', only: ['store']),
+            new Middleware('permission:user-edit', only: ['update']),
+            new Middleware('permission:user-delete', only: ['destroy']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        if (!request()->user()->can('user-list')) {
+            return back()->with('Error', 'You are not Authorized!');
+        }
         $query = User::query()->with(['roles', 'permissions']);
         $users = $query->whereNot('id', 1)->orderBy('id', 'desc')->get();
         $roles = Role::whereNot('id', 1)->get()->pluck('name');
@@ -37,6 +55,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        if (!request()->user()->can('user-create')) {
+            return back()->with('Error', 'You are not Authorized!');
+        }
         $validatedPayload = $request->validated();
 
         try {
@@ -70,6 +91,9 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        if (!request()->user()->can('user-edit')) {
+            return back()->with('Error', 'You are not Authorized!');
+        }
         $validatedPayload = $request->validated();
         try {
             if (!$validatedPayload['password']) {
@@ -83,6 +107,7 @@ class UserController extends Controller
                 $validatedPayload['image_path'] = $image->store('users/' . strtolower(str_replace(['-', ' '], "_", $validatedPayload['name'])), 'public');
             }
             $user->update($validatedPayload);
+            $user->syncRoles([$validatedPayload['role']]);
             return back()->with('success', 'User Updated Successfully');
         } catch (Exception $e) {
             Log::error($e->getMessage());
@@ -95,6 +120,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if (!request()->user()->can('user-delete')) {
+            return back()->with('Error', 'You are not Authorized!');
+        }
         try {
             if ($user->image_path) {
                 Storage::disk('public')->deleteDirectory(dirname($user->image_path));

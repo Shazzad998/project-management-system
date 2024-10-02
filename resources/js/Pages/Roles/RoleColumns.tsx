@@ -9,15 +9,17 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { Permission, Role } from "@/types";
+import { PageProps, Permission, Role } from "@/types";
 import { DataTableColumnHeader } from "../../Components/ui/data-table-column-header";
 import { Badge } from "@/Components/ui/badge";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
+import { can, canany } from "@/lib/utils";
 
 export const RoleColumns = (
     confirmDelete: (id: number) => void
 ): ColumnDef<Role>[] => {
-    return [
+    const { auth } = usePage<PageProps>().props;
+    const columns: ColumnDef<Role>[] = [
         // {
         //     id: "select",
         //     header: ({ table }) => (
@@ -102,8 +104,10 @@ export const RoleColumns = (
                 );
             },
         },
+    ];
 
-        {
+    if (canany(["role-edit", "role-delete"], auth.user)) {
+        columns.push({
             id: "actions",
             cell: ({ row }) => {
                 const role = row.original;
@@ -118,26 +122,32 @@ export const RoleColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <Link
-                                    href={route("roles.edit", role.id)}
-                                    className=" flex items-center gap-1"
+                            {can("role-edit", auth.user) && (
+                                <DropdownMenuItem>
+                                    <Link
+                                        href={route("roles.edit", role.id)}
+                                        className=" flex items-center gap-1"
+                                    >
+                                        {" "}
+                                        <Edit className="w-4 h-4" /> Edit
+                                    </Link>
+                                </DropdownMenuItem>
+                            )}
+                            {can("role-delete", auth.user) && (
+                                <DropdownMenuItem
+                                    onClick={() => confirmDelete(role.id)}
                                 >
-                                    {" "}
-                                    <Edit className="w-4 h-4" /> Edit
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => confirmDelete(role.id)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    <Trash className=" w-4 h-4" /> Delete
-                                </span>
-                            </DropdownMenuItem>
+                                    <span className=" flex items-center gap-1">
+                                        <Trash className=" w-4 h-4" /> Delete
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
             },
-        },
-    ];
+        });
+    }
+
+    return columns;
 };

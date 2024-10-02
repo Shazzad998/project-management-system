@@ -13,6 +13,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
+import { can } from "@/lib/utils";
 
 type Props = {
     auth: {
@@ -42,15 +43,17 @@ const Index = ({ auth, tasks }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Task List</h2>
                 </div>
-                <Button>
-                    <Link
-                        className=" flex items-center gap-1 "
-                        href={route("tasks.create")}
-                    >
-                        {" "}
-                        <PlusIcon className="w-4 h-4" /> Create Task
-                    </Link>
-                </Button>
+                {can("task-create", auth.user) && (
+                    <Button>
+                        <Link
+                            className=" flex items-center gap-1 "
+                            href={route("tasks.create")}
+                        >
+                            {" "}
+                            <PlusIcon className="w-4 h-4" /> Create Task
+                        </Link>
+                    </Button>
+                )}
             </div>
             <Card>
                 <CardContent className="pt-6">

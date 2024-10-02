@@ -30,3 +30,8 @@ export function can(permission: string, user: User | null) {
     if (!user) return false;
     return user.permissions.includes(permission);
 }
+
+export function canany(permissions: string[], user: User | null) {
+    if (!user) return false;
+    return permissions.some((permission) => user.permissions.includes(permission));
+}

@@ -17,6 +17,7 @@ import { Input } from "@/Components/ui/input";
 import { FormEvent, useEffect, useState } from "react";
 import InputError from "@/Components/InputError";
 import CheckBoxGroup from "./Partials/CheckBoxGroup";
+import { can } from "@/lib/utils";
 
 type EditProps = {
     auth: {
@@ -25,7 +26,7 @@ type EditProps = {
     permissions: {
         [key: string]: string[];
     };
-    role: Role
+    role: Role;
 };
 
 const Edit = ({ auth, permissions, role }: EditProps) => {
@@ -95,15 +96,17 @@ const Edit = ({ auth, permissions, role }: EditProps) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Edit Role</h2>
                 </div>
-                <Button asChild>
-                    <Link
-                        className=" flex items-center gap-1 "
-                        href={route("roles.index")}
-                    >
-                        {" "}
-                        <List className="w-4 h-4" /> Role List
-                    </Link>
-                </Button>
+                {can("role-list", auth.user) && (
+                    <Button asChild>
+                        <Link
+                            className=" flex items-center gap-1 "
+                            href={route("roles.index")}
+                        >
+                            {" "}
+                            <List className="w-4 h-4" /> Role List
+                        </Link>
+                    </Button>
+                )}
             </div>
             <Card>
                 <CardContent className="pt-6">

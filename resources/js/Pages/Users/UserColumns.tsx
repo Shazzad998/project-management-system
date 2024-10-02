@@ -10,16 +10,19 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { User } from "@/types";
+import { PageProps, User } from "@/types";
 import { DataTableColumnHeader } from "../../Components/ui/data-table-column-header";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { Badge } from "@/Components/ui/badge";
+import { can, canany } from "@/lib/utils";
 
 export const UserColumns = (
     confirmDelete: (id: number) => void,
     setUser: (item: User) => void
 ): ColumnDef<User>[] => {
-    return [
+    const { auth } = usePage<PageProps>().props;
+
+    const columns: ColumnDef<User>[] = [
         // {
         //     id: "select",
         //     header: ({ table }) => (
@@ -159,7 +162,7 @@ export const UserColumns = (
                 return (
                     <div className=" text-center">
                         {roles?.map((role: string) => (
-                            <Badge>{role}</Badge>
+                            <Badge key={role}>{role}</Badge>
                         ))}
                     </div>
                 );
@@ -172,7 +175,11 @@ export const UserColumns = (
             ),
         },
 
-        {
+        
+    ];
+
+    if(canany(['user-edit', 'user-delete'], auth.user)){
+        columns.push({
             id: "actions",
             cell: ({ row }) => {
                 const user = row.original;
@@ -187,25 +194,32 @@ export const UserColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => setUser(user ?? null)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    {" "}
-                                    <Edit className="w-4 h-4" /> Edit
-                                </span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => confirmDelete(user.id)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    <Trash className=" w-4 h-4" /> Delete
-                                </span>
-                            </DropdownMenuItem>
+
+                            {can("user-edit", auth.user) && (
+                                <DropdownMenuItem
+                                    onClick={() => setUser(user ?? null)}
+                                >
+                                    <span className=" flex items-center gap-1">
+                                        {" "}
+                                        <Edit className="w-4 h-4" /> Edit
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
+                            {can("user-delete", auth.user) && (
+                                <DropdownMenuItem
+                                    onClick={() => confirmDelete(user.id)}
+                                >
+                                    <span className=" flex items-center gap-1">
+                                        <Trash className=" w-4 h-4" /> Delete
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
             },
-        },
-    ];
+        },)
+    }
+
+    return columns;
 };

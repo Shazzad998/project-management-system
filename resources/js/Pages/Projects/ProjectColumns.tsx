@@ -9,16 +9,18 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { Project, User } from "@/types";
+import { PageProps, Project, User } from "@/types";
 import { DataTableColumnHeader } from "../../Components/ui/data-table-column-header";
 import StatusBadge from "../../Components/StatusBadge";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
+import { can, canany } from "@/lib/utils";
 
 export const ProjectColumns = (
     confirmDelete: (id: number) => void,
     setProject: (item: Project) => void
 ): ColumnDef<Project>[] => {
-    return [
+    const { auth } = usePage<PageProps>().props;
+    const columns: ColumnDef<Project>[] = [
         // {
         //     id: "select",
         //     header: ({ table }) => (
@@ -126,7 +128,10 @@ export const ProjectColumns = (
                 );
             },
         },
-        {
+    ];
+
+    if (canany(["project-edit", "projects-delete"], auth.user)) {
+        columns.push({
             id: "actions",
             cell: ({ row }) => {
                 const project = row.original;
@@ -141,25 +146,31 @@ export const ProjectColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => setProject(project ?? null)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    {" "}
-                                    <Edit className="w-4 h-4" /> Edit
-                                </span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => confirmDelete(project.id)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    <Trash className=" w-4 h-4" /> Delete
-                                </span>
-                            </DropdownMenuItem>
+                            {can("project-edit", auth.user) && (
+                                <DropdownMenuItem
+                                    onClick={() => setProject(project ?? null)}
+                                >
+                                    <span className=" flex items-center gap-1">
+                                        {" "}
+                                        <Edit className="w-4 h-4" /> Edit
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
+                            {can("project-delete", auth.user) && (
+                                <DropdownMenuItem
+                                    onClick={() => confirmDelete(project.id)}
+                                >
+                                    <span className=" flex items-center gap-1">
+                                        <Trash className=" w-4 h-4" /> Delete
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
             },
-        },
-    ];
+        });
+    }
+
+    return columns;
 };

@@ -16,6 +16,7 @@ import { PlusIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import ProjectForm from "./Modals/ProjectForm";
+import { can } from "@/lib/utils";
 
 type Props = {
     auth: {
@@ -79,9 +80,11 @@ const Index = ({ auth, projects, session }: Props) => {
                     </Breadcrumb>
                     <h2 className="mt-2 font-bold text-xl">Project List</h2>
                 </div>
-                <Button onClick={() => setFormOpen(true)}>
-                    <PlusIcon className="w-4 h-4" /> Create Project
-                </Button>
+                {can("project-create", auth.user) && (
+                    <Button onClick={() => setFormOpen(true)}>
+                        <PlusIcon className="w-4 h-4" /> Create Project
+                    </Button>
+                )}
                 <ProjectForm
                     open={formOpen}
                     onOpenChange={closeForm}
@@ -90,10 +93,7 @@ const Index = ({ auth, projects, session }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <ProjectsTable
-                        projects={projects}
-                        setProject={openEdit}
-                    />
+                    <ProjectsTable projects={projects} setProject={openEdit} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>
