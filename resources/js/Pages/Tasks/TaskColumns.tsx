@@ -1,4 +1,3 @@
-
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
@@ -18,7 +17,8 @@ import PriorityBadge from "@/Components/PriorityBadge";
 
 export const TaskColumns = (
     confirmDelete: (id: number) => void,
-    hideProjectColumn = false
+    hideProjectColumn = false,
+    setTask: (task: Task) => void
 ): ColumnDef<Task>[] => {
     const columns: ColumnDef<Task>[] = [
         // {
@@ -61,7 +61,11 @@ export const TaskColumns = (
         {
             accessorKey: "id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="ID" className="pl-2" />
+                <DataTableColumnHeader
+                    column={column}
+                    title="ID"
+                    className="pl-2"
+                />
             ),
             cell: ({ row }) => {
                 return (
@@ -69,6 +73,16 @@ export const TaskColumns = (
                         {row.getValue("id")}
                     </div>
                 );
+            },
+        },
+        {
+            accessorKey: "project_id",
+            header: () => <></>,
+            cell: ({ row }) => {
+                return <span className="hidden">{row.getValue("project_id")}</span>;
+            },
+            filterFn: (row, id, value) => {
+                return value.includes(row.getValue(id));
             },
         },
         {
@@ -107,13 +121,12 @@ export const TaskColumns = (
         {
             accessorKey: "assigned_user",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Assigned to"
-                />
+                <DataTableColumnHeader column={column} title="Assigned to" />
             ),
             cell: ({ row }) => {
-                const assigned_user = row.getValue("assigned_user") as User | null
+                const assigned_user = row.getValue(
+                    "assigned_user"
+                ) as User | null;
                 return (
                     <div className="text-start font-bold">
                         {assigned_user?.name}
@@ -144,31 +157,22 @@ export const TaskColumns = (
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Created at"
-                />
+                <DataTableColumnHeader column={column} title="Created at" />
             ),
         },
         {
             accessorKey: "due_date",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Due Date"
-                />
+                <DataTableColumnHeader column={column} title="Due Date" />
             ),
         },
         {
             accessorKey: "created_by",
             header: ({ column }) => (
-                <DataTableColumnHeader
-                    column={column}
-                    title="Created by"
-                />
+                <DataTableColumnHeader column={column} title="Created by" />
             ),
             cell: ({ row }) => {
-                const created_by = row.getValue("created_by") as User
+                const created_by = row.getValue("created_by") as User;
                 return (
                     <div className="text-start font-bold">
                         {created_by.name}
@@ -191,7 +195,9 @@ export const TaskColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => setTask(task ?? null)}
+                            >
                                 <span className=" flex items-center gap-1">
                                     {" "}
                                     <Edit className="w-4 h-4" /> Edit
@@ -211,13 +217,13 @@ export const TaskColumns = (
         },
     ];
     if (!hideProjectColumn) {
-        columns.splice(2, 0, {
+        columns.splice(3, 0, {
             accessorKey: "project",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Project" />
             ),
             cell: ({ row }) => {
-                const project = row.original;
+                const project = row.original.project;
                 return (
                     <div className="text-left font-semibold">
                         {project.name}
@@ -227,6 +233,5 @@ export const TaskColumns = (
         });
     }
 
-    return columns
-
+    return columns;
 };

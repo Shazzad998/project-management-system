@@ -68,8 +68,6 @@ export function SelectInput({
                                                 (opt) => opt.value == value
                                             ) || null
                                         );
-                                        console.log(value)
-                                        console.log(options)
                                         setOpen(false);
                                     }}
                                 >

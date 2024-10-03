@@ -128,6 +128,9 @@ const TaskForm = ({
         });
         setProject(null);
         setUser(null);
+        setStatus(null);
+        setPriority(null);
+        setDate(undefined);
         setErrors({});
     };
 

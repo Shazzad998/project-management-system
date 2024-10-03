@@ -10,6 +10,7 @@ use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserOptionResource;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -19,7 +20,7 @@ class TaskController extends Controller
     public function index()
     {
         $query = Task::query()->with(['project', 'creator', 'updater','assigned_user']);
-        $tasks = $query->get();
+        $tasks = $query->latest()->get();
         $projects = Project::query()->get();
         $users = User::query()->whereNot('id', 1)->get();
         return inertia('Tasks/Index', [
@@ -46,7 +47,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        $validatedPayload = $request->validated();
+        $validatedPayload['created_by'] = Auth::id();
+        $validatedPayload['updated_by'] = Auth::id();
+        Task::create($validatedPayload);
+        return back()->with('success', 'Task Created Successfully');
     }
 
     /**
@@ -78,6 +83,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return back()->with('success', 'Task Deleted Successfully');
     }
 }

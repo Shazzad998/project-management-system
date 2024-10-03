@@ -17,7 +17,7 @@ function StatusBadge({ status }: Props) {
     return (
         <span
             className={twMerge(
-                "text-xs px-2.5 py-0.5 rounded font-medium",
+                "text-xs px-2.5 py-0.5 rounded font-medium whitespace-nowrap",
                 color
             )}
         >

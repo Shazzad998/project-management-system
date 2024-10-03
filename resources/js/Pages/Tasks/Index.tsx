@@ -97,7 +97,7 @@ const Index = ({ auth, tasks, projects, users, session }: Props) => {
             </div>
             <Card>
                 <CardContent className="pt-6">
-                    <TasksTable tasks={tasks} />
+                    <TasksTable tasks={tasks} setTask={openEdit} projectOptions={projects} />
                 </CardContent>
             </Card>
         </AuthenticatedLayout>
