@@ -28,9 +28,9 @@ class StoreTaskRequest extends FormRequest
             'description' =>  ['nullable', 'string'],
             'status' =>  ['required',Rule::in([Task::STATUS_PENDING, Task::STATUS_IN_PROGRESS, Task::STATUS_COMPLETED])],
             'priority' =>  ['required',Rule::in([Task::PRIORITY_LOW, Task::PRIORITY_MEDIUM, Task::PRIORITY_HIGH])],
-            'project_id' =>  ['required'],
+            'project_id' =>  ['required', 'exists:projects,id'],
             'due_date' =>  ['nullable', 'date'],
-            'assigned_user_id' => ['required'],
+            'assigned_user_id' => ['required', 'exists:users,id'],
         ];
     }
 }

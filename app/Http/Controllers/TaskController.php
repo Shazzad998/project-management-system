@@ -21,8 +21,8 @@ class TaskController extends Controller
     {
         $query = Task::query()->with(['project', 'creator', 'updater','assigned_user']);
         $tasks = $query->latest()->get();
-        $projects = Project::query()->get();
-        $users = User::query()->whereNot('id', 1)->get();
+        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
         return inertia('Tasks/Index', [
             'tasks' => TaskResource::collection($tasks),
             'projects' => ProjectOptionResource::collection($projects),
