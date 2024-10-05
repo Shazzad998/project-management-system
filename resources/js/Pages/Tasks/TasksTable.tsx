@@ -10,15 +10,39 @@ import DeleteConfirm from "@/Components/DeleteConfirm";
 type TasksTableProps = {
     tasks: Task[];
     hideProjectColumn?: boolean;
-    setTask:(task:Task) => void;
-    projectOptions:ProjectOption[]
+    setTask: (task: Task) => void;
+    projectOptions: ProjectOption[];
 };
 
-const TasksTable = ({ tasks, hideProjectColumn = false, setTask, projectOptions }: TasksTableProps) => {
-    const ProjectOptions = projectOptions.map((project) => ({
-        label: project.id,
-        value: project.id,
-    }));
+const TasksTable = ({
+    tasks,
+    hideProjectColumn = false,
+    setTask,
+    projectOptions,
+}: TasksTableProps) => {
+    const tableFilters = [
+        {
+            title: "Status",
+            value: "status",
+            options: taskStatuses,
+        },
+        {
+            title: "Priority",
+            value: "priority",
+            options: taskPriorities,
+        },
+    ];
+    if (!hideProjectColumn) {
+        const ProjectOptions = projectOptions.map((project) => ({
+            label: project.name,
+            value: project.id,
+        }));
+        tableFilters.push({
+            title: "Project",
+            value: "project",
+            options: ProjectOptions,
+        });
+    }
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -48,23 +72,7 @@ const TasksTable = ({ tasks, hideProjectColumn = false, setTask, projectOptions 
             <DataTable
                 data={tasks}
                 columns={TaskColumns(confirmDelete, hideProjectColumn, setTask)}
-                filters={[
-                    {
-                        title: "Status",
-                        value: "status",
-                        options: taskStatuses,
-                    },
-                    {
-                        title: "Priority",
-                        value: "priority",
-                        options: taskPriorities,
-                    },
-                    {
-                        title: "Project",
-                        value: "project_id",
-                        options: ProjectOptions,
-                    },
-                ]}
+                filters={tableFilters}
                 searchableColumns={["name"]}
             />
         </>

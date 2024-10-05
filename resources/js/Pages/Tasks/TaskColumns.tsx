@@ -76,16 +76,6 @@ export const TaskColumns = (
             },
         },
         {
-            accessorKey: "project_id",
-            header: () => <></>,
-            cell: ({ row }) => {
-                return <span className="hidden">{row.getValue("project_id")}</span>;
-            },
-            filterFn: (row, id, value) => {
-                return value.includes(row.getValue(id));
-            },
-        },
-        {
             accessorKey: "name",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
@@ -217,7 +207,7 @@ export const TaskColumns = (
         },
     ];
     if (!hideProjectColumn) {
-        columns.splice(3, 0, {
+        columns.splice(2, 0, {
             accessorKey: "project",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Project" />
@@ -229,6 +219,9 @@ export const TaskColumns = (
                         {project.name}
                     </div>
                 );
+            },
+            filterFn: (row, id, value) => {
+                return value.includes(row.original.project_id);
             },
         });
     }
