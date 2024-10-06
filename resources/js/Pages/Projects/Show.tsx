@@ -9,12 +9,15 @@ import {
 } from "@/Components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Project, Task, User } from "@/types";
+import { Project, ProjectOption, Task, User, UserOption } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import BarChartRadial from "@/Components/BarChartRadial";
 import { Label } from "@/Components/ui/label";
 import StatusBadge from "@/Components/StatusBadge";
 import TasksTable from "../Tasks/TasksTable";
+import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import TaskForm from "../Tasks/Modals/TaskForm";
 
 type Props = {
     auth: {
@@ -23,9 +26,23 @@ type Props = {
     project: Project;
     tasks: Task[];
     members: User[];
+    session: {
+        success?: string;
+        error?: string;
+    };
+    projects: ProjectOption[];
+    users: UserOption[];
 };
 
-const Show = ({ auth, project, tasks, members }: Props) => {
+const Show = ({
+    auth,
+    project,
+    tasks,
+    members,
+    projects,
+    users,
+    session,
+}: Props) => {
     const totalTasks = tasks.length;
     const totalColpleted = tasks.filter(
         (item: Task) => item.status == "completed"
@@ -81,6 +98,36 @@ const Show = ({ auth, project, tasks, members }: Props) => {
             type: "completed",
         },
     ];
+
+    const { toast } = useToast();
+    const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [task, setTask] = useState<Task | null>(null);
+
+    const closeForm = () => {
+        setFormOpen(false);
+        setTask(null);
+    };
+    useEffect(() => {
+        if (session.success) {
+            toast({
+                title: "Success!",
+                description: session.success,
+                variant: "success",
+            });
+        }
+        if (session.error) {
+            toast({
+                title: "Error!",
+                description: session.error,
+                variant: "destructive",
+            });
+        }
+    }, [session]);
+
+    const openEdit = (task: Task | null) => {
+        setTask(task);
+        setFormOpen(true);
+    };
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title={project.name} />
@@ -147,6 +194,15 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                                                   )
                                                 : 0}
                                             %
+                                        </div>
+                                        <div className=" min-w-24 max-w-40 w-full h-1 rounded-full overflow-hidden relative bg-muted mb-2">
+                                             <div className="h-full bg-primary" style={{width:totalTasks > 0
+                                                ? Math.floor(
+                                                      (totalColpleted.length /
+                                                          totalTasks) *
+                                                          100
+                                                  )
+                                                : 0 + '%'}}></div>
                                         </div>
                                         <p className="text-xs text-muted-foreground">
                                             {totalColpleted.length} tasks
@@ -308,9 +364,17 @@ const Show = ({ auth, project, tasks, members }: Props) => {
                                     <TasksTable
                                         hideProjectColumn={true}
                                         tasks={tasks}
+                                        setTask={openEdit}
                                     />
                                 </CardContent>
                             </Card>
+                            <TaskForm
+                                open={formOpen}
+                                onOpenChange={closeForm}
+                                task={task}
+                                projects={projects}
+                                users={users}
+                            />
                         </TabsContent>
                     </Tabs>
                 </div>

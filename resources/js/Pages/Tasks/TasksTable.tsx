@@ -11,7 +11,7 @@ type TasksTableProps = {
     tasks: Task[];
     hideProjectColumn?: boolean;
     setTask: (task: Task) => void;
-    projectOptions: ProjectOption[];
+    projectOptions?: ProjectOption[];
 };
 
 const TasksTable = ({
@@ -33,15 +33,17 @@ const TasksTable = ({
         },
     ];
     if (!hideProjectColumn) {
-        const ProjectOptions = projectOptions.map((project) => ({
+        const ProjectOptions = projectOptions?.map((project) => ({
             label: project.name,
             value: project.id,
         }));
-        tableFilters.push({
-            title: "Project",
-            value: "project",
-            options: ProjectOptions,
-        });
+        if (ProjectOptions?.length) {
+            tableFilters.push({
+                title: "Project",
+                value: "project",
+                options: ProjectOptions,
+            });
+        }
     }
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Resources\ProjectOptionResource;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\UserOptionResource;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
@@ -51,10 +53,18 @@ class ProjectController extends Controller
         $query = Task::query()->where('project_id', $project->id);
         $relatedTasks = $query->get();
         $projectMembers = User::whereIn('id', $query->pluck('assigned_user_id'))->get();
+        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
         return inertia('Projects/Show', [
             'project' => new ProjectResource($project),
             'tasks' => TaskResource::collection($relatedTasks),
-            'members' => UserResource::collection($projectMembers)
+            'members' => UserResource::collection($projectMembers),
+            'projects' => ProjectOptionResource::collection($projects),
+            'users' => UserOptionResource::collection($users),
+            'session' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
         ]);
     }
 
