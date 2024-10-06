@@ -23,8 +23,10 @@ class ProjectController extends Controller
     {
         $query = Project::query()->with('tasks');
         $projects = $query->latest()->get();
+        $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
+            'users' => UserOptionResource::collection($users),
             'session' => [
                 'success' => session('success'),
                 'error' => session('error'),
@@ -41,7 +43,10 @@ class ProjectController extends Controller
         $validatedPayload = $request->validated();
         $validatedPayload['created_by'] = Auth::id();
         $validatedPayload['updated_by'] = Auth::id();
-        Project::create($validatedPayload);
+        $project = Project::create($validatedPayload);
+        if ($validatedPayload['user_ids']) {
+            $project->users()->attach($validatedPayload['user_ids']);
+        }
         return back()->with('success', 'Project Created Successfully');
     }
 
@@ -85,7 +90,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        if($project->tasks()->count()){
+        if ($project->tasks()->count()) {
             return back()->with('error', 'This project has tasks associated with it.');
         }
         $project->delete();

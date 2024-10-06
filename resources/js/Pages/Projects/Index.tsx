@@ -1,6 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Project, User } from "@/types";
+import { Project, SelectOption, User, UserOption } from "@/types";
 import { Card, CardContent } from "@/Components/ui/card";
 import {
     Breadcrumb,
@@ -23,17 +23,21 @@ type Props = {
         user: User;
     };
     projects: Project[];
+    users: UserOption[];
     session: {
         success?: string;
         error?: string;
     };
 };
 
-const Index = ({ auth, projects, session }: Props) => {
+const Index = ({ auth, projects, users, session }: Props) => {
     const { toast } = useToast();
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [project, setProject] = useState<Project | null>(null);
-
+    const UserOptions = users.map((user) => ({
+        label: user.name,
+        value: user.id,
+    }));
     const closeForm = () => {
         setFormOpen(false);
         setProject(null);
@@ -89,6 +93,7 @@ const Index = ({ auth, projects, session }: Props) => {
                     open={formOpen}
                     onOpenChange={closeForm}
                     project={project}
+                    userOptions={UserOptions}
                 />
             </div>
             <Card>

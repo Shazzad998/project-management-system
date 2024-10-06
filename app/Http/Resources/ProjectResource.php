@@ -24,6 +24,7 @@ class ProjectResource extends JsonResource
             'due_date' => (new Carbon($this->due_date))->format('Y-m-d'),
             'status' => $this->status,
             'image_path' => $this->image_path,
+            'user_ids' => $this->users->pluck('id'),
             'created_by' => new UserResource($this->creator),
             'updated_by' => new UserResource($this->updater)
         ];

@@ -17,15 +17,18 @@ import { SelectInput } from "../../../Components/SelectInput";
 import { projectStatus } from "@/data";
 import { Textarea } from "../../../Components/ui/textarea";
 import { router } from "@inertiajs/react";
+import { MultiSelect } from "@/Components/MultiSelect";
 
 type Props = {
     open: boolean;
     onOpenChange: (value: boolean) => void;
     project: Project | null;
+    userOptions: SelectOption[];
 };
 
-const ProjectForm = ({ open, onOpenChange, project }: Props) => {
+const ProjectForm = ({ open, onOpenChange, project, userOptions }: Props) => {
     const [status, setStatus] = useState<SelectOption | null | undefined>();
+    const [selectedUsers, setSelectedUsers] = useState<SelectOption[]>([]);
     const [date, setDate] = useState<Date | undefined>();
     const [errors, setErrors] = useState<Errors>({});
 
@@ -34,14 +37,20 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
         description: "",
         status: "",
         due_date: "",
+        user_ids:[]
     });
 
-    const setData = (key: string, value: string) => {
+    const setData = (key: string, value: string|number[]) => {
         _setData((values) => ({
             ...values,
             [key]: value,
         }));
     };
+
+    useEffect(() => {
+        console.log('setting user ids')
+        setData('user_ids',selectedUsers.map(item => Number(item.value)))
+    }, [selectedUsers])
 
     useEffect(() => {
         setData("name", project?.name ?? "");
@@ -56,6 +65,10 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
         setDate(
             project && project.due_date ? new Date(project.due_date) : undefined
         );
+        setData("user_ids", project?.user_ids ?? []);
+        setSelectedUsers(project
+            ? userOptions.filter((item) => project.user_ids.includes(Number(item.value)))
+            : [])
     }, [project]);
 
     const reset = () => {
@@ -64,6 +77,7 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
             description: "",
             status: "",
             due_date: "",
+            user_ids:[]
         });
         setStatus(null);
         setDate(undefined);
@@ -108,9 +122,9 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
                 </SheetHeader>
                 <form
                     onSubmit={handleSubmit}
-                    className=" grid grid-cols-1 md:grid-cols-2 gap-4"
+                    className=" grid grid-cols-1 md:grid-cols-3 gap-4 mt-6"
                 >
-                    <div className="grid gap-2">
+                    <div className="felx flex-column gap-2">
                         <Label htmlFor="name">Project Name</Label>
 
                         <div>
@@ -126,7 +140,7 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
                             <InputError message={errors.name} />
                         </div>
                     </div>
-                    <div className="grid gap-2">
+                    <div className="felx flex-column gap-2">
                         <Label htmlFor="due_date">Due Date</Label>
 
                         <div>
@@ -150,7 +164,7 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
                         </div>
                     </div>
 
-                    <div className="grid gap-2">
+                    <div className="felx flex-column gap-2">
                         <Label htmlFor="name">Project Status</Label>
                         <div>
                             <SelectInput
@@ -167,7 +181,20 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
                         </div>
                     </div>
 
-                    <div className="grid md:col-span-2 gap-2">
+                    <div className="felx flex-column gap-2 md:col-span-3">
+                        <Label htmlFor="name">Users</Label>
+                        <div>
+                            <MultiSelect
+                                options={userOptions}
+                                selected={selectedUsers}
+                                setSelected={setSelectedUsers}
+                                placeholder="Select users"
+                            />
+                            <InputError message={errors.user_ids} />
+                        </div>
+                    </div>
+
+                    <div className="grid md:col-span-3 gap-2">
                         <Label htmlFor="description">Project Description</Label>
 
                         <div>
@@ -183,7 +210,7 @@ const ProjectForm = ({ open, onOpenChange, project }: Props) => {
                         </div>
                     </div>
 
-                    <div className=" flex items-center justify-end gap-2 md:col-span-2">
+                    <div className=" flex items-center justify-end gap-2 md:col-span-3">
                         <SheetClose asChild>
                             <Button variant={"secondary"}>Cancel</Button>
                         </SheetClose>

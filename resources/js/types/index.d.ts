@@ -31,6 +31,7 @@ export type Project = {
     description: string | null;
     due_date: string | null;
     status: string;
+    user_ids:number[];
     image_path: string | undefined;
     created_at: string;
     created_by: User;
@@ -83,6 +84,7 @@ export type Errors = {
     priority?: string;
     project_id?: string;
     assigned_user_id?: string;
+    user_ids?:string
 };
 
 export type ProjectOption = {
