@@ -266,7 +266,7 @@ const Show = ({
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-2xl font-bold">
-                                            10
+                                            {members.length}
                                         </div>
                                         <p className="text-xs text-muted-foreground">
                                             3 recently added

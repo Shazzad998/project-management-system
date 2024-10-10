@@ -57,15 +57,14 @@ class ProjectController extends Controller
     {
         $query = Task::query()->where('project_id', $project->id);
         $relatedTasks = $query->get();
-        $projectMembers = User::whereIn('id', $query->pluck('assigned_user_id'))->get();
+        $projectMembers = $project->users;
         $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
         return inertia('Projects/Show', [
             'project' => new ProjectResource($project),
             'tasks' => TaskResource::collection($relatedTasks),
             'members' => UserResource::collection($projectMembers),
             'projects' => ProjectOptionResource::collection($projects),
-            'users' => UserOptionResource::collection($users),
+            'users' => UserOptionResource::collection($projectMembers),
             'session' => [
                 'success' => session('success'),
                 'error' => session('error'),
