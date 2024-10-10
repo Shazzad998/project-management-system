@@ -82,6 +82,7 @@ class ProjectController extends Controller
         $validatedPayload = $request->validated();
         $validatedPayload['updated_by'] = Auth::id();
         $project->update($validatedPayload);
+        $project->users()->sync($validatedPayload['user_ids']);
         return back()->with('success', 'Project Updated Successfully');
     }
 

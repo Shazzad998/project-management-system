@@ -48,7 +48,6 @@ const ProjectForm = ({ open, onOpenChange, project, userOptions }: Props) => {
     };
 
     useEffect(() => {
-        console.log('setting user ids')
         setData('user_ids',selectedUsers.map(item => Number(item.value)))
     }, [selectedUsers])
 

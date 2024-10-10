@@ -51,7 +51,7 @@ export function MultiSelect({options, selected, setSelected, placeholder} : Mult
   );
 
   const selectables = options.filter(
-    (option) => !selected.includes(option)
+    (option) => !selected.some(s => s.value === option.value)
   );
 
   return (
