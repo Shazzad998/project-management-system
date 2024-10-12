@@ -12,17 +12,37 @@ use App\Http\Resources\UserOptionResource;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 
-class ProjectController extends Controller
+class ProjectController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:project-list', only: ['index']),
+            new Middleware('permission:project-create', only: ['store']),
+            new Middleware('permission:project-edit', only: ['update']),
+            new Middleware('permission:project-delete', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Project::query()->with('tasks');
-        $projects = $query->latest()->get();
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        if ($user->hasRole('Super Admin')) {
+            $query = Project::query()->with('tasks');
+            $projects = $query->latest()->get();
+        } else {
+            $projects = $user->projects;
+        }
         $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
