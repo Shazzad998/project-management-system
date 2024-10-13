@@ -21,11 +21,12 @@ type Props = {
     roles: string[];
 };
 
-const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
-    const roleOptions = roles.map((role) => ({
-        label: role,
-        value: role,
-    }));
+const UserForm = ({ open, onOpenChange, user, roles= [] }: Props) => {
+    
+    const roleOptions = roles?.map((role) => ({
+            label: role,
+            value: role,
+        }));
     const [errors, setErrors] = useState<Errors>({});
     const [role, setRole] = useState<SelectOption | null | undefined>();
 
@@ -57,7 +58,7 @@ const UserForm = ({ open, onOpenChange, user, roles }: Props) => {
         setData("role", user?.roles?.[0] ?? null);
         setRole(
             user
-                ? roleOptions.find((item) => item.value == user.roles?.[0])
+                ? roleOptions?.find((item) => item.value == user.roles?.[0])
                 : null
         );
         if (user) {

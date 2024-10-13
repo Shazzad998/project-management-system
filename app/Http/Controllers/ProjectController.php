@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class ProjectController extends Controller implements HasMiddleware
 {
@@ -79,12 +80,14 @@ class ProjectController extends Controller implements HasMiddleware
         $relatedTasks = $query->get();
         $projectMembers = $project->users;
         $projects = Project::query()->orderBy('name', 'asc')->get();
+        $roles = Role::whereNot('id', 1)->get()->pluck('name');
         return inertia('Projects/Show', [
             'project' => new ProjectResource($project),
             'tasks' => TaskResource::collection($relatedTasks),
             'members' => UserResource::collection($projectMembers),
             'projects' => ProjectOptionResource::collection($projects),
             'users' => UserOptionResource::collection($projectMembers),
+            // 'roles' => $roles,
             'session' => [
                 'success' => session('success'),
                 'error' => session('error'),

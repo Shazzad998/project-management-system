@@ -18,6 +18,9 @@ import TasksTable from "../Tasks/TasksTable";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import TaskForm from "../Tasks/Modals/TaskForm";
+import { Activity, CalendarX2, ListChecks, UsersIcon } from "lucide-react";
+import UsersTable from "../Users/UsersTable";
+import UserForm from "../Users/Modals/UserForm";
 
 type Props = {
     auth: {
@@ -32,6 +35,7 @@ type Props = {
     };
     projects: ProjectOption[];
     users: UserOption[];
+    roles: string[];
 };
 
 const Show = ({
@@ -41,6 +45,7 @@ const Show = ({
     members,
     projects,
     users,
+    roles,
     session,
 }: Props) => {
     const totalTasks = tasks.length;
@@ -100,13 +105,28 @@ const Show = ({
     ];
 
     const { toast } = useToast();
-    const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [tastFormOpen, setTaskFormOpen] = useState<boolean>(false);
     const [task, setTask] = useState<Task | null>(null);
+    const [memberFormOpen, setMemberFormOpen] = useState<boolean>(false);
+    const [member, setMember] = useState<User | null>(null);
 
-    const closeForm = () => {
-        setFormOpen(false);
+    const closeTaskForm = () => {
+        setTaskFormOpen(false);
         setTask(null);
     };
+    const closeMemberForm = () => {
+        setMemberFormOpen(false);
+        setMember(null);
+    };
+    const openTaskEdit = (task: Task | null) => {
+        setTask(task);
+        setTaskFormOpen(true);
+    };
+    const openMemberEdit = (user: User | null) => {
+        setMember(user);
+        setMemberFormOpen(true);
+    };
+
     useEffect(() => {
         if (session.success) {
             toast({
@@ -124,10 +144,6 @@ const Show = ({
         }
     }, [session]);
 
-    const openEdit = (task: Task | null) => {
-        setTask(task);
-        setFormOpen(true);
-    };
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title={project.name} />
@@ -160,7 +176,7 @@ const Show = ({
                         <TabsList>
                             <TabsTrigger value="overview">Overview</TabsTrigger>
                             <TabsTrigger value="tasks">Tasks</TabsTrigger>
-                            <TabsTrigger value="members" disabled>
+                            <TabsTrigger value="members">
                                 Members
                             </TabsTrigger>
                         </TabsList>
@@ -171,18 +187,7 @@ const Show = ({
                                         <CardTitle className="text-sm font-medium">
                                             Project Progress
                                         </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                        </svg>
+                                        <Activity className=" text-primary" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-2xl font-bold">
@@ -196,13 +201,19 @@ const Show = ({
                                             %
                                         </div>
                                         <div className=" min-w-24 max-w-40 w-full h-1 rounded-full overflow-hidden relative bg-muted mb-2">
-                                             <div className="h-full bg-primary" style={{width:totalTasks > 0
-                                                ? Math.floor(
-                                                      (totalColpleted.length /
-                                                          totalTasks) *
-                                                          100
-                                                  )
-                                                : 0 + '%'}}></div>
+                                            <div
+                                                className="h-full bg-primary"
+                                                style={{
+                                                    width:
+                                                        totalTasks > 0
+                                                            ? Math.floor(
+                                                                  (totalColpleted.length /
+                                                                      totalTasks) *
+                                                                      100
+                                                              )
+                                                            : 0 + "%",
+                                                }}
+                                            ></div>
                                         </div>
                                         <p className="text-xs text-muted-foreground">
                                             {totalColpleted.length} tasks
@@ -215,20 +226,7 @@ const Show = ({
                                         <CardTitle className="text-sm font-medium">
                                             Completed Tasks
                                         </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                            <circle cx="9" cy="7" r="4" />
-                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                                        </svg>
+                                        <ListChecks className=" text-success" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-2xl font-bold">
@@ -244,25 +242,7 @@ const Show = ({
                                         <CardTitle className="text-sm font-medium">
                                             Members
                                         </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <rect
-                                                width="20"
-                                                height="14"
-                                                x="2"
-                                                y="5"
-                                                rx="2"
-                                            />
-                                            <path d="M2 10h20" />
-                                        </svg>
+                                        <UsersIcon className=" text-primary" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-2xl font-bold">
@@ -278,18 +258,7 @@ const Show = ({
                                         <CardTitle className="text-sm font-medium">
                                             Overdue Tasks
                                         </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                        </svg>
+                                        <CalendarX2 className=" text-destructive" />
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-2xl font-bold">
@@ -364,17 +333,33 @@ const Show = ({
                                     <TasksTable
                                         hideProjectColumn={true}
                                         tasks={tasks}
-                                        setTask={openEdit}
+                                        setTask={openTaskEdit}
                                     />
                                 </CardContent>
                             </Card>
                             <TaskForm
-                                open={formOpen}
-                                onOpenChange={closeForm}
+                                open={tastFormOpen}
+                                onOpenChange={closeTaskForm}
                                 task={task}
                                 projects={projects}
                                 users={users}
                             />
+                        </TabsContent>
+                        <TabsContent value="members">
+                            <Card>
+                                <CardContent className=" pt-4">
+                                    <UsersTable
+                                        users={members}
+                                        setUser={openMemberEdit}
+                                    />
+                                </CardContent>
+                                <UserForm
+                                    open={memberFormOpen}
+                                    roles={roles}
+                                    onOpenChange={closeMemberForm}
+                                    user={member}
+                                />
+                            </Card>
                         </TabsContent>
                     </Tabs>
                 </div>

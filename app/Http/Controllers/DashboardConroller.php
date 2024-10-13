@@ -16,11 +16,12 @@ class DashboardConroller extends Controller
         /** @var \App\Models\User */
         $user = Auth::user();
         $tasksQuery = Task::query()->with('project');
-        $projectsQuery = Project::query();
-        if (!$user->hasRole('Super Admin')) {
+        
+        if ($user->hasRole('Super Admin')) {
+            $projectsQuery = Project::query();
+        }else{
             $tasksQuery = $tasksQuery->where('assigned_user_id', $user->id);
-            $projectIds = $tasksQuery->select('project_id')->distinct()->pluck('project_id');
-            $projectsQuery = $projectsQuery->whereIn('id', $projectIds);
+            $projectsQuery = $user->projects();
         }
 
         $totalProjectCount = $projectsQuery->count();

@@ -189,7 +189,7 @@ export default function Dashboard({
                                                 </TableCell>
                                             </TableRow>
                                         ))}
-                                        {!pendingTasks.length && <TableRow><TableCell className="w-full">No data found</TableCell></TableRow>} 
+                                        {!pendingTasks.length && <TableRow><TableCell colSpan={6}>No data found</TableCell></TableRow>} 
                                     </TableBody>
                                 </Table>
                             </div>
@@ -239,6 +239,7 @@ export default function Dashboard({
                                                 </TableCell>
                                             </TableRow>
                                         ))}
+                                        {!overdueTasks.length && <TableRow><TableCell colSpan={6}>No data found</TableCell></TableRow>}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -282,6 +283,7 @@ export default function Dashboard({
                                                 </TableCell>
                                             </TableRow>
                                         ))}
+                                        {!pendingProjects.length && <TableRow><TableCell colSpan={4}>No data found</TableCell></TableRow>}
                                     </TableBody>
                                 </Table>
                             </div>
