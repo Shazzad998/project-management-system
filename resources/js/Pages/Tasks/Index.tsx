@@ -17,6 +17,8 @@ import { can } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import TaskForm from "./Modals/TaskForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
+import TasksBoardView from "./Partials/TasksBoardView";
 
 type Props = {
     auth: {
@@ -79,7 +81,6 @@ const Index = ({ auth, tasks, projects, users, session }: Props) => {
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <h2 className="mt-2 font-bold text-xl">Task List</h2>
                 </div>
                 {can("task-create", auth.user) && (
                     <Button onClick={() => setFormOpen(true)}>
@@ -95,11 +96,27 @@ const Index = ({ auth, tasks, projects, users, session }: Props) => {
                     users={users}
                 />
             </div>
-            <Card>
-                <CardContent className="pt-6">
-                    <TasksTable tasks={tasks} setTask={openEdit} projectOptions={projects} />
-                </CardContent>
-            </Card>
+
+            <Tabs defaultValue="board-view" className="space-y-4">
+                <TabsList>
+                    <TabsTrigger value="board-view">Board View</TabsTrigger>
+                    <TabsTrigger value="list-view">List View</TabsTrigger>
+                </TabsList>
+                <TabsContent value="board-view">
+                    <TasksBoardView/>
+                </TabsContent>
+                <TabsContent value="list-view">
+                    <Card>
+                        <CardContent className="pt-6">
+                            <TasksTable
+                                tasks={tasks}
+                                setTask={openEdit}
+                                projectOptions={projects}
+                            />
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </AuthenticatedLayout>
     );
 };
