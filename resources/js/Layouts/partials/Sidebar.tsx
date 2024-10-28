@@ -16,8 +16,7 @@ const Sidebar = ({ navigations }: SidebarProps) => {
                         href="/"
                         className="flex items-center gap-2 font-semibold max-w-full"
                     >
-                        <ApplicationLogo className="block h-9 fill-current text-gray-800" />{" "}
-                        <span className="text-lg truncate">Laravel Shadcn</span>
+                        <ApplicationLogo className="block h-7 fill-current text-foreground/80" />
                     </Link>
                 </div>
                 <div className="flex-1">
