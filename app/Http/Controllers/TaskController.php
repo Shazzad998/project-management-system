@@ -10,6 +10,7 @@ use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserOptionResource;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
@@ -85,4 +86,15 @@ class TaskController extends Controller implements HasMiddleware
         $task->delete();
         return back()->with('success', 'Task Deleted Successfully');
     }
+
+    public function updateStatus(Request $request, Task $task)
+    {
+        $request->validate(['status' => 'required|string|in:pending,in_progress,completed']);
+
+        $task->status = $request->status;
+        $task->save();
+
+        return response()->json($task);
+    }
+
 }

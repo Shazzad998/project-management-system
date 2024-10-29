@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('projects', ProjectController::class);
     Route::resource('tasks', TaskController::class);
+    Route::put('/tasks/{task}/status', [TaskController::class, 'updateStatus']);
 });
 
 Route::middleware('auth')->group(function () {

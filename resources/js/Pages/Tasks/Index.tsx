@@ -103,7 +103,7 @@ const Index = ({ auth, tasks, projects, users, session }: Props) => {
                     <TabsTrigger value="list-view">List View</TabsTrigger>
                 </TabsList>
                 <TabsContent value="board-view">
-                    <TasksBoardView/>
+                    <TasksBoardView tasks={tasks}/>
                 </TabsContent>
                 <TabsContent value="list-view">
                     <Card>
