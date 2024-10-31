@@ -33,7 +33,6 @@ class TaskFactory extends Factory
                     Task::PRIORITY_MEDIUM,
                     Task::PRIORITY_HIGH
                 ]),
-            'image_path' => fake()->imageUrl(),
             'assigned_user_id' => 1,
             'created_by' => 1,
             'updated_by' => 1

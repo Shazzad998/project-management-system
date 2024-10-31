@@ -81,12 +81,16 @@ class ProjectController extends Controller implements HasMiddleware
         $projectMembers = $project->users;
         $projects = Project::query()->orderBy('name', 'asc')->get();
         $roles = Role::whereNot('id', 1)->get()->pluck('name');
+        $pendingTasks = $query->where('status', 'pending')->take(5)->get();
+        $overdueTasks = $query->where('due_date', '<', now())->take(5)->get();
         return inertia('Projects/Show', [
             'project' => new ProjectResource($project),
             'tasks' => TaskResource::collection($relatedTasks),
             'members' => UserResource::collection($projectMembers),
             'projects' => ProjectOptionResource::collection($projects),
             'users' => UserOptionResource::collection($projectMembers),
+            'pendingTasks' => TaskResource::collection($pendingTasks),
+            'overdueTasks' => TaskResource::collection($overdueTasks),
             // 'roles' => $roles,
             'session' => [
                 'success' => session('success'),
