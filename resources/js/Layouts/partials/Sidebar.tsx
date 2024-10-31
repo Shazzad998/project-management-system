@@ -16,7 +16,7 @@ const Sidebar = ({ navigations }: SidebarProps) => {
                         href="/"
                         className="flex items-center gap-2 font-semibold max-w-full"
                     >
-                        <ApplicationLogo className="block h-7 fill-current text-foreground/80" />
+                        <ApplicationLogo className="block h-7 fill-current text-primary" />
                     </Link>
                 </div>
                 <div className="flex-1">

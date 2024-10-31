@@ -337,189 +337,163 @@ const Show = ({
                                     data={statusTastData}
                                 />
                             </div>
-                            <div className=" grid gap-4 lg:grid-cols-5">
-                                <div className=" grid gap-4 lg:col-span-3">
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>PendingTasks</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="rounded-md">
-                                                <Table>
-                                                    <TableHeader>
-                                                        <TableRow>
-                                                            <TableHead>
-                                                                ID
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Name
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Project
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Status
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Priority
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Due Date
-                                                            </TableHead>
-                                                        </TableRow>
-                                                    </TableHeader>
-                                                    <TableBody>
-                                                        {pendingTasks.map(
-                                                            (pendingTask) => (
-                                                                <TableRow
-                                                                    key={
+                            <div className=" grid gap-4 lg:grid-cols-2">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>PendingTasks</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="rounded-md">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>
+                                                            ID
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Name
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Status
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Priority
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Due Date
+                                                        </TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {pendingTasks.map(
+                                                        (pendingTask) => (
+                                                            <TableRow
+                                                                key={
+                                                                    pendingTask.id
+                                                                }
+                                                            >
+                                                                <TableCell>
+                                                                    {
                                                                         pendingTask.id
                                                                     }
-                                                                >
-                                                                    <TableCell>
-                                                                        {
-                                                                            pendingTask.id
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {
+                                                                        pendingTask.name
+                                                                    }
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <StatusBadge
+                                                                        status={
+                                                                            pendingTask.status
                                                                         }
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        {
-                                                                            pendingTask.name
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <PriorityBadge
+                                                                        priority={
+                                                                            pendingTask.priority
                                                                         }
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        {
-                                                                            pendingTask
-                                                                                .project
-                                                                                .name
-                                                                        }
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <StatusBadge
-                                                                            status={
-                                                                                pendingTask.status
-                                                                            }
-                                                                        />
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <PriorityBadge
-                                                                            priority={
-                                                                                pendingTask.priority
-                                                                            }
-                                                                        />
-                                                                    </TableCell>
-                                                                    <TableCell className=" text-nowrap">
-                                                                        {
-                                                                            pendingTask.due_date
-                                                                        }
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            )
-                                                        )}
-                                                        {!pendingTasks.length && (
-                                                            <TableRow>
-                                                                <TableCell
-                                                                    colSpan={6}
-                                                                >
-                                                                    No data
-                                                                    found
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell className=" text-nowrap">
+                                                                    {
+                                                                        pendingTask.due_date
+                                                                    }
                                                                 </TableCell>
                                                             </TableRow>
-                                                        )}
-                                                    </TableBody>
-                                                </Table>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                                <div className=" grid gap-4 lg:col-span-2">
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Overdue Tasks</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="rounded-md border">
-                                                <Table>
-                                                    <TableHeader>
+                                                        )
+                                                    )}
+                                                    {!pendingTasks.length && (
                                                         <TableRow>
-                                                            <TableHead>
-                                                                ID
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Name
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Project
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Status
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Priority
-                                                            </TableHead>
-                                                            <TableHead>
-                                                                Due Date
-                                                            </TableHead>
+                                                            <TableCell
+                                                                colSpan={6}
+                                                            >
+                                                                No data found
+                                                            </TableCell>
                                                         </TableRow>
-                                                    </TableHeader>
-                                                    <TableBody>
-                                                        {overdueTasks.map(
-                                                            (overdueTask) => (
-                                                                <TableRow
-                                                                    key={
+                                                    )}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Overdue Tasks</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="rounded-md border">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>
+                                                            ID
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Name
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Status
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Priority
+                                                        </TableHead>
+                                                        <TableHead>
+                                                            Due Date
+                                                        </TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {overdueTasks.map(
+                                                        (overdueTask) => (
+                                                            <TableRow
+                                                                key={
+                                                                    overdueTask.id
+                                                                }
+                                                            >
+                                                                <TableCell>
+                                                                    {
                                                                         overdueTask.id
                                                                     }
-                                                                >
-                                                                    <TableCell>
-                                                                        {
-                                                                            overdueTask.id
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {
+                                                                        overdueTask.name
+                                                                    }
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <StatusBadge status="overdue" />
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <PriorityBadge
+                                                                        priority={
+                                                                            overdueTask.priority
                                                                         }
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        {
-                                                                            overdueTask.name
-                                                                        }
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        {
-                                                                            overdueTask
-                                                                                .project
-                                                                                .name
-                                                                        }
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <StatusBadge status="overdue" />
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <PriorityBadge
-                                                                            priority={
-                                                                                overdueTask.priority
-                                                                            }
-                                                                        />
-                                                                    </TableCell>
-                                                                    <TableCell className=" text-nowrap">
-                                                                        {
-                                                                            overdueTask.due_date
-                                                                        }
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            )
-                                                        )}
-                                                        {!overdueTasks.length && (
-                                                            <TableRow>
-                                                                <TableCell
-                                                                    colSpan={6}
-                                                                >
-                                                                    No data
-                                                                    found
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell className=" text-nowrap">
+                                                                    {
+                                                                        overdueTask.due_date
+                                                                    }
                                                                 </TableCell>
                                                             </TableRow>
-                                                        )}
-                                                    </TableBody>
-                                                </Table>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
+                                                        )
+                                                    )}
+                                                    {!overdueTasks.length && (
+                                                        <TableRow>
+                                                            <TableCell
+                                                                colSpan={6}
+                                                            >
+                                                                No data found
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             </div>
                         </TabsContent>
                         <TabsContent value="tasks">
