@@ -105,6 +105,8 @@ class UserController extends Controller implements HasMiddleware
                     Storage::disk('public')->deleteDirectory(dirname($user->image_path));
                 }
                 $validatedPayload['image_path'] = $image->store('users/' . strtolower(str_replace(['-', ' '], "_", $validatedPayload['name'])), 'public');
+            }else{
+                $validatedPayload['image_path'] = $user->image_path;
             }
             $user->update($validatedPayload);
             $user->syncRoles([$validatedPayload['role']]);
