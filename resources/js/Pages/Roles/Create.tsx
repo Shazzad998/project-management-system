@@ -62,7 +62,7 @@ const Create = ({ auth, permissions }: Props) => {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Create Role" />
-            <div className="flex items-end justify-between gap-2">
+            <div className="flex items-end justify-between gap-2 mb-4">
                 <div>
                     <Breadcrumb>
                         <BreadcrumbList>

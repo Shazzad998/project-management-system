@@ -26,6 +26,7 @@ import { NavLink, User } from "@/types";
 import { useState } from "react";
 import { Link } from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import { SidebarTrigger } from "@/Components/ui/sidebar";
 
 type NavbarProps = {
     navigations: NavLink[];
@@ -35,7 +36,7 @@ type NavbarProps = {
 export function Navbar({ navigations, user }: NavbarProps) {
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
     return (
-        <header className="flex pt-[10px] pb-[9px] items-center gap-4 border-b bg-background px-4 lg:px-6 sticky top-0 z-10">
+        <header className="flex pt-[10px] pb-[9px] justify-between items-center gap-4 border-b bg-background px-4  sticky top-0 z-10">
             {/* Logout Dialog */}
             <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
                 <DialogContent>
@@ -143,7 +144,7 @@ export function Navbar({ navigations, user }: NavbarProps) {
         </DialogContent>
       </Dialog> */}
 
-            <Sheet>
+            {/* <Sheet>
                 <SheetTrigger asChild>
                     <Button
                         variant="outline"
@@ -185,19 +186,10 @@ export function Navbar({ navigations, user }: NavbarProps) {
                         )}
                     </nav>
                 </SheetContent>
-            </Sheet>
-            <div className="w-full flex-1">
-                <form>
-                    <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search products..."
-                            className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-                        />
-                    </div>
-                </form>
-            </div>
+            </Sheet> */}
+
+            <SidebarTrigger/>
+            
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button

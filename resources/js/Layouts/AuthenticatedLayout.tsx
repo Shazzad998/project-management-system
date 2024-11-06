@@ -5,6 +5,8 @@ import { Navbar } from "./partials/Navbar";
 import Sidebar from "./partials/Sidebar";
 import { Toaster } from "@/Components/ui/toaster";
 import { can } from "@/lib/utils";
+import { SidebarProvider, SidebarTrigger } from "@/Components/ui/sidebar";
+import { AppSidebar } from "./partials/AppSidebar";
 
 export default function AuthenticatedLayout({
     user,
@@ -44,15 +46,22 @@ export default function AuthenticatedLayout({
     ];
 
     return (
-        <div className="grid h-full min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] ">
-            <Sidebar navigations={navigations} />
-            <div className="flex flex-col bg-muted/10 min-h-screen max-h-screen overflow-auto">
+        // <div className="grid h-full min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] ">
+        //     <Sidebar navigations={navigations} />
+        //     <div className="flex flex-col bg-muted/10 min-h-screen max-h-screen overflow-auto">
+        //         <Navbar navigations={navigations} user={user} />
+        //         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        //             {children}
+        //         </main>
+        //     </div>
+        //     <Toaster />
+        // </div>
+        <SidebarProvider>
+            <AppSidebar />
+            <main className=" max-h-screen overflow-auto w-full">
                 <Navbar navigations={navigations} user={user} />
-                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-                    {children}
-                </main>
-            </div>
-            <Toaster />
-        </div>
+                <div className="p-4">{children}</div>
+            </main>
+        </SidebarProvider>
     );
 }

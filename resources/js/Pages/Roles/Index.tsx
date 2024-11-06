@@ -48,7 +48,7 @@ const Index = ({ auth, roles, session }: Props) => {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Roles" />
-            <div className="flex items-end justify-between gap-2">
+            <div className="flex items-end justify-between gap-2 mb-4">
                 <div>
                     <Breadcrumb>
                         <BreadcrumbList>
