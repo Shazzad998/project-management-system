@@ -11,10 +11,7 @@ import FaqSection from "@/Components/sections/FaqSection";
 import CtaSection from "@/Components/sections/CtaSection";
 import FooterSection from "@/Components/sections/FooterSection";
 
-export default function Welcome({
-    auth,
-}: PageProps) {
-
+export default function Welcome({ auth }: PageProps) {
     return (
         <>
             <Head title="Welcome" />

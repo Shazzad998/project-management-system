@@ -60,7 +60,7 @@ const PricingSection = (props: PricingSectionProps) => {
 
   const [yearly, setYearly] = useState<boolean>(true);
   return (
-    <SectionWrapper>
+    <SectionWrapper id="pricing">
       <SectionHeader
         headerText="Flexible plans for every team"
         subHeaderText="Choose the plan that fits your teams needs. Wheather you're just getting started managing large projects. Qwirk offers affordable solutions to help you stay organized and productive"

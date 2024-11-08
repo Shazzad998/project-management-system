@@ -2,10 +2,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import { Button } from "@/Components/ui/button";
 import {
     Sheet,
-    SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -16,9 +13,9 @@ import { AlignJustifyIcon } from "lucide-react";
 
 const Navbar = ({ auth }: PageProps) => {
     return (
-        <nav className=" p-2 flex items-center justify-between">
-            <div className=" flex gap-x-20 items-center">
-                <ApplicationLogo />
+        <nav className=" flex items-center justify-between sticky top-0 bg-background z-50 border-b border-border/30">
+            <div className=" flex gap-x-20 items-center p-2 pl-4">
+                <ApplicationLogo className=" w-32 fill-primary" />
                 <div className="hidden lg:flex gap-4 items-center">
                     <Link
                         className="p-2 font-semibold text-foreground/70 hover:text-foreground"
@@ -52,24 +49,23 @@ const Navbar = ({ auth }: PageProps) => {
                     </Link>
                 </div>
             </div>
-            <div className=" flex gap-2 items-center">
+            <div className=" flex gap-2 items-center pr-4">
                 <div className="hidden sm:flex items-center gap-2 ">
                     {auth.user ? (
-                        <Link href={route("dashboard")}>
-                            <Button variant={"outline"} asChild>
-                                Dashboard
-                            </Button>
-                        </Link>
+                        <Button variant={"outline"} asChild>
+                            <Link href={route("dashboard")}>Dashboard</Link>
+                        </Button>
                     ) : (
                         <>
-                            <Link href={route("login")}>
-                                <Button variant={"outline"} asChild>
-                                    Sign in
-                                </Button>
-                            </Link>
-                            <Link href={route("register")}>
-                                <Button asChild>Start for free</Button>
-                            </Link>
+                            <Button variant={"outline"} asChild>
+                                <Link href={route("login")}>Sign in</Link>
+                            </Button>
+
+                            <Button asChild>
+                                <Link href={route("register")}>
+                                    Start for free
+                                </Link>
+                            </Button>
                         </>
                     )}
                 </div>
@@ -121,31 +117,32 @@ const Navbar = ({ auth }: PageProps) => {
                         </div>
                         <div className="flex flex-col items-center gap-2 mt-8">
                             {auth.user ? (
-                                <Link href={route("dashboard")}>
+                                <Button
+                                    variant={"outline"}
+                                    className="w-full"
+                                    asChild
+                                >
+                                    <Link href={route("dashboard")}>
+                                        Dashboard
+                                    </Link>
+                                </Button>
+                            ) : (
+                                <>
                                     <Button
                                         variant={"outline"}
                                         className="w-full"
                                         asChild
                                     >
-                                        Dashboard
-                                    </Button>
-                                </Link>
-                            ) : (
-                                <>
-                                    <Link href={route("login")}>
-                                        <Button
-                                            variant={"outline"}
-                                            className="w-full"
-                                            asChild
-                                        >
+                                        <Link href={route("login")}>
                                             Sign in
-                                        </Button>
-                                    </Link>
-                                    <Link href={route("register")}>
-                                        <Button className=" w-full" asChild>
+                                        </Link>
+                                    </Button>
+
+                                    <Button className=" w-full" asChild>
+                                        <Link href={route("register")}>
                                             Start for free
-                                        </Button>
-                                    </Link>
+                                        </Link>
+                                    </Button>
                                 </>
                             )}
                         </div>

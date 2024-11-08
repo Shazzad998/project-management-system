@@ -5,7 +5,7 @@ type AboutProductSectionProps = {};
 
 const AboutProductSection = (props: AboutProductSectionProps) => {
   return (
-    <SectionWrapper>
+    <SectionWrapper id="features">
       <SectionHeader
         headerText="Key Features to boost your productivity"
         subHeaderText="Explore the essential tools designed to streamline your workglow,
@@ -51,7 +51,7 @@ const AboutProductSection = (props: AboutProductSectionProps) => {
               src="/images/member-feature.png"
               className=" object-cover absolute indent-0"
               alt="Member Feature"
-              
+
             />
           </div>
         </div>
