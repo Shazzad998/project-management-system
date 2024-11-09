@@ -15,18 +15,17 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [];
-        foreach(config('roles_permissions.permissions') as $permission_group){
-            foreach($permission_group as $permission){
-                $permissions [] = ['name' => $permission, 'guard_name' => 'web', 'created_at'=> now(), 'updated_at' => now()];
+        foreach (config('roles_permissions.super_permissions') as $permission_group) {
+            foreach ($permission_group as $permission) {
+                $permissions[] = ['name' => $permission, 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()];
             }
         }
-        Permission::insert($permissions);
-
-        $roles = [];
-        foreach(config('roles_permissions.roles') as $role){
-            $roles [] = ['name' => $role, 'guard_name' => 'web', 'created_at'=> now(), 'updated_at' => now()];
+        foreach (config('roles_permissions.permissions') as $permission_group) {
+            foreach ($permission_group as $permission) {
+                $permissions[] = ['name' => $permission, 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()];
+            }
         }
 
-        Role::insert($roles);
+        Permission::insert($permissions);
     }
 }

@@ -19,10 +19,15 @@ export type PageProps<
 };
 
 export type NavLink = {
-    label: string;
-    route: string;
-    icon?: ReactNode;
-    show:boolean
+    title: string;
+    url: string;
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+    items: {
+        url: string;
+        title: string;
+        show: boolean;
+    }[];
+    show: boolean;
 };
 
 export type Project = {
@@ -31,7 +36,7 @@ export type Project = {
     description: string | null;
     due_date: string | null;
     status: string;
-    user_ids:number[];
+    user_ids: number[];
     image_path: string | undefined;
     created_at: string;
     created_by: User;
@@ -53,7 +58,7 @@ export type Task = {
     assigned_user: User | null;
     assigned_user_id: string;
     project: Project;
-    project_id:string;
+    project_id: string;
 };
 
 export type Role = {
@@ -84,7 +89,7 @@ export type Errors = {
     priority?: string;
     project_id?: string;
     assigned_user_id?: string;
-    user_ids?:string
+    user_ids?: string;
 };
 
 export type ProjectOption = {

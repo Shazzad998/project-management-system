@@ -1,4 +1,4 @@
-import { LogOutIcon, Menu, Search, User2Icon } from "lucide-react";
+import { LogOutIcon, User2Icon } from "lucide-react";
 
 import { Button } from "@/Components/ui/button";
 import {
@@ -14,26 +14,20 @@ import {
     DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/Components/ui/dialog";
-import { Input } from "@/Components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/Components/ui/sheet";
-import { cn } from "@/lib/utils";
-import { NavLink, User } from "@/types";
+
+import { User } from "@/types";
 import { useState } from "react";
 import { Link } from "@inertiajs/react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
 import { SidebarTrigger } from "@/Components/ui/sidebar";
 
 type NavbarProps = {
-    navigations: NavLink[];
     user: User;
 };
 
-export function Navbar({ navigations, user }: NavbarProps) {
+export function Navbar({ user }: NavbarProps) {
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
     return (
         <header className="flex pt-[10px] pb-[9px] justify-between items-center gap-4 border-b bg-background px-4  sticky top-0 z-10">
@@ -64,132 +58,8 @@ export function Navbar({ navigations, user }: NavbarProps) {
                 </DialogContent>
             </Dialog>
 
-            {/* Profile Update Dialog */}
-            {/* <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
-            <DialogDescription>
-              Update your profile information.
-            </DialogDescription>
-          </DialogHeader>
-          <form className=" grid gap-4" onSubmit={handleSubmit}>
-            <div className=" grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <ErrorMessage message={errors.name?.[0]} className="-mt-1"/>
-            </div>
-            <div className=" grid gap-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <ErrorMessage message={errors.username?.[0]} className="-mt-1"/>
-            </div>
-            <div className=" grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                id="email"
-                value={email as string}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <ErrorMessage message={errors.email?.[0]} className="-mt-1"/>
-            </div>
-            <div className=" grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <ErrorMessage message={errors.password?.[0]} className="-mt-1"/>
-            </div>
-            <div className=" grid gap-2">
-              <Label htmlFor="password_confirmation">Confirm Password</Label>
-              <Input
-                type="password"
-                id="password_confirmation"
-                value={password_confirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-              />
-            </div>
-            <div className=" grid gap-2 flex-1">
-              <Label htmlFor="profile_image">Profile Image</Label>
-              <Input
-                type="file"
-                id="profile_image"
-                accept="image/png,image/svg,image/jpg,image/jpeg,image/webp"
-                onChange={handleImageChange}
-                className=" file:text-muted-foreground"
-              />
-              <ErrorMessage message={errors.profile_image?.[0]} className="-mt-1"/>
-            </div>
-            <DialogFooter>
-              <Button type="submit">Update</Button>
-              <DialogClose asChild>
-                <Button variant={"secondary"}>Cancel</Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog> */}
+            <SidebarTrigger />
 
-            {/* <Sheet>
-                <SheetTrigger asChild>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        className="shrink-0 md:hidden"
-                    >
-                        <Menu className="h-5 w-5" />
-                        <span className="sr-only">Toggle navigation menu</span>
-                    </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="flex flex-col">
-                    <nav className="grid gap-2 text-lg font-medium">
-                        <Link
-                            href="#"
-                            className="flex items-center gap-2 text-lg font-semibold mb-4 max-w-full"
-                        >
-                            <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />{" "}
-                            <span className=" text-xl w-64 truncate">
-                                Laravel Shadcn
-                            </span>
-                            <span className="sr-only">Acme Inc</span>
-                        </Link>
-                        {navigations.map(
-                            (nav) =>
-                                nav.show && (
-                                    <Link
-                                        key={nav.label}
-                                        href={route(nav.route)}
-                                        className={cn(
-                                            "mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground",
-                                            route().current(nav.route) &&
-                                                "bg-muted text-foreground"
-                                        )}
-                                    >
-                                        {nav.icon}
-                                        {nav.label}
-                                    </Link>
-                                )
-                        )}
-                    </nav>
-                </SheetContent>
-            </Sheet> */}
-
-            <SidebarTrigger/>
-            
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button

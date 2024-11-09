@@ -9,12 +9,23 @@ use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller implements HasMiddleware
 {
+    public $tenantId = null;
+
+    public function __construct()
+    {
+        $this->tenantId = Auth::user()->tenant_id;
+        if (!$this->tenantId) {
+            abort(403);
+        }
+    }
+
     /**
      * Get the middleware that should be assigned to the controller.
      */
@@ -37,8 +48,9 @@ class UserController extends Controller implements HasMiddleware
             return back()->with('Error', 'You are not Authorized!');
         }
         $query = User::query()->with(['roles', 'permissions']);
-        $users = $query->whereNot('id', 1)->orderBy('id', 'desc')->get();
-        $roles = Role::whereNot('id', 1)->get()->pluck('name');
+        $users = $query->where('tenant_id', $this->tenantId)->whereNot('id', $this->tenantId)->orderBy('id', 'desc')->get();
+        $roles = Role::where('tenant_id', $this->tenantId)->whereNot('name', 'Super Admin')->get()->pluck('name');
+        dd(auth()->user()->getAllPermissions());
         return inertia('Users/Index', [
             'users' => UserResource::collection($users),
             'roles' => $roles,
@@ -69,6 +81,7 @@ class UserController extends Controller implements HasMiddleware
             if ($image) {
                 $validatedPayload['image_path'] = $image->store('users/' . str_replace(" ", "_", $validatedPayload['name']), 'public');
             }
+            $validatedPayload['tenant_id'] = $this->tenantId;
             $user = User::create($validatedPayload);
             $user->assignRole($validatedPayload['role']);
             return back()->with('success', 'User Created Successfully');
@@ -105,7 +118,7 @@ class UserController extends Controller implements HasMiddleware
                     Storage::disk('public')->deleteDirectory(dirname($user->image_path));
                 }
                 $validatedPayload['image_path'] = $image->store('users/' . strtolower(str_replace(['-', ' '], "_", $validatedPayload['name'])), 'public');
-            }else{
+            } else {
                 $validatedPayload['image_path'] = $user->image_path;
             }
             $user->update($validatedPayload);

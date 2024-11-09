@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('image_path')->nullable();
+            $table->foreignId('tenant_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,8 +23,9 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin12345'),
             'email_verified_at' => time()
         ]);
+        $user->update(['tenant_id' => $user->id]);
 
         $user->assignRole('Super Admin');
-        Project::factory()->count(30)->hasTasks(30)->create();
+        // Project::factory()->count(5)->hasTasks(3)->create();
     }
 }

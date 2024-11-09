@@ -27,6 +27,7 @@ class Task extends Model
         'due_date',
         'project_id',
         'assigned_user_id',
+        'tenant_id',
         'created_by',
         'updated_by',
     ];

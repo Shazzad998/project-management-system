@@ -11,15 +11,25 @@ use Inertia\Inertia;
 
 class DashboardConroller extends Controller
 {
+    public $tenantId = null;
+
+    public function __construct()
+    {
+        $this->tenantId = Auth::user()->tenant_id;
+        if (!$this->tenantId) {
+            abort(403);
+        }
+    }
+
     public function index()
     {
         /** @var \App\Models\User */
         $user = Auth::user();
-        $tasksQuery = Task::query()->with('project');
-        
+        $tasksQuery = Task::query()->with('project')->where('tenant_id', $this->tenantId);
+
         if ($user->hasRole('Super Admin')) {
-            $projectsQuery = Project::query();
-        }else{
+            $projectsQuery = Project::query()->where('tenant_id', $this->tenantId);
+        } else {
             $tasksQuery = $tasksQuery->where('assigned_user_id', $user->id);
             $projectsQuery = $user->projects();
         }

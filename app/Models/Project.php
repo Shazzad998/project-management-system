@@ -19,6 +19,7 @@ class Project extends Model
         'description',
         'due_date',
         'status',
+        'tenant_id',
         'created_by',
         'updated_by',
     ];

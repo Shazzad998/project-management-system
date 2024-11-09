@@ -1,47 +1,59 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { NavLink as NavLinkType, User } from "@/types";
-import { FolderOpen, Home, ListTodo, UserRoundCog, Users2 } from "lucide-react";
+import { User } from "@/types";
+import { Briefcase, Home, Users } from "lucide-react";
 import { Navbar } from "./partials/Navbar";
-import Sidebar from "./partials/Sidebar";
 import { Toaster } from "@/Components/ui/toaster";
 import { can } from "@/lib/utils";
-import { SidebarProvider, SidebarTrigger } from "@/Components/ui/sidebar";
+import { SidebarProvider } from "@/Components/ui/sidebar";
 import { AppSidebar } from "./partials/AppSidebar";
 
 export default function AuthenticatedLayout({
     user,
     children,
 }: PropsWithChildren<{ user: User; header?: ReactNode }>) {
-    const navigations: NavLinkType[] = [
+    const navMain = [
         {
-            label: "Dashboard",
-            route: "dashboard",
-            icon: <Home className="h-5 w-5" />,
+            title: "Dashboard",
+            url: "dashboard",
+            icon: Home,
+            items: [],
             show: true,
         },
         {
-            label: "Users",
-            route: "users.index",
-            icon: <Users2 className="h-5 w-5" />,
-            show: can("user-list", user),
+            title: "User Management",
+            url: "#",
+            icon: Users,
+            show: can("user-list", user) || can("role-list", user),
+            items: [
+                {
+                    title: "Users",
+                    url: "users.index",
+                    show: can("user-list", user),
+                },
+                {
+                    title: "Roles",
+                    url: "roles.index",
+                    show: can("role-list", user),
+                },
+            ],
         },
         {
-            label: "Roles",
-            route: "roles.index",
-            icon: <UserRoundCog className="h-5 w-5" />,
-            show: can("role-list", user),
-        },
-        {
-            label: "Projects",
-            route: "projects.index",
-            icon: <FolderOpen className="h-5 w-5" />,
-            show: can("project-list", user),
-        },
-        {
-            label: "Tasks",
-            route: "tasks.index",
-            icon: <ListTodo className="h-5 w-5" />,
-            show: can("task-list", user),
+            title: "Work",
+            url: "#",
+            icon: Briefcase,
+            show: can("project-list", user) || can("task-list", user),
+            items: [
+                {
+                    title: "Projects",
+                    url: "projects.index",
+                    show: can("project-list", user),
+                },
+                {
+                    title: "Tasks",
+                    url: "tasks.index",
+                    show: can("task-list", user),
+                },
+            ],
         },
     ];
 
@@ -57,11 +69,12 @@ export default function AuthenticatedLayout({
         //     <Toaster />
         // </div>
         <SidebarProvider>
-            <AppSidebar />
+            <AppSidebar navMain={navMain} />
             <main className=" max-h-screen overflow-auto w-full">
-                <Navbar navigations={navigations} user={user} />
+                <Navbar user={user} />
                 <div className="p-4">{children}</div>
             </main>
+            <Toaster />
         </SidebarProvider>
     );
 }

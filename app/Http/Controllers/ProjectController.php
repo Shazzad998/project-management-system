@@ -19,6 +19,18 @@ use Spatie\Permission\Models\Role;
 
 class ProjectController extends Controller implements HasMiddleware
 {
+    private $user = null;
+    private $tenantId = null;
+
+    public function __construct()
+    {
+        /** @var \App\Models\User */
+        $this->user = Auth::user();
+        $this->tenantId = $this->user->tenant_id;
+        if (!$this->tenantId) {
+            abort(403);
+        }
+    }
     /**
      * Get the middleware that should be assigned to the controller.
      */
@@ -36,15 +48,14 @@ class ProjectController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        /** @var \App\Models\User */
-        $user = Auth::user();
-        if ($user->hasRole('Super Admin')) {
-            $query = Project::query()->with('tasks');
+
+        if ($this->user->hasRole('Super Admin')) {
+            $query = Project::query()->where('tenant_id', $this->tenantId)->with('tasks');
             $projects = $query->latest()->get();
         } else {
-            $projects = $user->projects;
+            $projects = $this->user->projects;
         }
-        $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
+        $users = User::query()->whereNot('id', 1)->where('tenant_id', $this->tenantId)->orderBy('name', 'asc')->get();
         return inertia('Projects/Index', [
             'projects' => ProjectResource::collection($projects),
             'users' => UserOptionResource::collection($users),
@@ -64,6 +75,7 @@ class ProjectController extends Controller implements HasMiddleware
         $validatedPayload = $request->validated();
         $validatedPayload['created_by'] = Auth::id();
         $validatedPayload['updated_by'] = Auth::id();
+        $validatedPayload['tenant_id'] = $this->tenantId;
         $project = Project::create($validatedPayload);
         if ($validatedPayload['user_ids']) {
             $project->users()->attach($validatedPayload['user_ids']);
@@ -80,7 +92,6 @@ class ProjectController extends Controller implements HasMiddleware
         $relatedTasks = $query->get();
         $projectMembers = $project->users;
         $projects = Project::query()->orderBy('name', 'asc')->get();
-        $roles = Role::whereNot('id', 1)->get()->pluck('name');
         $pendingTasks = Task::query()->where('project_id', $project->id)->where('status', 'pending')->where('due_date', '>', now())->take(5)->get();
         $overdueTasks = Task::query()->where('project_id', $project->id)->where('due_date', '<', now())->take(5)->get();
         return inertia('Projects/Show', [

@@ -29,6 +29,7 @@ type Props = {
 };
 
 const Index = ({ auth, roles, session }: Props) => {
+    console.log(auth.user);
     useEffect(() => {
         if (session.success) {
             toast({

@@ -17,6 +17,18 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller implements HasMiddleware
 {
+    private $user = null;
+    private $tenantId = null;
+
+    public function __construct()
+    {
+        /** @var \App\Models\User */
+        $this->user = Auth::user();;
+        $this->tenantId = $this->user->tenant_id;
+        if (!$this->tenantId) {
+            abort(403);
+        }
+    }
     /**
      * Get the middleware that should be assigned to the controller.
      */
@@ -34,13 +46,12 @@ class TaskController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        /** @var \App\Models\User */
-        $user = Auth::user();
+
         $query = Task::query()->with(['project', 'creator', 'updater', 'assigned_user']);
-        if ($user->hasRole('Super Admin')) {
+        if ($this->user->hasRole('Super Admin')) {
             $tasks = $query->latest()->get();
         } else {
-            $tasks = $query->where('assigned_user_id', $user->id)->latest()->get();
+            $tasks = $query->where('assigned_user_id', $this->user->id)->latest()->get();
         }
         $projects = Project::query()->orderBy('name', 'asc')->get();
         $users = User::query()->whereNot('id', 1)->orderBy('name', 'asc')->get();
@@ -96,5 +107,4 @@ class TaskController extends Controller implements HasMiddleware
 
         return response()->json($task);
     }
-
 }
