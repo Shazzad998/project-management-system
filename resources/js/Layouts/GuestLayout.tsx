@@ -23,7 +23,7 @@ export default function Guest({ children }: PropsWithChildren) {
                     <ApplicationLogo className="w-44 fill-current text-foreground" />
                 </Link>
             </div>
-            <Card className="mx-auto max-w-sm min-w-80 sm:min-w-96 mt-6 relative">
+            <Card className="mx-auto max-w-sm min-w-80 sm:min-w-96 mt-6 relative ">
                 {children}
             </Card>
         </div>

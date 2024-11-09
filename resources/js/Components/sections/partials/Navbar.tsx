@@ -11,42 +11,43 @@ import { PageProps } from "@/types";
 import { Link } from "@inertiajs/react";
 import { AlignJustifyIcon } from "lucide-react";
 
+const mainNavs = [
+    {
+        name: "Home",
+        url: "#home",
+    },
+    {
+        name: "Features",
+        url: "#features",
+    },
+    {
+        name: "Pricing",
+        url: "#pricing",
+    },
+    {
+        name: "Faq",
+        url: "#faq",
+    },
+    {
+        name: "Contact",
+        url: "#contact",
+    },
+];
 const Navbar = ({ auth }: PageProps) => {
     return (
         <nav className=" flex items-center justify-between sticky top-0 bg-background z-50 border-b border-border/30">
             <div className=" flex gap-x-20 items-center p-2 pl-4">
                 <ApplicationLogo className=" w-32 fill-primary" />
                 <div className="hidden lg:flex gap-4 items-center">
-                    <Link
-                        className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                        href="/"
-                    >
-                        Home
-                    </Link>
-                    <Link
-                        className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                        href="/"
-                    >
-                        Features
-                    </Link>
-                    <Link
-                        className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                        href="/"
-                    >
-                        Pricing
-                    </Link>
-                    <Link
-                        className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                        href="/"
-                    >
-                        FAQ
-                    </Link>
-                    <Link
-                        className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                        href="/"
-                    >
-                        Contact
-                    </Link>
+                    {mainNavs.map((nav, index) => (
+                        <a
+                            key={index}
+                            className="p-2 font-semibold text-foreground/70 hover:text-foreground"
+                            href={nav.url}
+                        >
+                            {nav.name}
+                        </a>
+                    ))}
                 </div>
             </div>
             <div className=" flex gap-2 items-center pr-4">
@@ -79,41 +80,22 @@ const Navbar = ({ auth }: PageProps) => {
                     <SheetContent>
                         <SheetHeader>
                             <SheetTitle className=" sr-only">
-                                Edit profile
+                                Main Menu
                             </SheetTitle>
                         </SheetHeader>
 
                         <div className="flex flex-col gap-2 pt-6">
-                            <Link
-                                className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                                href="/"
-                            >
-                                Home
-                            </Link>
-                            <Link
-                                className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                                href="/"
-                            >
-                                Features
-                            </Link>
-                            <Link
-                                className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                                href="/"
-                            >
-                                Pricing
-                            </Link>
-                            <Link
-                                className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                                href="/"
-                            >
-                                FAQ
-                            </Link>
-                            <Link
-                                className="p-2 font-semibold text-foreground/70 hover:text-foreground"
-                                href="/"
-                            >
-                                Contact
-                            </Link>
+                            {mainNavs.map((nav, index) => (
+                                <SheetTrigger asChild>
+                                    <a
+                                        key={index}
+                                        className="p-2 font-semibold text-foreground/70 hover:text-foreground"
+                                        href={nav.url}
+                                    >
+                                        {nav.name}
+                                    </a>
+                                </SheetTrigger>
+                            ))}
                         </div>
                         <div className="flex flex-col items-center gap-2 mt-8">
                             {auth.user ? (

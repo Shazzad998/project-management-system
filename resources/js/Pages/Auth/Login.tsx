@@ -58,6 +58,7 @@ export default function Login({
                             type="email"
                             name="email"
                             value={data.email}
+                            tabIndex={1}
                             onChange={(e) => setData("email", e.target.value)}
                         />
                         <InputError message={errors.email} className="-mt-1" />
@@ -79,6 +80,7 @@ export default function Login({
                             type="password"
                             name="password"
                             value={data.password}
+                            tabIndex={2}
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
@@ -92,6 +94,7 @@ export default function Login({
                         <Checkbox
                             id="remember"
                             name="remember"
+                            tabIndex={3}
                             checked={data.remember}
                             onCheckedChange={(e) =>
                                 setData("remember", e as boolean)
@@ -101,6 +104,7 @@ export default function Login({
                     </div>
                     <Button
                         type="submit"
+                        tabIndex={4}
                         disabled={processing}
                         className="w-full"
                     >
