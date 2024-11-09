@@ -5,16 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:role-list', only: ['index']),
+            new Middleware('permission:role-create', only: ['store']),
+            new Middleware('permission:role-edit', only: ['update']),
+            new Middleware('permission:role-delete', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Role::query()->with('permissions');
+
+        $query = Role::query()->with('permissions')->where('tenant_id', Auth::user()->tenant_id);
         $roles = $query->whereNot('name', 'Super Admin')->get();
         return inertia('Roles/Index', [
             'roles' => RoleResource::collection($roles),
@@ -40,6 +57,7 @@ class RoleController extends Controller
     public function store(StoreRoleRequest $request)
     {
         $validatedPayload = $request->validated();
+        $validatedPayload['tenant_id'] = Auth::user()->tenant_id;
 
         $role = Role::create($validatedPayload);
         $role->givePermissionTo($validatedPayload['permissions']);

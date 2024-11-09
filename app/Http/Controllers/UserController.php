@@ -50,7 +50,6 @@ class UserController extends Controller implements HasMiddleware
         $query = User::query()->with(['roles', 'permissions']);
         $users = $query->where('tenant_id', $this->tenantId)->whereNot('id', $this->tenantId)->orderBy('id', 'desc')->get();
         $roles = Role::where('tenant_id', $this->tenantId)->whereNot('name', 'Super Admin')->get()->pluck('name');
-        dd(auth()->user()->getAllPermissions());
         return inertia('Users/Index', [
             'users' => UserResource::collection($users),
             'roles' => $roles,
@@ -71,9 +70,8 @@ class UserController extends Controller implements HasMiddleware
             return back()->with('Error', 'You are not Authorized!');
         }
         $validatedPayload = $request->validated();
-
         try {
-            $roles = Role::whereNot('id', 1)->get()->pluck('name')->toArray();
+            $roles = Role::whereNot('id', 1)->where('tenant_id', $this->tenantId)->get()->pluck('name')->toArray();
             if (!in_array($validatedPayload['role'], $roles)) {
                 return back()->with('error', 'Invalid Role Selected.');
             }
@@ -82,8 +80,9 @@ class UserController extends Controller implements HasMiddleware
                 $validatedPayload['image_path'] = $image->store('users/' . str_replace(" ", "_", $validatedPayload['name']), 'public');
             }
             $validatedPayload['tenant_id'] = $this->tenantId;
+            $role = Role::where('name', $validatedPayload['role'])->where('tenant_id', $this->tenantId)->first();
             $user = User::create($validatedPayload);
-            $user->assignRole($validatedPayload['role']);
+            $user->assignRole($role);
             return back()->with('success', 'User Created Successfully');
         } catch (Exception $e) {
             Log::error($e->getMessage());

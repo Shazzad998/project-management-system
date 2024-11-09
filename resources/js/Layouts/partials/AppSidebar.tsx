@@ -50,7 +50,7 @@ export function AppSidebar({ navMain }: AppSidebarProps) {
                     <SidebarMenu>
                         {navMain.map((item) => (
                             <Fragment key={item.title}>
-                                {item.items?.length > 0 ? (
+                                {item.show && item.items?.length > 0 ? (
                                     <Collapsible
                                         asChild
                                         defaultOpen={isRouteActive(item.items)}
@@ -69,51 +69,56 @@ export function AppSidebar({ navMain }: AppSidebarProps) {
                                             <CollapsibleContent>
                                                 <SidebarMenuSub>
                                                     {item.items?.map(
-                                                        (subItem) => (
-                                                            <SidebarMenuSubItem
-                                                                key={
-                                                                    subItem.title
-                                                                }
-                                                            >
-                                                                <SidebarMenuSubButton
-                                                                    asChild
-                                                                    isActive={route().current(
-                                                                        subItem.url
-                                                                    )}
+                                                        (subItem) =>
+                                                            subItem.show && (
+                                                                <SidebarMenuSubItem
+                                                                    key={
+                                                                        subItem.title
+                                                                    }
                                                                 >
-                                                                    <Link
-                                                                        href={route(
+                                                                    <SidebarMenuSubButton
+                                                                        asChild
+                                                                        isActive={route().current(
                                                                             subItem.url
                                                                         )}
                                                                     >
-                                                                        {" "}
-                                                                        <span>
-                                                                            {
-                                                                                subItem.title
-                                                                            }
-                                                                        </span>
-                                                                    </Link>
-                                                                </SidebarMenuSubButton>
-                                                            </SidebarMenuSubItem>
-                                                        )
+                                                                        <Link
+                                                                            href={route(
+                                                                                subItem.url
+                                                                            )}
+                                                                        >
+                                                                            {" "}
+                                                                            <span>
+                                                                                {
+                                                                                    subItem.title
+                                                                                }
+                                                                            </span>
+                                                                        </Link>
+                                                                    </SidebarMenuSubButton>
+                                                                </SidebarMenuSubItem>
+                                                            )
                                                     )}
                                                 </SidebarMenuSub>
                                             </CollapsibleContent>
                                         </SidebarMenuItem>
                                     </Collapsible>
                                 ) : (
-                                    <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton
-                                            asChild
-                                            tooltip={item.title}
-                                            isActive={route().current(item.url)}
-                                        >
-                                            <Link href={route(item.url)}>
-                                                <item.icon />
-                                                <span>{item.title}</span>
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
+                                    item.show && (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                tooltip={item.title}
+                                                isActive={route().current(
+                                                    item.url
+                                                )}
+                                            >
+                                                <Link href={route(item.url)}>
+                                                    <item.icon />
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    )
                                 )}
                             </Fragment>
                         ))}

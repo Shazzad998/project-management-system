@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UpdateRoleRequest extends FormRequest
@@ -22,8 +23,11 @@ class UpdateRoleRequest extends FormRequest
      */
     public function rules(): array
     {
+        $tenantId = Auth::user()->tenant_id;
         return [
-            'name' => ['required', 'string', 'max:20', Rule::unique('roles')->ignore($this->route('role'))],
+            'name' => ['required', 'string', 'max:20', Rule::unique('roles')->where(function ($query) use ($tenantId) {
+                return $query->where('tenant_id', $tenantId);
+            })->ignore($this->route('role'))],
             'permissions' => ['required', 'array'],
             'permissions.*' => 'string',
         ];

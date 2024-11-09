@@ -47,16 +47,27 @@ class RegisteredUserController extends Controller
             ]);
             $user->update(['tenant_id' => $user->id]);
             $user->refresh();
+            $roles = [];
+
+            foreach (config('roles_permissions.roles') as $role) {
+                $roles[] = ['name' => $role, 'tenant_id' => $user->id, 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()];
+            }
+
+            Role::insert($roles);
+
+            $admin = Role::where('tenant_id', $user->id)->first();
 
             $permissions = [];
+
             foreach (config('roles_permissions.permissions') as $permission_group) {
                 foreach ($permission_group as $permission) {
                     $permissions[] =  $permission;
                 }
             }
 
+            $admin->givePermissionTo($permissions);
             $user->givePermissionTo($permissions);
-
+            // $user->assignRole($admin);
             event(new Registered($user));
 
             Auth::login($user);
