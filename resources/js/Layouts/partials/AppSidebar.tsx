@@ -17,9 +17,11 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
+    useSidebar,
 } from "@/Components/ui/sidebar";
-import { Link } from "@inertiajs/react";
-import { Briefcase, ChevronRight, Home, Users } from "lucide-react";
+import { PageProps } from "@/types";
+import { Link, usePage } from "@inertiajs/react";
+import { Briefcase, ChevronRight, Home, Settings, Users } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
 
 const navMain = [
@@ -59,12 +61,22 @@ const navMain = [
             },
         ],
     },
+    {
+        title: "Settings",
+        url: "settings.index",
+        icon: Settings,
+        items: [],
+    },
 ];
 
 export function AppSidebar() {
-    const isRouteActive = (subItems:{title:string, url:string}[]) => {
+    const isRouteActive = (subItems: { title: string; url: string }[]) => {
         return subItems.some((subItem) => route().current(subItem.url));
-      };
+    };
+
+    const { state } = useSidebar();
+
+    const setting = usePage<PageProps>().props.auth.setting;
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
@@ -74,76 +86,107 @@ export function AppSidebar() {
                             href="/"
                             className="flex items-center gap-2 font-semibold max-w-full"
                         >
-                            <ApplicationLogo className="block h-7 fill-current text-primary" />
+                            {state == "expanded" ? (
+                                <>
+                                    <img
+                                        src={setting.logo}
+                                        alt="giftly-logo"
+                                        className=" w-28 h-auto"
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <img
+                                        src={setting.icon}
+                                        alt="giftly-logo"
+                                        className=" w-8 h-auto"
+                                    />
+                                </>
+                            )}
                         </Link>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-            <SidebarGroup>
-                <SidebarMenu>
-                    {navMain.map((item) => (
-                        <Fragment key={item.title}>
-                            {item.items?.length > 0 ? (
-                                <Collapsible
-                                    
-                                    asChild
-                                    defaultOpen={isRouteActive(item.items)}
-                                    className="group/collapsible"
-                                >
-                                    <SidebarMenuItem>
-                                        <CollapsibleTrigger asChild>
-                                            <SidebarMenuButton
-                                                tooltip={item.title}
-                                            >
-                                                {item.icon && <item.icon />}
-                                                <span>{item.title}</span>
-                                                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                            </SidebarMenuButton>
-                                        </CollapsibleTrigger>
-                                        <CollapsibleContent>
-                                            <SidebarMenuSub>
-                                                {item.items?.map((subItem) => (
-                                                    <SidebarMenuSubItem
-                                                        key={subItem.title}
-                                                    >
-                                                        <SidebarMenuSubButton
-                                                            asChild
-                                                            isActive={route().current(subItem.url)}
-                                                        >
-                                                            <Link
-                                                                href={route(
-                                                                    subItem.url
-                                                                )}
+                <SidebarGroup>
+                    <SidebarMenu>
+                        {navMain.map((item) => (
+                            <Fragment key={item.title}>
+                                {item.items?.length > 0 ? (
+                                    <Collapsible
+                                        asChild
+                                        defaultOpen={isRouteActive(item.items)}
+                                        className="group/collapsible"
+                                    >
+                                        <SidebarMenuItem>
+                                            <CollapsibleTrigger asChild>
+                                                <SidebarMenuButton
+                                                    tooltip={item.title}
+                                                >
+                                                    {item.icon && <item.icon />}
+                                                    <span>{item.title}</span>
+                                                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                                </SidebarMenuButton>
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent>
+                                                <SidebarMenuSub>
+                                                    {item.items?.map(
+                                                        (subItem) => (
+                                                            <SidebarMenuSubItem
+                                                                key={
+                                                                    subItem.title
+                                                                }
                                                             >
-                                                                {" "}
-                                                                <span>
-                                                                    {
-                                                                        subItem.title
-                                                                    }
-                                                                </span>
-                                                            </Link>
-                                                        </SidebarMenuSubButton>
-                                                    </SidebarMenuSubItem>
-                                                ))}
-                                            </SidebarMenuSub>
-                                        </CollapsibleContent>
+                                                                <SidebarMenuSubButton
+                                                                    asChild
+                                                                    isActive={route().current(
+                                                                        subItem.url
+                                                                    )}
+                                                                >
+                                                                    <Link
+                                                                        href={route(
+                                                                            subItem.url
+                                                                        )}
+                                                                    >
+                                                                        {" "}
+                                                                        <span>
+                                                                            {
+                                                                                subItem.title
+                                                                            }
+                                                                        </span>
+                                                                    </Link>
+                                                                </SidebarMenuSubButton>
+                                                            </SidebarMenuSubItem>
+                                                        )
+                                                    )}
+                                                </SidebarMenuSub>
+                                            </CollapsibleContent>
+                                        </SidebarMenuItem>
+                                    </Collapsible>
+                                ) : (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            tooltip={item.title}
+                                            isActive={route().current(item.url)}
+                                        >
+                                            <Link
+                                                href={
+                                                    item.url != "#"
+                                                        ? route(item.url)
+                                                        : item.url
+                                                }
+                                            >
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
                                     </SidebarMenuItem>
-                                </Collapsible>
-                            ) : (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild tooltip={item.title} isActive={route().current(item.url)}>
-                                        <Link href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            )}
-                        </Fragment>
-                    ))}
-                </SidebarMenu>
-            </SidebarGroup>
+                                )}
+                            </Fragment>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
             </SidebarContent>
             <SidebarFooter />
         </Sidebar>

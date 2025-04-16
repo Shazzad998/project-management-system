@@ -15,6 +15,7 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
+        setting: Setting;
     };
 };
 
@@ -94,4 +95,24 @@ export type ProjectOption = {
 export type UserOption = {
     id: string;
     name: string;
+};
+
+export type Setting = {
+    logo: string;
+    icon: string;
+    site_name: string;
+    site_description: string;
+    email: string;
+    phone: string;
+    address: string;
+    copy_text: string;
+    google_client_id: string;
+    google_client_secret: string;
+    facebook_url: string;
+    x_url: string;
+    instagram_url: string;
+    youtube_url: string;
+    linkedin_url: string;
+    tiktok_url: string;
+    discord_url: string;
 };

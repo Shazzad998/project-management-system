@@ -23,6 +23,13 @@ return [
         'task-management' => [
             'task-create', 'task-list', 'task-view', 'task-edit', 'task-delete'
         ],
+        'application-settings' => [
+            'settings-view',
+            'general-settings-edit',
+            'oauth-settings-edit',
+            'social-links-edit',
+            'email-settings-edit'
+        ]
     ]
     
 ];

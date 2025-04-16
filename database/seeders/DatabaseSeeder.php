@@ -24,6 +24,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user->assignRole('Super Admin');
-        Project::factory()->count(30)->hasTasks(30)->create();
+        Project::factory()->count(3)->hasTasks(3)->create();
+
+        $this->call([
+            SettingsSeeder::class,
+            EmailConfigurationSeeder::class
+        ]);
     }
 }

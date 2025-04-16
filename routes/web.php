@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardConroller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
@@ -27,6 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::resource('tasks', TaskController::class);
     Route::put('/tasks/{task}/status', [TaskController::class, 'updateStatus']);
+    //Settings
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('general-settings-update', [SettingsController::class, 'update_general_settings'])->name('settings.general-settings-update');
+    Route::post('oauth-settings-update', [SettingsController::class, 'update_oauth_settings'])->name('settings.oauth-settings-update');
+    Route::post('social-links-update', [SettingsController::class, 'update_social_links'])->name('settings.social-links-update');
+    Route::post('email-settings-update', [SettingsController::class, 'update_email_settings'])->name('settings.email-settings-update');
 });
 
 Route::middleware('auth')->group(function () {

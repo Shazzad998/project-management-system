@@ -21,7 +21,7 @@ export default function Welcome({ auth }: PageProps) {
             <MarqueeSection />
             <AboutProductSection />
             <FeatureSection />
-            <PricingSection />
+            {/* <PricingSection /> */}
             <FaqSection />
             <CtaSection />
             <FooterSection />
