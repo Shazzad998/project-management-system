@@ -20,7 +20,7 @@ class EmailConfigurationSeeder extends Seeder
                 'mail_host' => 'smtp.gmail.com',
                 'mail_port' => 587,
                 'mail_username' => 'shazzadulislam998@gmail.com', 
-                'mail_password' => 'defa gkvw sgcm cqsb', 
+                'mail_password' => 'test', 
                 'mail_encryption' => 'tls',
                 'mail_from_address' => 'shazzadulislam998@gmail.com', 
                 'mail_from_name' => 'Coders Passion', 
