@@ -97,10 +97,10 @@ const Index = ({ auth, tasks, projects, users, session }: Props) => {
                 />
             </div>
 
-            <Tabs defaultValue="board-view" className="space-y-4">
+            <Tabs defaultValue="list-view" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="board-view">Board View</TabsTrigger>
                     <TabsTrigger value="list-view">List View</TabsTrigger>
+                    <TabsTrigger value="board-view">Board View</TabsTrigger>
                 </TabsList>
                 <TabsContent value="board-view">
                     <TasksBoardView tasks={tasks}/>

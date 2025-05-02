@@ -5,10 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:project-list', only: ['index']),
+            new Middleware('permission:project-create', only: ['create','store']),
+            new Middleware('permission:project-edit', only: ['edit','update']),
+            new Middleware('permission:project-delete', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */

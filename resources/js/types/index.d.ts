@@ -116,3 +116,19 @@ export type Setting = {
     tiktok_url: string;
     discord_url: string;
 };
+
+export type EmailConfig = {
+    mail_mailer: string;
+    mail_host: string;
+    mail_port: string;
+    mail_encryption: string;
+    mail_username: string;
+    mail_password: string;
+    mail_from_address: string;
+    mail_from_name: string;
+};
+
+export type Session = {
+    success?: string;
+    error?: string;
+};

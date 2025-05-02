@@ -160,7 +160,7 @@ const Show = ({
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title={project.name} />
-            <div className="grid ">
+            <div className="grid mb-2">
                 <Breadcrumb>
                     <BreadcrumbList>
                         <BreadcrumbItem>
@@ -243,9 +243,6 @@ const Show = ({
                                         <div className="text-2xl font-bold">
                                             {totalColpleted.length}
                                         </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            +7 since last hour
-                                        </p>
                                     </CardContent>
                                 </Card>
                                 <Card>
@@ -259,9 +256,6 @@ const Show = ({
                                         <div className="text-2xl font-bold">
                                             {members.length}
                                         </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            3 recently added
-                                        </p>
                                     </CardContent>
                                 </Card>
                                 <Card>
@@ -273,11 +267,8 @@ const Show = ({
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-2xl font-bold">
-                                            5
+                                            {overdueTasks.length}
                                         </div>
-                                        <p className="text-xs text-muted-foreground">
-                                            +4 will be in next 12 hour.
-                                        </p>
                                     </CardContent>
                                 </Card>
                             </div>

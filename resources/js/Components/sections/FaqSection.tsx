@@ -12,6 +12,7 @@ import {
 import SectionWrapper from "./partials/SectionWrapper";
 import SectionHeader from "./partials/SectionHeader";
 import Accordion from "./partials/Accordion";
+import Reveal from "../Reveal";
 
 type FaqSectionProps = {};
 
@@ -82,6 +83,8 @@ const FaqSection = (props: FaqSectionProps) => {
       <div className=" max-w-6xl mx-auto">
         {data.map((item, index) => {
           return (
+            <Reveal delay={0.3 + (index * 0.1)} x={0} y={10}>
+
             <Accordion
               key={index}
               title={item.title}
@@ -92,6 +95,7 @@ const FaqSection = (props: FaqSectionProps) => {
             >
               {item.content}
             </Accordion>
+            </Reveal>
           );
         })}
       </div>

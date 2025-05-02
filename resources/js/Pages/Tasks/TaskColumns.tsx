@@ -18,7 +18,8 @@ import PriorityBadge from "@/Components/PriorityBadge";
 export const TaskColumns = (
     confirmDelete: (id: number) => void,
     hideProjectColumn = false,
-    setTask: (task: Task) => void
+    setTask: (task: Task) => void,
+    setTaskDetail: (task: Task) => void
 ): ColumnDef<Task>[] => {
     const columns: ColumnDef<Task>[] = [
         // {
@@ -81,8 +82,10 @@ export const TaskColumns = (
                 <DataTableColumnHeader column={column} title="Name" />
             ),
             cell: ({ row }) => {
+
+                const task = row.original;
                 return (
-                    <div className="text-left font-semibold">
+                    <div className="text-left font-semibold" onClick={() => setTaskDetail(task ?? null)}>
                         {row.getValue("name")}
                     </div>
                 );

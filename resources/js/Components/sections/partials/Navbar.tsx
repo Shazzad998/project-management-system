@@ -8,7 +8,7 @@ import {
     SheetTrigger,
 } from "@/Components/ui/sheet";
 import { PageProps } from "@/types";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { AlignJustifyIcon } from "lucide-react";
 
 const mainNavs = [
@@ -20,24 +20,29 @@ const mainNavs = [
         name: "Features",
         url: "#features",
     },
-    {
-        name: "Pricing",
-        url: "#pricing",
-    },
+    // {
+    //     name: "Pricing",
+    //     url: "#pricing",
+    // },
     {
         name: "Faq",
         url: "#faq",
     },
-    {
-        name: "Contact",
-        url: "#contact",
-    },
+    // {
+    //     name: "Contact",
+    //     url: "#contact",
+    // },
 ];
 const Navbar = ({ auth }: PageProps) => {
+    const setting = usePage<PageProps>().props.auth.setting;
     return (
         <nav className=" flex items-center justify-between sticky top-0 bg-background z-50 border-b border-border/30">
             <div className=" flex gap-x-20 items-center p-2 pl-4">
-                <ApplicationLogo className=" w-32 fill-primary" />
+                <img
+                    src={setting.logo}
+                    alt="qwirk-logo"
+                    className=" w-28 h-auto"
+                />
                 <div className="hidden lg:flex gap-4 items-center">
                     {mainNavs.map((nav, index) => (
                         <a

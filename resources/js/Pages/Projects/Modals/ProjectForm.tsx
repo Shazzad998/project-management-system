@@ -117,7 +117,7 @@ const ProjectForm = ({ open, onOpenChange, project, userOptions }: Props) => {
         <Sheet open={open} onOpenChange={closeSheet}>
             <SheetContent className=" w-full sm:max-w-4xl">
                 <SheetHeader>
-                    <SheetTitle>Create Project</SheetTitle>
+                    <SheetTitle>{project? "Edit" : "Create"} Project</SheetTitle>
                 </SheetHeader>
                 <form
                     onSubmit={handleSubmit}

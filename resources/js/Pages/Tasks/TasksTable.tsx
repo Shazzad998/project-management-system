@@ -6,6 +6,7 @@ import { TaskColumns } from "./TaskColumns";
 import { router } from "@inertiajs/react";
 import { ProjectOption, Task } from "@/types";
 import DeleteConfirm from "@/Components/DeleteConfirm";
+import TaskDetails from "./Modals/TaskDetails";
 
 type TasksTableProps = {
     tasks: Task[];
@@ -63,6 +64,15 @@ const TasksTable = ({
             });
         }
     };
+
+    const [taskDetail, setTaskDetail] = useState<Task|null>(null);
+    const [taskDetailOpen, setTaskDetailOpen] = useState(false);
+
+    const openEdit = (task: Task | null) => {
+        setTaskDetail(task);
+        setTaskDetailOpen(true);
+    };
+
     return (
         <>
             <DeleteConfirm
@@ -71,9 +81,11 @@ const TasksTable = ({
                 onConfirm={deleteItem}
             />
 
+            <TaskDetails task={taskDetail} open={taskDetailOpen} opOpenChange={setTaskDetailOpen}/>
+
             <DataTable
                 data={tasks}
-                columns={TaskColumns(confirmDelete, hideProjectColumn, setTask)}
+                columns={TaskColumns(confirmDelete, hideProjectColumn, setTask, openEdit)}
                 filters={tableFilters}
                 searchableColumns={["name"]}
             />

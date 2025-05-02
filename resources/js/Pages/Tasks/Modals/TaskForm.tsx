@@ -168,7 +168,7 @@ const TaskForm = ({
         <Sheet open={open} onOpenChange={closeSheet}>
             <SheetContent className=" w-full sm:max-w-4xl">
                 <SheetHeader>
-                    <SheetTitle>Create Task</SheetTitle>
+                    <SheetTitle>{task? "Edit" : "Create"} Task</SheetTitle>
                 </SheetHeader>
                 <form
                     onSubmit={handleSubmit}

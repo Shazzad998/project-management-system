@@ -4,162 +4,184 @@ import { Label } from "../ui/label";
 import { FacebookIcon, Youtube } from "lucide-react";
 import { InstagramLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import ApplicationLogo from "../ApplicationLogo";
+import Reveal from "../Reveal";
+import { usePage } from "@inertiajs/react";
+import { PageProps } from "@/types";
 
 type FooterSectionProps = {};
 
 const FooterSection = (props: FooterSectionProps) => {
+    const setting = usePage<PageProps>().props.auth.setting;
     return (
         <footer className=" pt-16">
             <div className=" grid md:grid-cols-2 gap-4 max-w-6xl mx-auto border-b border-border pb-6 mb-10 px-4">
-                <div>
+                <Reveal delay={0.5} x={0} y={4}>
                     <h4 className=" font-dosis font-semibold text-2xl mb-1">
                         Join our newsletter
                     </h4>
                     <p className=" text-sm font-light text-foreground/70">
                         Get updates from us weekly about project management
                     </p>
-                </div>
-                <div className=" flex gap-2 justify-end">
+                </Reveal>
+                <Reveal
+                    delay={0.8}
+                    x={0}
+                    y={4}
+                    className=" flex gap-2 justify-end"
+                >
                     <Input
                         placeholder="Enter your email"
                         className=" max-w-72"
                     />
                     <Button>Subscribe</Button>
-                </div>
+                </Reveal>
             </div>
             <div className=" max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between gap-6 px-4">
                 <div className=" text-foreground/70 space-y-6">
-                    <div>
-                        <ApplicationLogo className="w-32 fill-primary " />
-                    </div>
-                    <div className=" grid">
+                    <Reveal delay={0.5} x={0} y={4}>
+                        <img
+                            src={setting.logo}
+                            alt="qwirk-logo"
+                            className=" w-32 h-auto"
+                        />
+                    </Reveal>
+                    <Reveal delay={0.6} x={0} y={4} className=" grid">
                         <Label className=" text-lg text-foreground">
                             Address
                         </Label>
-                        <span> Level 2, 45 Tech Avenue, Dhaka 1201</span>
-                    </div>
-                    <div className=" grid">
+                        <span> {setting.address}</span>
+                    </Reveal>
+                    <Reveal delay={0.7} x={0} y={4} className=" grid">
                         <Label className=" text-lg text-foreground">
                             Contact
                         </Label>
                         <a href="" className=" underline">
-                            +880 1992-327-887
+                            {setting.phone}
                         </a>
                         <a href="" className=" underline">
-                            support@qwirk.org
+                            {setting.email}
                         </a>
-                    </div>
-                    <div className=" flex items-center text-foreground">
+                    </Reveal>
+                    <Reveal
+                        delay={0.8}
+                        x={0}
+                        y={4}
+                        className=" flex items-center text-foreground"
+                    >
                         <a
-                            href=""
+                            href={setting.facebook_url}
                             className=" p-2 hover:text-primary transition-colors duration-200"
                         >
                             <FacebookIcon className=" w-6 h-6" />
                         </a>
                         <a
-                            href=""
+                            href={setting.instagram_url}
                             className=" p-2 hover:text-primary transition-colors duration-200"
                         >
                             <InstagramLogoIcon className=" w-6 h-6" />
                         </a>
                         <a
-                            href=""
+                            href={setting.linkedin_url}
                             className=" p-2 hover:text-primary transition-colors duration-200"
                         >
                             <LinkedInLogoIcon className=" w-6 h-6" />
                         </a>
                         <a
-                            href=""
+                            href={setting.youtube_url}
                             className=" p-2 hover:text-primary transition-colors duration-200"
                         >
                             <Youtube className=" w-6 h-6" />
                         </a>
-                    </div>
+                    </Reveal>
                 </div>
 
                 <div className=" grid grid-cols-2 gap-6 md:gap-16">
-                    <ul className=" text-foreground/70 flex flex-col gap-2">
-                        <Label className=" text-lg text-foreground">
-                            Sitemap
-                        </Label>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Features
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Product
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Pricing
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Faq
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className=" text-foreground/70 flex flex-col gap-2">
-                        <Label className=" text-lg text-foreground">
-                            Company
-                        </Label>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                About Us
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Careers
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Contact Us
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href=""
-                                className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
-                            >
-                                Blog
-                            </a>
-                        </li>
-                    </ul>
+                    <Reveal delay={0.5} x={0} y={4}>
+                        <ul className=" text-foreground/70 flex flex-col gap-2">
+                            <Label className=" text-lg text-foreground">
+                                Sitemap
+                            </Label>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Features
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Product
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Pricing
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Faq
+                                </a>
+                            </li>
+                        </ul>
+                    </Reveal>
+                    <Reveal delay={0.5} x={0} y={4}>
+                        <ul className=" text-foreground/70 flex flex-col gap-2">
+                            <Label className=" text-lg text-foreground">
+                                Company
+                            </Label>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    About Us
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Careers
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Contact Us
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href=""
+                                    className=" p-2 pl-0 hover:text-foreground transition-colors duration-200"
+                                >
+                                    Blog
+                                </a>
+                            </li>
+                        </ul>
+                    </Reveal>
                 </div>
             </div>
             <hr className=" mt-6" />

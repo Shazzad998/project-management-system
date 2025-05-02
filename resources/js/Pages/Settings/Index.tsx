@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { EmailConfig, Session, Setting } from "@/types";
+import { EmailConfig, PageProps, Session, Setting } from "@/types";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -21,7 +21,7 @@ import { can } from "@/lib/utils";
 import EmailConfigurationTab from "./EmailConfigurationTab";
 
 const Edit = () => {
-    const user = usePage().props.auth.user;
+    const user = usePage<PageProps>().props.auth.user;
     const setting = usePage().props.setting as Setting;
     const emailConfig = usePage().props.emailConfig as EmailConfig;
     const session = usePage().props.session as Session;
