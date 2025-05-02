@@ -43,6 +43,7 @@ const Index = ({ auth, projects, users, session }: Props) => {
         setProject(null);
     };
     useEffect(() => {
+        console.log(session)
         if (session.success) {
             toast({
                 title: "Success!",

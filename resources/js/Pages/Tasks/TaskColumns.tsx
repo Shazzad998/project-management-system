@@ -10,10 +10,12 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { Task, User } from "@/types";
+import { PageProps, Task, User } from "@/types";
 import { DataTableColumnHeader } from "../../Components/ui/data-table-column-header";
 import StatusBadge from "../../Components/StatusBadge";
 import PriorityBadge from "@/Components/PriorityBadge";
+import { can } from "@/lib/utils";
+import { usePage } from "@inertiajs/react";
 
 export const TaskColumns = (
     confirmDelete: (id: number) => void,
@@ -21,6 +23,7 @@ export const TaskColumns = (
     setTask: (task: Task) => void,
     setTaskDetail: (task: Task) => void
 ): ColumnDef<Task>[] => {
+    const user = usePage<PageProps>().props.auth.user;
     const columns: ColumnDef<Task>[] = [
         // {
         //     id: "select",
@@ -82,10 +85,12 @@ export const TaskColumns = (
                 <DataTableColumnHeader column={column} title="Name" />
             ),
             cell: ({ row }) => {
-
                 const task = row.original;
                 return (
-                    <div className="text-left font-semibold" onClick={() => setTaskDetail(task ?? null)}>
+                    <div
+                        className="text-left font-semibold cursor-pointer"
+                        onClick={() => setTaskDetail(task ?? null)}
+                    >
                         {row.getValue("name")}
                     </div>
                 );
@@ -188,21 +193,25 @@ export const TaskColumns = (
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => setTask(task ?? null)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    {" "}
-                                    <Edit className="w-4 h-4" /> Edit
-                                </span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => confirmDelete(task.id)}
-                            >
-                                <span className=" flex items-center gap-1">
-                                    <Trash className=" w-4 h-4" /> Delete
-                                </span>
-                            </DropdownMenuItem>
+                            {can("task-edit", user) && (
+                                <DropdownMenuItem
+                                    onClick={() => setTask(task ?? null)}
+                                >
+                                    <span className=" flex items-center gap-1">
+                                        {" "}
+                                        <Edit className="w-4 h-4" /> Edit
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
+                            {can("task-delete", user) && (
+                                <DropdownMenuItem
+                                    onClick={() => confirmDelete(task.id)}
+                                >
+                                    <span className=" flex items-center gap-1">
+                                        <Trash className=" w-4 h-4" /> Delete
+                                    </span>
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

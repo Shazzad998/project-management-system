@@ -72,18 +72,18 @@ const Edit = () => {
                     >
                         General Settings
                     </TabsTrigger>
-                    <TabsTrigger
+                    {/* <TabsTrigger
                         value="email-configuration-settings"
                         disabled={!can("email-settings-edit", user)}
                     >
                         Email Configuration
-                    </TabsTrigger>
-                    <TabsTrigger
+                    </TabsTrigger> */}
+                    {/* <TabsTrigger
                         value="oauth-settings"
                         disabled={!can("oauth-settings-edit", user)}
                     >
                         OAuth Settings
-                    </TabsTrigger>
+                    </TabsTrigger> */}
                     <TabsTrigger
                         value="social-links"
                         disabled={!can("social-links-edit", user)}
@@ -100,9 +100,9 @@ const Edit = () => {
                             <EmailConfigurationTab emailConfig={emailConfig} />
                         )}
                     </TabsContent>
-                    <TabsContent value="oauth-settings">
+                    {/* <TabsContent value="oauth-settings">
                         <OAuthSettingsTab setting={setting} />
-                    </TabsContent>
+                    </TabsContent> */}
 
                     <TabsContent value="social-links">
                         <SocialLinksTab setting={setting} />

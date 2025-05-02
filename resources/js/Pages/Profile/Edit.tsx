@@ -21,7 +21,7 @@ export default function Edit({
                     className="max-w-xl"
                 />
                 <UpdatePasswordForm className="max-w-xl" />
-                <DeleteUserForm className="max-w-xl" />
+                {/* <DeleteUserForm className="max-w-xl" /> */}
             </div>
         </AuthenticatedLayout>
     );

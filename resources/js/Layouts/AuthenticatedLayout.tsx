@@ -62,6 +62,7 @@ export default function AuthenticatedLayout({
                 <Navbar navigations={navigations} user={user} />
                 <div className="p-4">{children}</div>
             </main>
+            <Toaster />
         </SidebarProvider>
     );
 }

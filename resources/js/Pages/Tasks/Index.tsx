@@ -97,7 +97,7 @@ const Index = ({ auth, tasks, projects, users, session }: Props) => {
                 />
             </div>
 
-            <Tabs defaultValue="list-view" className="space-y-4">
+            <Tabs defaultValue="list-view" className="space-y-4 mt-2">
                 <TabsList>
                     <TabsTrigger value="list-view">List View</TabsTrigger>
                     <TabsTrigger value="board-view">Board View</TabsTrigger>

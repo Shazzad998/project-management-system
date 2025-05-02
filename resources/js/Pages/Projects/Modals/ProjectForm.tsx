@@ -80,6 +80,7 @@ const ProjectForm = ({ open, onOpenChange, project, userOptions }: Props) => {
         });
         setStatus(null);
         setDate(undefined);
+        setSelectedUsers([]);
         setErrors({});
     };
 
