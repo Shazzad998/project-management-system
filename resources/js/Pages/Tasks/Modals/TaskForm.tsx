@@ -8,6 +8,7 @@ import {
 import { Button } from "../../../Components/ui/button";
 import {
     Errors,
+    Project,
     ProjectOption,
     SelectOption,
     Task,
@@ -31,6 +32,7 @@ type TaskFormProps = {
     projects: ProjectOption[];
     users: UserOption[];
     task: Task | null;
+    project_id?: number | null;
 };
 
 const TaskForm = ({
@@ -39,6 +41,7 @@ const TaskForm = ({
     users,
     projects,
     task,
+    project_id,
 }: TaskFormProps) => {
     const ProjectOptions = projects.map((project) => ({
         label: project.name,
@@ -70,11 +73,11 @@ const TaskForm = ({
         status: "",
         priority: "",
         due_date: "",
-        project_id: null,
+        project_id: project_id ?? null,
         assigned_user_id: null,
     });
 
-    const setData = (key: string, value: string | File | null) => {
+    const setData = (key: string, value: string | File | null | number) => {
         _setData((values) => ({
             ...values,
             [key]: value,
@@ -87,7 +90,7 @@ const TaskForm = ({
         setData("status", task?.status ?? "");
         setData("priority", task?.priority ?? "");
         setData("due_date", task?.due_date ?? "");
-        setData("project_id", task?.project_id ?? "");
+        setData("project_id", task?.project_id ?? project_id ?? "");
         setData("assigned_user_id", task?.assigned_user_id ?? "");
         setData("due_date", task?.due_date ?? "");
         setProject(
@@ -168,7 +171,7 @@ const TaskForm = ({
         <Sheet open={open} onOpenChange={closeSheet}>
             <SheetContent className=" w-full sm:max-w-4xl">
                 <SheetHeader>
-                    <SheetTitle>{task? "Edit" : "Create"} Task</SheetTitle>
+                    <SheetTitle>{task ? "Edit" : "Create"} Task</SheetTitle>
                 </SheetHeader>
                 <form
                     onSubmit={handleSubmit}
@@ -190,8 +193,9 @@ const TaskForm = ({
                             <InputError message={errors.name} />
                         </div>
                     </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="project">Project</Label>
+                    {!project_id && (
+                        <div className="grid gap-2">
+                            <Label htmlFor="project">Project</Label>
                             <SelectInput
                                 className="w-full"
                                 options={ProjectOptions}
@@ -203,7 +207,8 @@ const TaskForm = ({
                                 placeholder="Choose Project"
                             />
                             <InputError message={errors.project_id} />
-                    </div>
+                        </div>
+                    )}
                     <div className="grid gap-2">
                         <Label htmlFor="assigned_to">Assigned to</Label>
                         <div>

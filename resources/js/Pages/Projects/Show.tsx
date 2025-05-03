@@ -18,7 +18,7 @@ import TasksTable from "../Tasks/TasksTable";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import TaskForm from "../Tasks/Modals/TaskForm";
-import { Activity, CalendarX2, ListChecks, UsersIcon } from "lucide-react";
+import { Activity, CalendarX2, ListChecks, PlusIcon, UsersIcon } from "lucide-react";
 import UsersTable from "../Users/UsersTable";
 import UserForm from "../Users/Modals/UserForm";
 import {
@@ -30,6 +30,8 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import PriorityBadge from "@/Components/PriorityBadge";
+import { Button } from "@/Components/ui/button";
+import { can } from "@/lib/utils";
 
 type Props = {
     auth: {
@@ -488,6 +490,14 @@ const Show = ({
                             </div>
                         </TabsContent>
                         <TabsContent value="tasks">
+                        <div className=" flex justify-end mb-4">
+                                        {can("task-create", auth.user) && (
+                                                            <Button onClick={() => openTaskEdit(null)}>
+                                                                <PlusIcon className="w-4 h-4" /> Create Task
+                                                            </Button>
+                                                        )}
+                                        
+                                    </div>
                             <Card>
                                 <CardContent className=" pt-4">
                                     <TasksTable
@@ -503,6 +513,7 @@ const Show = ({
                                 task={task}
                                 projects={projects}
                                 users={users}
+                                project_id={project.id}
                             />
                         </TabsContent>
                         <TabsContent value="members">
